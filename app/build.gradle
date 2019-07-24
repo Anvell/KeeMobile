@@ -35,4 +35,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.github.anvell:openkeepass:v0.8.3-SNAPSHOT'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 }
