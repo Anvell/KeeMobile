@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.common
+package io.github.anvell.keemobile.presentation.core
 
 /*
  *  Copyright 2017 Google Inc.

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/app_navigation" app:startDestination="@id/openFragment">
+
+    <fragment android:id="@+id/openFragment" android:name="io.github.anvell.keemobile.presentation.open.OpenFragment"
+              android:label="OpenFragment"/>
+</navigation>
