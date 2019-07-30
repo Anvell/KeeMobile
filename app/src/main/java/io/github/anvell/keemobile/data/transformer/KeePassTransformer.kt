@@ -12,17 +12,17 @@ private const val TITLE = "Title"
 object KeePassTransformer {
 
     fun from(database: KeePassFile): KeyDatabase = KeyDatabase(
-        from(database.meta),
-        from(database.root.rootGroup),
+        database.meta.convert(),
+        database.root.rootGroup.convert(),
         database.root?.deletedObjects?.map {
             KeyDeletedEntry(it.uuid, it.deletionTime)
         }?.toMutableList() ?: mutableListOf()
     )
 
-    fun from(database: KeyDatabase): KeePassFile = KeePassFileBuilder(from(database.meta))
+    fun to(database: KeyDatabase): KeePassFile = KeePassFileBuilder(database.meta.convert())
         .withRoot(
             DocumentRootBuilder()
-                .rootGroup(from(database, database.root))
+                .rootGroup(database.root.convert(database))
                 .addDeletedObjects(database.deletedEntries.map {
                     DeletedObjectBuilder(it.uuid)
                         .deletionTime(it.deletionTime)
@@ -31,7 +31,7 @@ object KeePassTransformer {
                 .build()
         ).build()
 
-    fun from(sourceMeta: KeyMeta): Meta = with(sourceMeta) {
+    private fun KeyMeta.convert(): Meta =
         MetaBuilder(databaseName)
             .generator(generator)
             .databaseDescription(databaseDescription)
@@ -72,59 +72,52 @@ object KeePassTransformer {
                 }
             ).build())
             .build()
-    }
 
-    fun from(database: KeyDatabase, sourceGroup: KeyGroup): Group = with(sourceGroup) {
+    private fun KeyGroup.convert(database: KeyDatabase): Group {
         val groupBuilder = GroupBuilder(uuid)
             .name(name)
             .notes(notes)
             .iconId(iconId)
             .iconData(iconData)
             .customIconUuid(customIconUuid)
-            .times(from(times))
+            .times(times?.convert())
             .isExpanded(isExpanded)
             .defaultAutoTypeSequence(defaultAutoTypeSequence)
             .enableAutoType(enableAutoType)
             .enableSearching(enableSearching)
             .lastTopVisibleEntry(lastTopVisibleEntry)
-            .addEntries(entries.map { from(database, it) })
+            .addEntries(entries.map { it.convert(database) })
 
         groups.forEach {
-            groupBuilder.addGroup(from(database, it))
+            groupBuilder.addGroup(it.convert(database))
         }
 
-        groupBuilder.build()
+        return groupBuilder.build()
     }
 
-    fun from(sourceTimes: KeyDateTime?) = sourceTimes?.let {
-        with(sourceTimes) {
-            TimesBuilder()
-                .creationTime(creationTime)
-                .lastAccessTime(lastAccessTime)
-                .lastModificationTime(lastModificationTime)
-                .locationChanged(locationChanged)
-                .expiryTime(expiryTime)
-                .usageCount(usageCount)
-                .expires(expires)
-                .build()
-        }
-    }
+    private fun KeyDateTime.convert(): Times =
+        TimesBuilder()
+            .creationTime(creationTime)
+            .lastAccessTime(lastAccessTime)
+            .lastModificationTime(lastModificationTime)
+            .locationChanged(locationChanged)
+            .expiryTime(expiryTime)
+            .usageCount(usageCount)
+            .expires(expires)
+            .build()
 
-    fun from(sourceTimes: Times?) = sourceTimes?.let {
-        with(sourceTimes) {
-            KeyDateTime(
-                creationTime,
-                lastAccessTime,
-                lastModificationTime,
-                locationChanged,
-                expiryTime,
-                usageCount,
-                expires()
-            )
-        }
-    }
+    private fun Times.convert(): KeyDateTime =
+        KeyDateTime(
+            creationTime,
+            lastAccessTime,
+            lastModificationTime,
+            locationChanged,
+            expiryTime,
+            usageCount,
+            expires()
+        )
 
-    fun from(database: KeyDatabase, sourceEntry: KeyEntry): Entry = with(sourceEntry) {
+    private fun KeyEntry.convert(database: KeyDatabase): Entry {
         val entryBuilder = EntryBuilder()
             .uuid(uuid)
             .title(title)
@@ -135,18 +128,18 @@ object KeePassTransformer {
             .iconId(iconId)
             .iconData(iconData)
             .customIconUuid(customIconUuid)
-            .times(from(times))
+            .times(times?.convert())
             .foregroundColor(foregroundColor)
             .backgroundColor(backgroundColor)
             .overrideUrl(overrideUrl)
-            .autoType(from(autoType))
+            .autoType(autoType?.convert())
             .tags(tags)
 
         if (history.size > 0) {
             val entryHistory = History()
 
             history.forEach {
-                entryHistory.historicEntries.add(from(database, it))
+                entryHistory.historicEntries.add(it.convert(database))
             }
             entryBuilder.history(entryHistory)
         }
@@ -159,10 +152,10 @@ object KeePassTransformer {
             customProperties.map { Property(it.key, it.value, it.isProtected) }
         )
 
-        entryBuilder.build()
+        return entryBuilder.build()
     }
 
-    fun from(sourceAutoType: KeyAutoType): AutoType = with(sourceAutoType) {
+    private fun KeyAutoType.convert(): AutoType =
         AutoTypeBuilder()
             .enabled(isEnabled)
             .defaultSequence(defaultSequence)
@@ -174,9 +167,8 @@ object KeePassTransformer {
                     .build()
             }.toTypedArray())
             .build()
-    }
 
-    fun from(sourceMeta: Meta): KeyMeta = with(sourceMeta) {
+    private fun Meta.convert(): KeyMeta =
         KeyMeta(
             generator ?: "",
             databaseName ?: "",
@@ -202,9 +194,8 @@ object KeePassTransformer {
             customIcons.icons.map { IconData(it.uuid, it.data) },
             binaries.binaries.map { BinaryData(it.id, it.isCompressed, it.data) }
         )
-    }
 
-    fun from(sourceGroup: Group): KeyGroup = with(sourceGroup) {
+    private fun Group.convert(): KeyGroup =
         KeyGroup(
             uuid,
             name ?: "",
@@ -212,18 +203,17 @@ object KeePassTransformer {
             iconId,
             iconData,
             customIconUuid,
-            from(times),
+            times?.convert(),
             isExpanded,
             defaultAutoTypeSequence,
             isEnableAutoType,
             isEnableSearching,
             lastTopVisibleEntry,
-            groups.map { from(it) }.toMutableList(),
-            entries.map { from(it) }.toMutableList()
+            groups.map { it.convert() }.toMutableList(),
+            entries.map { it.convert() }.toMutableList()
         )
-    }
 
-    fun from(sourceEntry: Entry): KeyEntry = with(sourceEntry) {
+    private fun Entry.convert(): KeyEntry =
         KeyEntry(
             uuid,
             getPropertyByName(TITLE)?.value ?: "",
@@ -234,19 +224,18 @@ object KeePassTransformer {
             iconId,
             iconData,
             customIconUuid,
-            from(times),
+            times?.convert(),
             foregroundColor,
             backgroundColor,
             overrideUrl ?: "",
-            from(autoType),
+            autoType?.convert(),
             tags ?: mutableListOf(),
-            history?.historicEntries?.map { from(it) }?.toMutableList() ?: mutableListOf(),
+            history?.historicEntries?.map { it.convert() }?.toMutableList() ?: mutableListOf(),
             attachments?.map { KeyAttachment(it.key, it.ref) }?.toMutableList() ?: mutableListOf(),
             customProperties?.map { KeyProperty(it.key, it.value, it.isProtected) }?.toMutableList() ?: mutableListOf()
         )
-    }
 
-    fun from(sourceAutoType: AutoType): KeyAutoType = with(sourceAutoType) {
+    private fun AutoType.convert(): KeyAutoType =
         KeyAutoType(
             isEnabled,
             dataTransferObfuscation,
@@ -255,6 +244,5 @@ object KeePassTransformer {
                 KeyAutoTypeAssociation(it.windowTitle, it.keystrokeSequence)
             }.toMutableList()
         )
-    }
 
 }
