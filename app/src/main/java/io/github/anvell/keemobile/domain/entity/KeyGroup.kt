@@ -5,7 +5,7 @@ import java.util.*
 data class KeyGroup(
     val uuid: UUID = UUID.randomUUID(),
     val name: String,
-    val notes: String,
+    val notes: String = "",
     val iconId: Int = 49,
     val iconData: ByteArray? = null,
     val customIconUuid: UUID? = null,
