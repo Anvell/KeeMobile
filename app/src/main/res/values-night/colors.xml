@@ -5,14 +5,14 @@
     <color name="colorAccent">#D81B60</color>
     <color name="error">#D35761</color>
 
-    <color name="background">#FFFFFF</color>
-    <color name="surface">#E7E7E7</color>
+    <color name="background">#333E57</color>
+    <color name="surface">#3D4865</color>
 
     <color name="onPrimary">#E7E7E7</color>
-    <color name="onBackground">#333333</color>
-    <color name="onSurface">#333333</color>
+    <color name="onBackground">#E6E6E6</color>
+    <color name="onSurface">#A1A5B3</color>
 
-    <color name="listItemDivider">#CCCCCC</color>
+    <color name="listItemDivider">#37415C</color>
 
     <color name="launcherBackground">#59A674</color>
 </resources>
