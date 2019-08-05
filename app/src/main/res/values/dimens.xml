@@ -3,4 +3,6 @@
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
     <dimen name="content_margin">16dp</dimen>
+
+    <dimen name="surface_corner_radius">10dp</dimen>
 </resources>
