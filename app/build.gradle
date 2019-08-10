@@ -20,12 +20,12 @@ androidExtensions {
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "io.github.anvell.keemobile"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -58,7 +58,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /* Material */
-    implementation "com.google.android.material:material:1.1.0-alpha08"
+    implementation "com.google.android.material:material:1.1.0-alpha09"
 
     /* AndroidX */
     implementation 'androidx.appcompat:appcompat:1.0.2'
