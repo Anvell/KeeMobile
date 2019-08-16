@@ -1,0 +1,24 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View.OnClickListener"/>
+        <variable name="title" type="String"/>
+        <variable name="isSelected" type="Boolean"/>
+        <variable name="clickListener" type="OnClickListener"/>
+    </data>
+
+    <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Typography.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            android:padding="16dp"
+            android:gravity="start|center_vertical"
+            android:clickable="true"
+            android:background="@drawable/selectable_surface_background"
+            android:drawSelectorOnTop="true"
+            android:selected="@{isSelected}"
+            android:onClick="@{clickListener}"
+            tools:text="@tools:sample/lorem"
+            android:focusable="true"/>
+</layout>
