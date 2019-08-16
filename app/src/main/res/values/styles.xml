@@ -8,4 +8,13 @@
         <item name="android:background">@drawable/selectable_surface_background</item>
     </style>
 
+    <style name="Button.Round" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="cornerRadius">@dimen/surface_corner_radius</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textColor">@color/onPrimary</item>
+    </style>
+
 </resources>

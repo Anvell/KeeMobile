@@ -7,6 +7,7 @@
 
     <color name="background">#333E57</color>
     <color name="surface">#3D4865</color>
+    <color name="surfaceSelected">#505873</color>
 
     <color name="onPrimary">#E7E7E7</color>
     <color name="onBackground">#E6E6E6</color>
@@ -15,4 +16,5 @@
     <color name="listItemDivider">#37415C</color>
 
     <color name="launcherBackground">#59A674</color>
+    <color name="navigationBarBackground">@color/background</color>
 </resources>
