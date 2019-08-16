@@ -6,7 +6,7 @@ import android.view.View
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
-import io.github.anvell.keemobile.extensions.injector
+import io.github.anvell.keemobile.common.extensions.injector
 import io.github.anvell.keemobile.presentation.core.BaseFragment
 import javax.inject.Inject
 

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/app_navigation" app:startDestination="@id/openFragment">
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/app_navigation"
+            app:startDestination="@id/openFragment">
 
     <fragment android:id="@+id/openFragment" android:name="io.github.anvell.keemobile.presentation.open.OpenFragment"
-              android:label="OpenFragment"/>
+              android:label="OpenFragment">
+        <action android:id="@+id/action_explore_database" app:destination="@id/exploreFragment"
+                app:enterAnim="@anim/nav_default_enter_anim" app:exitAnim="@anim/nav_default_exit_anim"
+                app:popUpToInclusive="false" app:popUpTo="@+id/app_navigation"/>
+    </fragment>
+    <fragment android:id="@+id/exploreFragment"
+              android:name="io.github.anvell.keemobile.presentation.explore.ExploreFragment"
+              android:label="ExploreFragment">
+    </fragment>
 </navigation>
