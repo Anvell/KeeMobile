@@ -8,8 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.MvRxState
+import com.google.android.material.snackbar.Snackbar
 import io.github.anvell.keemobile.common.constants.RequestCodes
+import io.github.anvell.keemobile.common.mapper.ErrorMapper
+import javax.inject.Inject
+import kotlin.reflect.KProperty1
 
 abstract class BaseFragment<T>(
     val inflaterBlock: (
@@ -17,6 +23,9 @@ abstract class BaseFragment<T>(
         root: ViewGroup?, attachToRoot: Boolean
     ) -> T
 ) : BaseMvRxFragment() where T : ViewDataBinding {
+
+    @Inject
+    lateinit var errorMapper: ErrorMapper
 
     protected lateinit var binding: T
 
@@ -36,6 +45,17 @@ abstract class BaseFragment<T>(
                     }
                 }
             }
+        }
+    }
+
+    protected fun <S : MvRxState, V> snackbarOnFailedState(viewModel: BaseViewModel<S>, vararg asyncProps: KProperty1<S, Async<V>>) {
+        for (property in asyncProps) {
+            viewModel.asyncSubscribe(property, onFail = { t ->
+                val message = errorMapper.map(t)
+                if(message != null && view != null) {
+                    Snackbar.make(view!!, message, Snackbar.LENGTH_SHORT).show()
+                }
+            }, deliveryMode = uniqueOnly())
         }
     }
 

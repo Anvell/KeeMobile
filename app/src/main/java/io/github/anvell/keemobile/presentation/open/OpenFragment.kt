@@ -47,6 +47,8 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
                 }
             }
         }
+
+        snackbarOnFailedState(viewModel, OpenViewState::opened)
     }
 
     override fun onFileOpened(uri: Uri) {
