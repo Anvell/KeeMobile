@@ -11,7 +11,7 @@ import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.usecase.CreateNewFile
 import io.github.anvell.keemobile.domain.usecase.OpenFileSource
-import io.github.anvell.keemobile.presentation.core.BaseViewModel
+import io.github.anvell.keemobile.presentation.base.BaseViewModel
 
 class OpenViewModel @AssistedInject constructor(
     @Assisted initialState: OpenViewState,

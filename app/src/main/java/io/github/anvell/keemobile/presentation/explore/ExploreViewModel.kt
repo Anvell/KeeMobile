@@ -5,8 +5,7 @@ import com.airbnb.mvrx.MvRxViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.github.anvell.keemobile.domain.usecase.CreateNewFile
-import io.github.anvell.keemobile.presentation.core.BaseViewModel
+import io.github.anvell.keemobile.presentation.base.BaseViewModel
 
 class ExploreViewModel @AssistedInject constructor(
     @Assisted initialState: ExploreViewState

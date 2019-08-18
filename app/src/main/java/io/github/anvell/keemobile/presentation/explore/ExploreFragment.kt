@@ -7,7 +7,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
 import io.github.anvell.keemobile.common.extensions.injector
-import io.github.anvell.keemobile.presentation.core.BaseFragment
+import io.github.anvell.keemobile.presentation.base.BaseFragment
 import javax.inject.Inject
 
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {

@@ -14,7 +14,7 @@ import io.github.anvell.keemobile.databinding.FragmentOpenBinding
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.itemRecentFile
-import io.github.anvell.keemobile.presentation.core.BaseFragment
+import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.explore.ExploreArgs
 import java.util.*
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package io.github.anvell.keemobile.presentation.home
 import android.os.Bundle
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
-import io.github.anvell.keemobile.presentation.core.BaseActivity
+import io.github.anvell.keemobile.presentation.base.BaseActivity
 import javax.inject.Inject
 
 class HomeActivity : BaseActivity() {

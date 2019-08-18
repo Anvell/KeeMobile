@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.presentation.core
+package io.github.anvell.keemobile.presentation.base
 
 import android.app.Activity
 import android.content.Intent
