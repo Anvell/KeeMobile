@@ -1,13 +1,12 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
+import io.github.anvell.keemobile.common.extensions.scheduleOn
+import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
-import io.github.anvell.keemobile.common.rx.RxSchedulers
-import io.github.anvell.keemobile.common.extensions.scheduleOn
 import io.reactivex.Single
-import java.util.*
 import javax.inject.Inject
 
 
@@ -18,6 +17,6 @@ class OpenFileSource @Inject constructor(
 ) {
 
     fun use(source: FileSource, secrets: FileSecrets) =
-        Single.create<UUID> { databaseRepository.readFromSource(source, secrets) }
+        Single.fromCallable { databaseRepository.readFromSource(source, secrets) }
             .scheduleOn(rxSchedulers.io())
 }
