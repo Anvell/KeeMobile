@@ -11,12 +11,12 @@ import com.airbnb.mvrx.*
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
+import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.itemRecentFile
 import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.explore.ExploreArgs
-import java.util.*
 import javax.inject.Inject
 
 class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::inflate) {
@@ -38,7 +38,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.addDivider(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
 
-        binding.fileCreate.setOnClickListener { }
+        binding.fileCreate.setOnClickListener { requestCreateFile(getString(R.string.default_file_name)) }
         binding.fileOpen.setOnClickListener { requestOpenFile() }
         binding.unlock.setOnClickListener {
             withState(viewModel) { state ->
@@ -51,11 +51,22 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         snackbarOnFailedState(viewModel, OpenViewState::opened)
     }
 
+    //TODO: Implement proper user flow for file creation
+    override fun onFileCreated(uri: Uri) {
+        val uriText = uri.toString()
+        uri.getName(requireContext())?.let {
+            viewModel.createFile(
+                FileSource.Storage(uriText.toSha256(), it, uriText),
+                FileSecrets("123")
+            )
+        }
+    }
+
     override fun onFileOpened(uri: Uri) {
         val uriText = uri.toString()
-        viewModel.addFileSource(
-            FileSource.Storage(uriText.toSha256(), uri.getName(requireContext()) ?: "", uriText)
-        )
+        uri.getName(requireContext())?.let {
+            viewModel.addFileSource(FileSource.Storage(uriText.toSha256(), it, uriText))
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -65,9 +76,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.title.text = state.selectedFile?.name
         binding.unlock.isEnabled = state.selectedFile != null
 
-        if(state.recentFiles.isEmpty()) {
-            binding.motionLayout.transitionToStart()
-        } else {
+        if (state.recentFiles.isNotEmpty()) {
             binding.recentFiles.withModels {
                 state.recentFiles.reversed().forEach { entry ->
 
@@ -81,12 +90,20 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
                     }
                 }
             }
-            binding.recentFiles.requestModelBuild()
+        }
+
+        handleAnimation(state.recentFiles.isEmpty())
+    }
+
+    private fun handleAnimation(isRecentFiles: Boolean) {
+        if(isRecentFiles) {
+            binding.motionLayout.transitionToStart()
+        } else {
             binding.motionLayout.transitionToEnd()
         }
     }
 
-    private fun handleOpening(opened: Async<UUID>) {
+    private fun handleOpening(opened: Async<VaultId>) {
         when(opened) {
             is Success -> findNavController().navigate(R.id.action_explore_database, bundleOf(MvRx.KEY_ARG to ExploreArgs(opened())))
         }

@@ -1,36 +1,27 @@
 package io.github.anvell.keemobile.data.repository
 
 import de.slackspace.openkeepass.KeePassDatabase
+import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
+import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
-import io.github.anvell.keemobile.common.io.StorageFile
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.HashMap
 
 @Singleton
 class DatabaseRepositoryImpl @Inject constructor(private val storageFile: StorageFile) : DatabaseRepository {
 
-    private val openDatabases = HashMap<UUID, OpenDatabase>()
+    private val openDatabases = HashMap<VaultId, OpenDatabase>()
 
-    override fun readFromSource(source: FileSource, secrets: FileSecrets): UUID {
+    override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
         val database = when (source) {
             is FileSource.Storage -> readFromStorage(source, secrets)
         }
         return pushDatabase(database, source, secrets)
     }
 
-    protected fun readFromStorage(source: FileSource.Storage, secrets: FileSecrets): KeyDatabase {
-        val database = KeePassDatabase
-            .getInstance(storageFile.readFromUri(source.uri))
-            .openDatabase(secrets.masterKey)
-
-        return KeePassTransformer.from(database)
-    }
-
-    override fun createDatabase(source: FileSource, secrets: FileSecrets): UUID {
+    override fun createDatabase(source: FileSource, secrets: FileSecrets): VaultId {
         val sample = KeyDatabase(
             KeyMeta(),
             KeyGroup(
@@ -41,21 +32,39 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
                 ), entries = mutableListOf(
                     KeyEntry(
                         title = "My entry",
-                        password = "PHOENIX"
+                        password = "GJKHEFJEH656"
                     ),
                     KeyEntry(
                         title = "Second entry",
-                        password = "ARIADNE"
+                        password = "R#JFJDERFLL"
                     )
                 )
             )
         )
+
+        when (source) {
+            is FileSource.Storage -> writeToStorage(sample, source, secrets)
+        }
+
         return pushDatabase(sample, source, secrets)
     }
 
-    protected fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): UUID {
-        val id = UUID.randomUUID()
-        openDatabases[id] = OpenDatabase(id, database, source, secrets)
-        return id
+    private fun readFromStorage(source: FileSource.Storage, secrets: FileSecrets): KeyDatabase {
+        val database = KeePassDatabase
+            .getInstance(storageFile.openInputStream(source.uri))
+            .openDatabase(secrets.masterKey)
+
+        return KeePassTransformer.from(database)
     }
+
+    private fun writeToStorage(database: KeyDatabase, source: FileSource.Storage, secrets: FileSecrets) {
+        val outputStream = storageFile.openOutputStream(source.uri)
+        KeePassDatabase.write(KeePassTransformer.to(database), secrets.masterKey, outputStream)
+    }
+
+    private fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): VaultId {
+        openDatabases[source.id] = OpenDatabase(database, source, secrets)
+        return source.id
+    }
+
 }

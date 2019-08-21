@@ -29,10 +29,11 @@ class OpenViewModel @AssistedInject constructor(
 
     fun addFileSource(source: FileSource) {
         setState {
-            if(recentFiles.find { it.id == source.id } == null) {
+            val entry = recentFiles.find { it.id == source.id }
+            if(entry == null) {
                 copy(recentFiles = recentFiles.append(source, AppConstants.MAX_RECENT_FILES), selectedFile = source)
             } else {
-                this
+                copy(selectedFile = entry)
             }
         }
     }
