@@ -5,6 +5,7 @@ import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.*
+import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,6 +14,16 @@ import javax.inject.Singleton
 class DatabaseRepositoryImpl @Inject constructor(private val storageFile: StorageFile) : DatabaseRepository {
 
     private val openDatabases = HashMap<VaultId, OpenDatabase>()
+
+    override fun getOpenDatabaseById(id: VaultId): OpenDatabase {
+        val database = openDatabases[id]
+
+        if(database != null) {
+            return database
+        } else {
+            throw DatabaseNotOpenException()
+        }
+    }
 
     override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
         val database = when (source) {
