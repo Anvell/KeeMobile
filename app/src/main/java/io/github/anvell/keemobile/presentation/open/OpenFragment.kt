@@ -76,9 +76,9 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.title.text = state.selectedFile?.name
         binding.unlock.isEnabled = state.selectedFile != null
 
-        if (state.recentFiles.isNotEmpty()) {
+        if (state.recentFiles is Success) {
             binding.recentFiles.withModels {
-                state.recentFiles.reversed().forEach { entry ->
+                state.recentFiles()!!.reversed().forEach { entry ->
 
                     if(entry is FileSource.Storage) {
                         itemRecentFile {
@@ -92,14 +92,14 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        handleAnimation(state.recentFiles.isEmpty())
+        handleAnimation(state.recentFiles is Success)
     }
 
-    private fun handleAnimation(isRecentFiles: Boolean) {
-        if(isRecentFiles) {
-            binding.motionLayout.transitionToStart()
-        } else {
+    private fun handleAnimation(showRecentFiles: Boolean) {
+        if (showRecentFiles) {
             binding.motionLayout.transitionToEnd()
+        } else {
+            binding.motionLayout.transitionToStart()
         }
     }
 

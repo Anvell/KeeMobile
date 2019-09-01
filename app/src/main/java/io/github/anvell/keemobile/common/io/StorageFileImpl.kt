@@ -3,6 +3,7 @@ package io.github.anvell.keemobile.common.io
 import android.content.Context
 import android.net.Uri
 import dagger.Reusable
+import io.github.anvell.keemobile.common.extensions.fileExists
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
@@ -20,4 +21,11 @@ class StorageFileImpl @Inject constructor(private val context: Context) :
         val uri = Uri.parse(targetUri)
         return context.contentResolver.openOutputStream(uri)
     }
+
+    override fun checkUriPermission(targetUri: String): Boolean {
+        val uri = Uri.parse(targetUri)
+        return context.contentResolver.persistedUriPermissions.any { it.uri == uri }
+    }
+
+    override fun exists(targetUri: String) = Uri.parse(targetUri).fileExists(context)
 }

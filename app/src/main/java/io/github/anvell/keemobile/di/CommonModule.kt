@@ -2,6 +2,8 @@ package io.github.anvell.keemobile.di
 
 import dagger.Module
 import dagger.Provides
+import io.github.anvell.keemobile.common.io.InternalFile
+import io.github.anvell.keemobile.common.io.InternalFileImpl
 import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.common.io.StorageFileImpl
 import io.github.anvell.keemobile.common.rx.RxSchedulers
@@ -17,4 +19,8 @@ object CommonModule {
     @Provides
     @JvmStatic
     fun provideStorageFile(storageFile: StorageFileImpl): StorageFile = storageFile
+
+    @Provides
+    @JvmStatic
+    fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile = InternalFile
 }
