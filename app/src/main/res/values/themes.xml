@@ -10,7 +10,7 @@
 
         <item name="android:fontFamily">@font/firasans_regular</item>
         <item name="android:textColor">@color/onBackground</item>
-        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:statusBarColor">@color/statusBarBackground</item>
         <item name="android:navigationBarColor">@color/navigationBarBackground</item>
     </style>
 

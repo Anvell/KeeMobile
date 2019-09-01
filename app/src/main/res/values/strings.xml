@@ -9,5 +9,6 @@
     <string name="landing_title">Welcome</string>
     <string name="button_unlock">Unlock</string>
     <string name="text_hint_password">Password</string>
+    <string name="text_hint_search">Search</string>
 
 </resources>

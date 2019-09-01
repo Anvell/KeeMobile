@@ -1,13 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:gravity="center_vertical|center"
-                  android:background="@color/background">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-    </LinearLayout>
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/explore_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingTop="@dimen/explore_list_top_padding"
+            tools:itemCount="16"
+            tools:listitem="@layout/item_entry" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/explore_search_bar_height"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
+            android:layout_marginTop="@dimen/layout_vertical_margin"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:background="@drawable/card_translucent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/navigateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:src="@drawable/ic_menu"
+                android:tint="@color/onSurface"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="@string/text_hint_search"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:layout_weight="1" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_more_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:tint="@color/onSurface"
+                android:background="@null" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 </layout>

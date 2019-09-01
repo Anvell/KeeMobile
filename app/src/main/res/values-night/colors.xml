@@ -7,6 +7,7 @@
 
     <color name="background">#333E57</color>
     <color name="surface">#3D4865</color>
+    <color name="surfaceTranslucent">#F53D4866</color>
     <color name="surfaceSelected">#505873</color>
 
     <color name="onPrimary">#E7E7E7</color>
@@ -17,4 +18,5 @@
 
     <color name="launcherBackground">#59A674</color>
     <color name="navigationBarBackground">@color/background</color>
+    <color name="statusBarBackground">@color/background</color>
 </resources>

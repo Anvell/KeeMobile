@@ -38,6 +38,25 @@ open class KeyDatabase(
         return null
     }
 
+    fun findGroup(predicate: (KeyGroup) -> Boolean): KeyGroup? {
+        val stack = Stack<KeyGroup>()
+        stack.push(root)
+
+        while (!stack.empty()) {
+            val group = stack.pop()
+
+            if (predicate(group)) {
+                return group
+            }
+
+            if (group.groups.isNotEmpty()) {
+                group.groups.forEach { stack.push(it) }
+            }
+        }
+
+        return null
+    }
+
     fun getAttachmentDataById(id: Int): ByteArray? {
         val data = meta.binaries?.find { it.id == id }
         return data?.data
