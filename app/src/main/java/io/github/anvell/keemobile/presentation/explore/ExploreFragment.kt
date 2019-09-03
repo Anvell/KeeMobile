@@ -1,12 +1,15 @@
 package io.github.anvell.keemobile.presentation.explore
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
@@ -21,6 +24,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
+@SuppressLint("ClickableViewAccessibility")
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
 
     @Inject
@@ -37,6 +41,19 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         super.onViewCreated(view, savedInstanceState)
 
         binding.exploreView.addDivider(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
+        binding.search.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                hideSoftKeyboard()
+                binding.searchExtraButton.playReverse()
+            } else {
+                binding.searchExtraButton.play()
+            }
+        }
+        binding.exploreRoot.setOnTouchListener { _, _ ->
+            hideSoftKeyboard()
+            binding.search.clearFocus()
+            false
+        }
 
         binding.navigateButton.setImageDrawable(
             ContextCompat.getDrawable(

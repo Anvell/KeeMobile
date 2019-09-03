@@ -62,7 +62,6 @@
             style="@style/Typography.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -71,6 +70,7 @@
             app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="@tools:sample/lorem" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -78,7 +78,6 @@
             style="@style/Typography.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -88,6 +87,7 @@
             app:layout_constraintEnd_toStartOf="@+id/arrow"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toBottomOf="@+id/title_text"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="@tools:sample/lorem" />
 
         <androidx.appcompat.widget.AppCompatImageView

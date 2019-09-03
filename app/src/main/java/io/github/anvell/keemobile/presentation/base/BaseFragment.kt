@@ -17,6 +17,7 @@ import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import javax.inject.Inject
 import kotlin.reflect.KProperty1
+import android.view.inputmethod.InputMethodManager
 
 abstract class BaseFragment<T>(
     val inflaterBlock: (
@@ -55,6 +56,11 @@ abstract class BaseFragment<T>(
                 }
             }
         }
+    }
+
+    protected fun hideSoftKeyboard() {
+        val manager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        manager?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     protected fun <S : MvRxState, V> snackbarOnFailedState(

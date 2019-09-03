@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
+        android:id="@+id/explore_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background">
@@ -28,7 +29,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/navigateButton"
+                android:id="@+id/navigate_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingStart="16dp"
@@ -47,14 +48,16 @@
                 android:inputType="text"
                 android:layout_weight="1" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <io.github.anvell.keemobile.presentation.widgets.AnimatedImageView
+                android:id="@+id/search_extra_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_more_vertical"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:tint="@color/onSurface"
-                android:background="@null" />
+                app:srcCompat="@drawable/ic_anim_more_to_close"
+                app:srcReversed="@drawable/ic_anim_close_to_more" />
 
         </LinearLayout>
 
