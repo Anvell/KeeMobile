@@ -18,6 +18,8 @@ import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import javax.inject.Inject
 import kotlin.reflect.KProperty1
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 
 abstract class BaseFragment<T>(
     val inflaterBlock: (
@@ -38,6 +40,15 @@ abstract class BaseFragment<T>(
     ): View? {
         binding = inflaterBlock(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher
+            .addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() = onBackPressed()
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -103,5 +114,9 @@ abstract class BaseFragment<T>(
     protected open fun onFileCreated(uri: Uri) = Unit
 
     protected open fun onFileOpened(uri: Uri) = Unit
+
+    protected open fun onBackPressed() {
+        findNavController().navigateUp()
+    }
 
 }
