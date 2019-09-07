@@ -7,6 +7,5 @@ import java.util.*
 
 @Parcelize
 data class ExploreArgs(
-    val databaseId: VaultId,
-    val rootId: UUID? = null
+    val databaseId: VaultId
 ) : Parcelable

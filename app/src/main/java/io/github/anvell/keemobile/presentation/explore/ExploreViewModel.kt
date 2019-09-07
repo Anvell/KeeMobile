@@ -6,9 +6,11 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.ViewModelContext
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
+import java.util.*
 
 class ExploreViewModel @AssistedInject constructor(
     @Assisted initialState: ExploreViewState,
@@ -27,14 +29,20 @@ class ExploreViewModel @AssistedInject constructor(
         getOpenDatabase
             .use(id)
             .execute {
-                val openDatabase = it()
-
-                if (openDatabase != null && activeRoot == null) {
-                    copy(activeDatabase = it, activeRoot = openDatabase.database.root.uuid)
-                } else {
-                    copy(activeDatabase = it)
-                }
+                copy(activeDatabase = it)
             }
+    }
+
+    fun activateGroup(id: UUID) {
+        setState {
+            copy(rootStack = rootStack.append(id))
+        }
+    }
+
+    fun navigateUp() {
+        setState {
+            copy(rootStack = rootStack.dropLast(1))
+        }
     }
 
     @AssistedInject.Factory

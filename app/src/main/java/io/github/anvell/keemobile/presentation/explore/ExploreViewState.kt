@@ -9,8 +9,8 @@ import java.util.*
 
 data class ExploreViewState(
     val activeDatabaseId: VaultId,
-    val activeRoot: UUID? = null,
+    val rootStack: List<UUID> = listOf(),
     val activeDatabase: Async<OpenDatabase> = Uninitialized
 ) : MvRxState {
-    constructor(args: ExploreArgs) : this(args.databaseId, args.rootId)
+    constructor(args: ExploreArgs) : this(args.databaseId)
 }
