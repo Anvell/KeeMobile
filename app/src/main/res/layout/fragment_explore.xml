@@ -28,15 +28,16 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <io.github.anvell.keemobile.presentation.widgets.AnimatedImageView
                 android:id="@+id/navigate_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:src="@drawable/ic_menu"
                 android:tint="@color/onSurface"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_anim_menu_to_arrow"
+                app:srcReversed="@drawable/ic_anim_arrow_to_menu" />
 
             <EditText
                 android:id="@+id/search"
