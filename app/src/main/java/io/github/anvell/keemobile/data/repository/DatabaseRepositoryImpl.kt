@@ -25,6 +25,16 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
         }
     }
 
+    override fun getFilteredEntries(id: VaultId, filter: String): List<SearchResult> {
+        val database = openDatabases[id]
+
+        if(database != null) {
+            return database.database.filterEntries(filter)
+        } else {
+            throw DatabaseNotOpenException()
+        }
+    }
+
     override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
         val database = when (source) {
             is FileSource.Storage -> readFromStorage(source, secrets)
