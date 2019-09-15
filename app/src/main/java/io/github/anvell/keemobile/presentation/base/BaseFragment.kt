@@ -20,6 +20,9 @@ import kotlin.reflect.KProperty1
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
+import io.github.anvell.keemobile.common.rx.RxSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 abstract class BaseFragment<T>(
     val inflaterBlock: (
@@ -29,9 +32,14 @@ abstract class BaseFragment<T>(
 ) : BaseMvRxFragment() where T : ViewDataBinding {
 
     @Inject
+    lateinit var rxSchedulers: RxSchedulers
+
+    @Inject
     lateinit var errorMapper: ErrorMapper
 
     protected lateinit var binding: T
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +75,16 @@ abstract class BaseFragment<T>(
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        disposables.clear()
+        super.onStop()
+    }
+
+    protected fun Disposable.disposeOnStop(): Disposable {
+        disposables.add(this)
+        return this
     }
 
     protected fun hideSoftKeyboard() {
