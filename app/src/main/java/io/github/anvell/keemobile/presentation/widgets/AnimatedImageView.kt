@@ -23,8 +23,16 @@ class AnimatedImageView(context: Context, attrs: AttributeSet) : AppCompatImageV
         }
     }
 
-    fun play() {
+    fun rewindToStart() {
         setImageDrawable(animDrawable)
+    }
+
+    fun rewindToEnd() {
+        setImageDrawable(animReversedDrawable)
+    }
+
+    fun play() {
+        rewindToStart()
 
         if (animDrawable != null && animDrawable is Animatable) {
             with(animDrawable as Animatable) {
@@ -36,7 +44,7 @@ class AnimatedImageView(context: Context, attrs: AttributeSet) : AppCompatImageV
     }
 
     fun playReverse() {
-        setImageDrawable(animReversedDrawable)
+        rewindToEnd()
 
         if (animReversedDrawable != null && animReversedDrawable is Animatable) {
             with(animReversedDrawable as Animatable) {
