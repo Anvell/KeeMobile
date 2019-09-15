@@ -1,20 +1,19 @@
 package io.github.anvell.keemobile.presentation.explore
 
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.usecase.GetFilteredEntries
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
 import java.util.*
 
 class ExploreViewModel @AssistedInject constructor(
     @Assisted initialState: ExploreViewState,
-    private val getOpenDatabase: GetOpenDatabase
+    private val getOpenDatabase: GetOpenDatabase,
+    private val getFilteredEntries: GetFilteredEntries
 ) : BaseViewModel<ExploreViewState>(initialState) {
 
     init {
@@ -36,6 +35,24 @@ class ExploreViewModel @AssistedInject constructor(
     fun activateGroup(id: UUID) {
         setState {
             copy(rootStack = rootStack.append(id))
+        }
+    }
+
+    fun filterEntries(filter: String) {
+        withState { state ->
+            if(state.searchResults is Uninitialized || state.searchResults()?.filter != filter) {
+                getFilteredEntries
+                    .use(state.activeDatabaseId, filter)
+                    .execute {
+                        copy(searchResults = it)
+                    }
+            }
+        }
+    }
+
+    fun clearFilter() {
+        setState {
+            copy(searchResults = Uninitialized)
         }
     }
 

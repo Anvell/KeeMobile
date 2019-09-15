@@ -110,4 +110,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
 
     implementation "com.gitlab.mvysny.konsume-xml:konsume-xml:0.8"
+
+    def RxBindings = "3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding:$RxBindings"
+
 }

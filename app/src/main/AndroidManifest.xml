@@ -11,7 +11,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".presentation.home.HomeActivity"
-                  android:windowSoftInputMode="adjustPan">
+                  android:windowSoftInputMode="adjustResize"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

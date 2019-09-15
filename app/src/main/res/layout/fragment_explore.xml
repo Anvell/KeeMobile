@@ -47,6 +47,7 @@
                 android:hint="@string/text_hint_search"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:imeOptions="flagNoExtractUi|flagNoPersonalizedLearning"
                 android:layout_weight="1" />
 
             <io.github.anvell.keemobile.presentation.widgets.AnimatedImageView
