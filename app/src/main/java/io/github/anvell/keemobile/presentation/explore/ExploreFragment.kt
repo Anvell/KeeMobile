@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.github.anvell.keemobile.R
@@ -47,10 +48,12 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         binding.navigateButton.setOnClickListener {
             updateUiOnNavigation(false)
             withState(viewModel) { state ->
-                if (state.rootStack.isEmpty()) {
-                    // TODO: Show drawer
-                } else {
-                    viewModel.navigateUp()
+                when {
+                    state.searchResults !is Uninitialized -> binding.search.text.clear()
+                    state.rootStack.isEmpty() -> {
+                        // TODO: Show drawer
+                    }
+                    else -> viewModel.navigateUp()
                 }
             }
         }
@@ -97,10 +100,10 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     override fun onBackPressed() {
         updateUiOnNavigation(false)
         withState(viewModel) { state ->
-            if (state.rootStack.isEmpty()) {
-                super.onBackPressed()
-            } else {
-                viewModel.navigateUp()
+            when {
+                state.searchResults !is Uninitialized -> binding.search.text.clear()
+                state.rootStack.isEmpty() -> super.onBackPressed()
+                else -> viewModel.navigateUp()
             }
         }
     }
@@ -110,14 +113,20 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         when {
             state.searchResults is Success -> state.searchResults()?.also {
                 renderFilteredEntries(it.filteredEntries)
+
+                binding.navigateButton.isVisible = false
+                binding.searchSeparator.isVisible = true
             }
-            state.searchResults is Uninitialized && state.activeDatabase is Success ->
+            state.searchResults is Uninitialized && state.activeDatabase is Success -> {
                 state.activeDatabase()?.database?.let { db ->
                     val group = if (state.rootStack.isEmpty()) db.root else {
                         db.findGroup { it.uuid == state.rootStack.last() }
                     }
                     renderGroupContents(group!!)
                 }
+                binding.navigateButton.isVisible = true
+                binding.searchSeparator.isVisible = false
+            }
         }
     }
 

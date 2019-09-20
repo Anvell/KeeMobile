@@ -25,6 +25,7 @@
             android:layout_marginTop="@dimen/layout_vertical_margin"
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:background="@drawable/card_translucent"
+            android:animateLayoutChanges="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -38,6 +39,12 @@
                 android:tint="@color/onSurface"
                 android:src="@drawable/ic_anim_menu_to_arrow"
                 app:srcReversed="@drawable/ic_anim_arrow_to_menu" />
+
+            <View
+                android:id="@+id/search_separator"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/search"
