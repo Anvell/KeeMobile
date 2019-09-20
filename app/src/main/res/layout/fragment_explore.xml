@@ -16,6 +16,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingTop="@dimen/explore_list_top_padding"
             tools:itemCount="16"
+            android:overScrollMode="never"
             tools:listitem="@layout/item_entry" />
 
         <LinearLayout

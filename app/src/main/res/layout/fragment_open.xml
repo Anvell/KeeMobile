@@ -58,6 +58,7 @@
             android:paddingTop="@dimen/layout_vertical_margin"
             android:paddingEnd="@dimen/layout_horizontal_margin"
             android:paddingBottom="@dimen/layout_vertical_margin"
+            android:overScrollMode="never"
             android:scrollbars="none">
 
             <LinearLayout
@@ -93,6 +94,7 @@
                     android:background="@drawable/card_background"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="6"
+                    android:overScrollMode="never"
                     tools:listitem="@layout/item_recent_file" />
 
                 <com.google.android.material.button.MaterialButton
