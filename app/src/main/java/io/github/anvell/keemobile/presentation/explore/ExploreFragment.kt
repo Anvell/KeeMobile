@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -17,6 +18,7 @@ import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
 import io.github.anvell.keemobile.presentation.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_explore.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -51,7 +53,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 when {
                     state.searchResults !is Uninitialized -> binding.search.text.clear()
                     state.rootStack.isEmpty() -> {
-                        // TODO: Show drawer
+                        binding.drawer.openDrawer(GravityCompat.START)
                     }
                     else -> viewModel.navigateUp()
                 }
@@ -101,6 +103,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         updateUiOnNavigation(false)
         withState(viewModel) { state ->
             when {
+                binding.drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
                 state.searchResults !is Uninitialized -> binding.search.text.clear()
                 state.rootStack.isEmpty() -> super.onBackPressed()
                 else -> viewModel.navigateUp()

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="drawer_width">256dp</dimen>
+
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
     <dimen name="content_margin">16dp</dimen>
