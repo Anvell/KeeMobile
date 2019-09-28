@@ -7,7 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.ViewDataBinding
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRxState
@@ -15,14 +19,12 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
-import javax.inject.Inject
-import kotlin.reflect.KProperty1
-import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.findNavController
 import io.github.anvell.keemobile.common.rx.RxSchedulers
+import io.github.anvell.keemobile.presentation.home.DrawerHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
+import kotlin.reflect.KProperty1
 
 abstract class BaseFragment<T>(
     val inflaterBlock: (
@@ -57,6 +59,7 @@ abstract class BaseFragment<T>(
             .addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() = onBackPressed()
             })
+        getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -136,5 +139,7 @@ abstract class BaseFragment<T>(
     protected open fun onBackPressed() {
         findNavController().navigateUp()
     }
+
+    protected open fun getDrawer() = (activity as? DrawerHolder)?.getDrawer()
 
 }

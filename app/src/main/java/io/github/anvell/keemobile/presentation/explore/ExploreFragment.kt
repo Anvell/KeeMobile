@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.github.anvell.keemobile.R
@@ -18,6 +19,8 @@ import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
 import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.home.HomeViewModel
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_explore.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -38,6 +41,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
         initSearch()
 
@@ -53,7 +57,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 when {
                     state.searchResults !is Uninitialized -> binding.search.text.clear()
                     state.rootStack.isEmpty() -> {
-                        binding.drawer.openDrawer(GravityCompat.START)
+                        getDrawer()?.openDrawer(GravityCompat.START)
                     }
                     else -> viewModel.navigateUp()
                 }
@@ -103,7 +107,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         updateUiOnNavigation(false)
         withState(viewModel) { state ->
             when {
-                binding.drawer.isDrawerOpen(GravityCompat.START) -> drawer.closeDrawer(GravityCompat.START)
+                getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(GravityCompat.START)
                 state.searchResults !is Uninitialized -> binding.search.text.clear()
                 state.rootStack.isEmpty() -> super.onBackPressed()
                 else -> viewModel.navigateUp()
