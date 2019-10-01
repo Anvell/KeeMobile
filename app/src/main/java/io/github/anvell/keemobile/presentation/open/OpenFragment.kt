@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
@@ -33,6 +34,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
         binding.dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))

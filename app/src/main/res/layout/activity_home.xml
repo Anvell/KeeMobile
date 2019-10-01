@@ -21,13 +21,14 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/app_navigation" />
 
-            <LinearLayout
+            <fragment
+                android:id="@+id/drawer_fragment"
                 android:layout_width="@dimen/drawer_width"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:background="@color/background">
+                android:name="io.github.anvell.keemobile.presentation.drawer.DrawerFragment"
+                android:background="@color/background"/>
 
-            </LinearLayout>
         </androidx.drawerlayout.widget.DrawerLayout>
     </FrameLayout>
 </layout>

@@ -59,7 +59,6 @@ abstract class BaseFragment<T>(
             .addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() = onBackPressed()
             })
-        getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
