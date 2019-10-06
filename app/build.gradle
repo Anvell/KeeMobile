@@ -80,7 +80,7 @@ dependencies {
     implementation "androidx.fragment:fragment:$Fragment"
     implementation "androidx.fragment:fragment-ktx:$Fragment"
 
-    def Navigation = "2.1.0-beta02"
+    def Navigation = "2.1.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$Navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$Navigation"
 
