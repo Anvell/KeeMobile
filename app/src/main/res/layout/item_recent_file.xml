@@ -8,17 +8,17 @@
     </data>
 
     <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Typography.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{title}"
-            android:padding="16dp"
-            android:gravity="start|center_vertical"
-            android:clickable="true"
-            android:background="@drawable/selectable_surface_background"
-            android:drawSelectorOnTop="true"
-            android:selected="@{isSelected}"
-            android:onClick="@{clickListener}"
-            tools:text="@tools:sample/lorem"
-            android:focusable="true"/>
+        style="@style/Typography.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selectable_surface_background"
+        android:drawSelectorOnTop="true"
+        android:clickable="@{clickListener != null}"
+        android:focusable="@{clickListener != null}"
+        android:gravity="start|center_vertical"
+        android:onClick="@{clickListener}"
+        android:padding="16dp"
+        android:selected="@{isSelected}"
+        android:text="@{title}"
+        tools:text="@tools:sample/lorem" />
 </layout>

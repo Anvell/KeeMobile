@@ -26,8 +26,7 @@
                 android:layout_width="@dimen/drawer_width"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:name="io.github.anvell.keemobile.presentation.drawer.DrawerFragment"
-                android:background="@color/background"/>
+                android:name="io.github.anvell.keemobile.presentation.drawer.DrawerFragment" />
 
         </androidx.drawerlayout.widget.DrawerLayout>
     </FrameLayout>

@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
-        android:id="@+id/drawer_root"
+        android:id="@+id/drawer_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/content_margin"
-        android:background="@drawable/card_background"
         android:overScrollMode="never"
+        android:background="@color/background"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="6"
         tools:listitem="@layout/item_recent_file" />
