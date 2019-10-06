@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.ViewDataBinding
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRxState
@@ -21,6 +19,7 @@ import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.presentation.home.DrawerHolder
+import io.github.anvell.keemobile.presentation.home.NavControllerHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -136,7 +135,7 @@ abstract class BaseFragment<T>(
     protected open fun onFileOpened(uri: Uri) = Unit
 
     protected open fun onBackPressed() {
-        findNavController().navigateUp()
+        (activity as? NavControllerHolder)?.getNavController()?.navigateUp()
     }
 
     protected open fun getDrawer() = (activity as? DrawerHolder)?.getDrawer()
