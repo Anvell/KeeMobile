@@ -7,10 +7,7 @@ import io.github.anvell.keemobile.common.constants.AppConstants
 import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
-import io.github.anvell.keemobile.domain.usecase.CreateNewFile
-import io.github.anvell.keemobile.domain.usecase.GetRecentFiles
-import io.github.anvell.keemobile.domain.usecase.OpenFileSource
-import io.github.anvell.keemobile.domain.usecase.SaveRecentFiles
+import io.github.anvell.keemobile.domain.usecase.*
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
 import timber.log.Timber
 
@@ -19,7 +16,8 @@ class OpenViewModel @AssistedInject constructor(
     private val createNewFile: CreateNewFile,
     private val openFileSource: OpenFileSource,
     private val getRecentFiles: GetRecentFiles,
-    private val saveRecentFiles: SaveRecentFiles
+    private val saveRecentFiles: SaveRecentFiles,
+    private val getOpenDatabase: GetOpenDatabase
 ) : BaseViewModel<OpenViewState>(initialState) {
 
     init {
@@ -75,8 +73,10 @@ class OpenViewModel @AssistedInject constructor(
     }
 
     fun openFromSource(source: FileSource, secrets: FileSecrets) {
-        openFileSource
-            .use(source, secrets)
+        getOpenDatabase
+            .use(source.id)
+            .map { it.id }
+            .onErrorResumeNext(openFileSource.use(source, secrets))
             .execute {
                 copy(opened = it)
             }
