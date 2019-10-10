@@ -5,13 +5,19 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import com.airbnb.mvrx.*
+import androidx.navigation.fragment.findNavController
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
+import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
 import io.github.anvell.keemobile.domain.entity.KeyGroup
 import io.github.anvell.keemobile.domain.entity.SearchResult
@@ -19,9 +25,6 @@ import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
 import io.github.anvell.keemobile.presentation.base.BaseFragment
-import io.github.anvell.keemobile.presentation.home.HomeViewModel
-import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.fragment_explore.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -33,6 +36,9 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     lateinit var viewModelFactory: ExploreViewModel.Factory
 
     private val viewModel: ExploreViewModel by fragmentViewModel()
+
+    @Inject
+    lateinit var iconMapper: IconMapper
 
     override fun onAttach(context: Context) {
         requireActivity().injector.inject(this)
@@ -150,7 +156,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     id(entry.uuid.toString())
                     title(entry.name)
                     subtitle(entry.notes)
-                    iconId(R.drawable.ic_folder)
+                    iconId(iconMapper.map(entry.iconId))
                     isSelected(false)
                     clickListener(View.OnClickListener { onGroupClicked(entry.uuid) })
                 }
@@ -161,7 +167,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     id(entry.uuid.toString())
                     title(entry.title)
                     subtitle(entry.username)
-                    iconId(R.drawable.ic_plus_square)
+                    iconId(iconMapper.map(entry.iconId))
                     isSelected(false)
                     clickListener(View.OnClickListener { })
                 }
@@ -189,12 +195,12 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
 
                         item.entries
                             .sortedBy { it.title }
-                            .forEach {
+                            .forEach { entry ->
                                 itemEntry {
-                                    id(it.uuid.toString())
-                                    title(it.title)
-                                    subtitle(it.username)
-                                    iconId(R.drawable.ic_plus_square)
+                                    id(entry.uuid.toString())
+                                    title(entry.title)
+                                    subtitle(entry.username)
+                                    iconId(iconMapper.map(entry.iconId))
                                     isSelected(false)
                                     clickListener(View.OnClickListener { })
                                 }
