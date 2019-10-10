@@ -43,6 +43,11 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         super.onViewCreated(view, savedInstanceState)
         getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 
+        requireActivity().onBackPressedDispatcher
+            .addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() = onBackPressed()
+        })
+
         initSearch()
 
         binding.exploreRoot.setOnTouchListener { _, _ ->
@@ -103,13 +108,13 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
             .disposeOnStop()
     }
 
-    override fun onBackPressed() {
+    private fun onBackPressed() {
         updateUiOnNavigation(false)
         withState(viewModel) { state ->
             when {
                 getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(GravityCompat.START)
                 state.searchResults !is Uninitialized -> binding.search.text.clear()
-                state.rootStack.isEmpty() -> super.onBackPressed()
+                state.rootStack.isEmpty() -> findNavController().navigateUp()
                 else -> viewModel.navigateUp()
             }
         }

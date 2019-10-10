@@ -41,14 +41,6 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding
         )
     }
 
-    override fun onBackPressed() {
-        if(getDrawer()?.isDrawerOpen(GravityCompat.START) == true) {
-            getDrawer()?.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun invalidate(): Unit = withState(viewModel) { state ->
         binding.drawerMenu.withModels {
 

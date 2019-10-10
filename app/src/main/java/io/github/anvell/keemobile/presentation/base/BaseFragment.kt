@@ -51,15 +51,6 @@ abstract class BaseFragment<T>(
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher
-            .addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() = onBackPressed()
-            })
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -133,10 +124,6 @@ abstract class BaseFragment<T>(
     protected open fun onFileCreated(uri: Uri) = Unit
 
     protected open fun onFileOpened(uri: Uri) = Unit
-
-    protected open fun onBackPressed() {
-        (activity as? NavControllerHolder)?.getNavController()?.navigateUp()
-    }
 
     protected open fun getDrawer() = (activity as? DrawerHolder)?.getDrawer()
 
