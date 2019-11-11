@@ -14,6 +14,9 @@
         <item name="android:textColor">@color/onBackground</item>
         <item name="android:statusBarColor">@color/statusBarBackground</item>
         <item name="android:navigationBarColor">@color/navigationBarBackground</item>
+
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>
     </style>
 
 </resources>
