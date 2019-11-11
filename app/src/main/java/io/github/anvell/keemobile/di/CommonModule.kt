@@ -1,7 +1,10 @@
 package io.github.anvell.keemobile.di
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import io.github.anvell.keemobile.common.io.InternalFile
 import io.github.anvell.keemobile.common.io.InternalFileImpl
 import io.github.anvell.keemobile.common.io.StorageFile
@@ -23,4 +26,14 @@ object CommonModule {
     @Provides
     @JvmStatic
     fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile = InternalFile
+
+    @Provides
+    @JvmStatic
+    @Reusable
+    fun provideMoshi(): Moshi {
+        return Moshi
+            .Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
 }
