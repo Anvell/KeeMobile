@@ -3,9 +3,11 @@ package io.github.anvell.keemobile.presentation.explore
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,12 +17,9 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
-import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
-import io.github.anvell.keemobile.domain.entity.KeyGroup
-import io.github.anvell.keemobile.domain.entity.SearchResult
 import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
@@ -28,6 +27,8 @@ import io.github.anvell.keemobile.presentation.base.BaseFragment
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import io.github.anvell.keemobile.R
+import io.github.anvell.keemobile.domain.entity.*
 
 @SuppressLint("ClickableViewAccessibility")
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
@@ -93,6 +94,43 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         binding.searchExtraButton.setOnClickListener {
             if (!binding.search.text.isNullOrEmpty()) {
                 binding.search.text.clear()
+            } else {
+                showExplorePopupMenu(it)
+            }
+        }
+    }
+
+    private fun showExplorePopupMenu(view: View) = withState(viewModel) { state ->
+        with(PopupMenu(requireActivity(), view, GravityCompat.END)) {
+
+            if (state.appSettings is Success) {
+                addViewModeMenuItem(menu, state.appSettings()!!)
+            }
+            show()
+        }
+    }
+
+    private fun addViewModeMenuItem(menu: Menu, settings: AppSettings) = withState(viewModel) { state ->
+        when (settings.exploreViewMode) {
+            ViewMode.TREE -> {
+                menu.add(getString(R.string.explore_menu_show_list))
+                    .setOnMenuItemClickListener {
+                        binding.exploreView.clear()
+
+                        if (state.rootStack.isNotEmpty()) {
+                            viewModel.resetRoot()
+                            binding.navigateButton.playReverse()
+                        }
+                        viewModel.updateAppSettings(settings.copy(exploreViewMode = ViewMode.LIST))
+                        true
+                    }
+            }
+            ViewMode.LIST -> {
+                menu.add(getString(R.string.explore_menu_show_folders))
+                    .setOnMenuItemClickListener {
+                        viewModel.updateAppSettings(settings.copy(exploreViewMode = ViewMode.TREE))
+                        true
+                    }
             }
         }
     }
@@ -137,15 +175,28 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
             }
             state.searchResults is Uninitialized && state.activeDatabase is Success -> {
                 state.activeDatabase()?.database?.let { db ->
-                    val group = if (state.rootStack.isEmpty()) db.root else {
-                        db.findGroup { it.uuid == state.rootStack.last() }
+
+                    when (state.appSettings()?.exploreViewMode) {
+                        ViewMode.TREE -> {
+                            val group = if (state.rootStack.isEmpty()) db.root else {
+                                db.findGroup { it.uuid == state.rootStack.last() }
+                            }
+                            renderGroupContents(group!!)
+                        }
+                        ViewMode.LIST -> {
+                            renderEntriesAsList(db)
+                        }
                     }
-                    renderGroupContents(group!!)
+
                 }
                 binding.navigateButton.isVisible = true
                 binding.searchSeparator.isVisible = false
             }
         }
+    }
+
+    private fun renderEntriesAsList(database: KeyDatabase) {
+        renderFilteredEntries(database.findEntries { true })
     }
 
     private fun renderGroupContents(group: KeyGroup) {
@@ -185,7 +236,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 }
             } else {
                 results
-                    .sortedBy { it.group.name }
+                    .sortedBy { it.group.name.toLowerCase(Locale.getDefault()) }
                     .forEach { item ->
 
                         itemHeader {

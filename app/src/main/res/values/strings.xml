@@ -12,6 +12,8 @@
     <string name="text_hint_search">Search</string>
 
     <string name="explore_search_no_results">No results</string>
+    <string name="explore_menu_show_list">Show as list</string>
+    <string name="explore_menu_show_folders">Show as folders</string>
 
     <string name="drawer_file_list_header">Vaults</string>
     <string name="drawer_app_header">Application</string>
