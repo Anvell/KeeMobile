@@ -23,10 +23,8 @@ class RecentFilesRepositoryImpl @Inject constructor(
     }
 
     override fun readRecentFiles(): List<FileSource> {
-        val inputStream = internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)
-
-        if (inputStream != null) {
-            return inputStream
+        internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
+            return stream
                 .readAsString()
                 .konsumeXml()
                 .child(RECENT_FILES_TAG) {
@@ -43,10 +41,9 @@ class RecentFilesRepositoryImpl @Inject constructor(
                 }.filter {
                     storageFile.checkUriPermission(it.uri) && storageFile.exists(it.uri)
                 }
-
-        } else {
-            throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
         }
+
+        throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
     }
 
     override fun writeRecentFiles(recentFiles: List<FileSource>) {
@@ -56,8 +53,11 @@ class RecentFilesRepositoryImpl @Inject constructor(
             .reduce { acc, element -> acc + element }
             .toXmlTag(RECENT_FILES_TAG)
 
-        internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES).use {
-            it?.write(contents.toByteArray())
+        internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
+            stream.write(contents.toByteArray())
+            return
         }
+
+        throw IOException("Cannot write ${AppConstants.FILE_RECENT_FILES}")
     }
 }
