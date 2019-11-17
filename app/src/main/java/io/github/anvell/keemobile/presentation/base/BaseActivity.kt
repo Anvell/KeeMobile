@@ -1,5 +1,5 @@
 package io.github.anvell.keemobile.presentation.base
 
-import com.airbnb.mvrx.BaseMvRxActivity
+import androidx.appcompat.app.AppCompatActivity
 
-abstract class BaseActivity : BaseMvRxActivity()
+abstract class BaseActivity : AppCompatActivity()
