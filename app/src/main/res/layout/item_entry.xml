@@ -23,6 +23,10 @@
             type="Integer" />
 
         <variable
+            name="iconTint"
+            type="Integer" />
+
+        <variable
             name="isSelected"
             type="Boolean" />
 
@@ -52,6 +56,7 @@
             android:background="@null"
             android:padding="16dp"
             android:tint="@color/onSurface"
+            customTint="@{iconTint}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

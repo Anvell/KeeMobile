@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -17,9 +18,12 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.jakewharton.rxbinding3.widget.textChanges
+import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
+import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
+import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
@@ -27,8 +31,6 @@ import io.github.anvell.keemobile.presentation.base.BaseFragment
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.domain.entity.*
 
 @SuppressLint("ClickableViewAccessibility")
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
@@ -41,6 +43,8 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     @Inject
     lateinit var iconMapper: IconMapper
 
+    private lateinit var filterColorMapper: FilterColorMapper
+
     override fun onAttach(context: Context) {
         requireActivity().injector.inject(this)
         super.onAttach(context)
@@ -49,6 +53,10 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        filterColorMapper = FilterColorMapper(
+            ContextCompat.getColor(requireContext(), R.color.onSurface),
+            resources.getIntArray(R.array.filterColors)
+        )
 
         requireActivity().onBackPressedDispatcher
             .addCallback(this, object : OnBackPressedCallback(true) {
@@ -208,6 +216,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     title(entry.name)
                     subtitle(entry.notes)
                     iconId(iconMapper.map(entry.iconId))
+                    iconTint(filterColorMapper.defaultColor)
                     isSelected(false)
                     clickListener(View.OnClickListener { onGroupClicked(entry.uuid) })
                 }
@@ -219,6 +228,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     title(entry.title)
                     subtitle(entry.username)
                     iconId(iconMapper.map(entry.iconId))
+                    iconTint(filterColorMapper.map(entry.backgroundColor))
                     isSelected(false)
                     clickListener(View.OnClickListener { })
                 }
@@ -252,6 +262,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                                     title(entry.title)
                                     subtitle(entry.username)
                                     iconId(iconMapper.map(entry.iconId))
+                                    iconTint(filterColorMapper.map(entry.backgroundColor))
                                     isSelected(false)
                                     clickListener(View.OnClickListener { })
                                 }

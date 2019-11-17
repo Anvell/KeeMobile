@@ -19,4 +19,13 @@
     <color name="launcherBackground">#59A674</color>
     <color name="navigationBarBackground">#242424</color>
     <color name="statusBarBackground">#242424</color>
+
+    <array name="filterColors">
+        <item>#FFCA28</item>
+        <item>#66BB6A</item>
+        <item>#EF5350</item>
+        <item>#FF7043</item>
+        <item>#5C6BC0</item>
+        <item>#7E57C2</item>
+    </array>
 </resources>
