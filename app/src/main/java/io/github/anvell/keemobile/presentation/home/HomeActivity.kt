@@ -1,6 +1,7 @@
 package io.github.anvell.keemobile.presentation.home
 
 import android.os.Bundle
+import android.view.WindowManager.LayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -20,7 +21,9 @@ class HomeActivity : BaseActivity(), DrawerHolder, NavControllerHolder {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
         injector.inject(this)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
     }
 
