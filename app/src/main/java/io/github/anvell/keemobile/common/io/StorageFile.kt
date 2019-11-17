@@ -8,4 +8,8 @@ interface StorageFile {
     fun openInputStream(sourceUri: String): InputStream?
 
     fun openOutputStream(targetUri: String): OutputStream?
+
+    fun checkUriPermission(targetUri: String): Boolean
+
+    fun exists(targetUri: String): Boolean
 }

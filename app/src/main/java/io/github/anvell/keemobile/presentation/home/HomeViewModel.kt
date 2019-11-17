@@ -1,14 +1,49 @@
 package io.github.anvell.keemobile.presentation.home
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
+import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.usecase.CloseDatabase
+import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
+import io.github.anvell.keemobile.domain.usecase.GetOpenDatabases
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
 
-class HomeViewModel @AssistedInject constructor(@Assisted initialState: HomeViewState) :
-    BaseViewModel<HomeViewState>(initialState) {
+class HomeViewModel @AssistedInject constructor(
+    @Assisted initialState: HomeViewState,
+    private val getOpenDatabase: GetOpenDatabase,
+    private val getOpenDatabases: GetOpenDatabases,
+    private val closeDatabase: CloseDatabase
+) : BaseViewModel<HomeViewState>(initialState) {
+
+    init {
+        getOpenDatabases
+            .use()
+            .subscribe {
+                setState {
+                    copy(openDatabases = it)
+                }
+            }
+            .disposeOnClear()
+    }
+
+    fun switchDatabase(id: VaultId) {
+        getOpenDatabase
+            .use(id)
+            .map { it.id }
+            .execute {
+                copy(activeDatabaseId = it)
+            }
+    }
+
+    fun closeDatabase(id: VaultId) {
+        closeDatabase
+            .use(id)
+            .map { if (it.isNotEmpty()) it.first().id else "" }
+            .execute {
+                copy(activeDatabaseId = it)
+            }
+    }
 
     @AssistedInject.Factory
     interface Factory {

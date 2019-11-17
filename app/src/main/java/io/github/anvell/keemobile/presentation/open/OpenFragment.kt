@@ -4,8 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
 import io.github.anvell.keemobile.R
@@ -16,7 +15,7 @@ import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.itemRecentFile
 import io.github.anvell.keemobile.presentation.base.BaseFragment
-import io.github.anvell.keemobile.presentation.explore.ExploreArgs
+import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import javax.inject.Inject
 
 class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::inflate) {
@@ -25,6 +24,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
     lateinit var viewModelFactory: OpenViewModel.Factory
 
     private val viewModel: OpenViewModel by fragmentViewModel()
+    private val homeViewModel: HomeViewModel by activityViewModel()
 
     override fun onAttach(context: Context) {
         requireActivity().injector.inject(this)
@@ -33,6 +33,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
         binding.dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
@@ -76,9 +77,9 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.title.text = state.selectedFile?.name
         binding.unlock.isEnabled = state.selectedFile != null
 
-        if (state.recentFiles.isNotEmpty()) {
+        if (state.recentFiles is Success) {
             binding.recentFiles.withModels {
-                state.recentFiles.reversed().forEach { entry ->
+                state.recentFiles()!!.reversed().forEach { entry ->
 
                     if(entry is FileSource.Storage) {
                         itemRecentFile {
@@ -92,20 +93,20 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        handleAnimation(state.recentFiles.isEmpty())
+        handleAnimation(state.recentFiles is Success)
     }
 
-    private fun handleAnimation(isRecentFiles: Boolean) {
-        if(isRecentFiles) {
-            binding.motionLayout.transitionToStart()
-        } else {
+    private fun handleAnimation(showRecentFiles: Boolean) {
+        if (showRecentFiles) {
             binding.motionLayout.transitionToEnd()
+        } else {
+            binding.motionLayout.transitionToStart()
         }
     }
 
     private fun handleOpening(opened: Async<VaultId>) {
         when(opened) {
-            is Success -> findNavController().navigate(R.id.action_explore_database, bundleOf(MvRx.KEY_ARG to ExploreArgs(opened())))
+            is Success -> homeViewModel.switchDatabase(opened())
         }
     }
 

@@ -5,20 +5,67 @@ import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.*
+import io.github.anvell.keemobile.domain.exceptions.DatabaseAlreadyOpenException
+import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DatabaseRepositoryImpl @Inject constructor(private val storageFile: StorageFile) : DatabaseRepository {
 
-    private val openDatabases = HashMap<VaultId, OpenDatabase>()
+    private var openDatabases = listOf<OpenDatabase>()
+    private val openDatabasesSubject = BehaviorSubject.create<List<OpenDatabase>>()
+
+    override fun getOpenDatabases(): Observable<List<OpenDatabase>> {
+       return openDatabasesSubject
+    }
+
+    override fun getOpenDatabaseById(id: VaultId): OpenDatabase {
+        val database = openDatabases.find { it.id == id }
+
+        if(database != null) {
+            return database
+        } else {
+            throw DatabaseNotOpenException()
+        }
+    }
+
+    override fun getFilteredEntries(id: VaultId, filter: String): List<SearchResult> {
+        val database = openDatabases.find { it.id == id }
+
+        if(database != null) {
+            return database.database.filterEntries(filter)
+        } else {
+            throw DatabaseNotOpenException()
+        }
+    }
+
+    override fun closeDatabase(id: VaultId): List<OpenDatabase> {
+        val database = openDatabases.find { it.id == id }
+
+        if(database != null) {
+            openDatabases = openDatabases.filter { it.id != id }
+            openDatabasesSubject.onNext(openDatabases)
+            return openDatabases
+        } else {
+            throw DatabaseNotOpenException()
+        }
+    }
 
     override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
-        val database = when (source) {
-            is FileSource.Storage -> readFromStorage(source, secrets)
+        val alreadyOpen = openDatabases.find { it.id == source.id }
+
+        if (alreadyOpen == null) {
+            val database = when (source) {
+                is FileSource.Storage -> readFromStorage(source, secrets)
+            }
+            return pushDatabase(database, source, secrets)
+        } else {
+            throw DatabaseAlreadyOpenException()
         }
-        return pushDatabase(database, source, secrets)
     }
 
     override fun createDatabase(source: FileSource, secrets: FileSecrets): VaultId {
@@ -63,7 +110,8 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
     }
 
     private fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): VaultId {
-        openDatabases[source.id] = OpenDatabase(database, source, secrets)
+        openDatabases = openDatabases + OpenDatabase(database, source, secrets)
+        openDatabasesSubject.onNext(openDatabases)
         return source.id
     }
 

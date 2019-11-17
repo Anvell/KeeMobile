@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="drawer_width">256dp</dimen>
+
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
     <dimen name="content_margin">16dp</dimen>
@@ -7,4 +9,7 @@
     <dimen name="surface_corner_radius">10dp</dimen>
     <dimen name="dock_height">64dp</dimen>
     <dimen name="content_margin_medium">32dp</dimen>
+    <dimen name="explore_list_item_height">64sp</dimen>
+    <dimen name="explore_search_bar_height">54sp</dimen>
+    <dimen name="explore_list_top_padding">86sp</dimen>
 </resources>

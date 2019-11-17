@@ -29,6 +29,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -78,7 +80,7 @@ dependencies {
     implementation "androidx.fragment:fragment:$Fragment"
     implementation "androidx.fragment:fragment-ktx:$Fragment"
 
-    def Navigation = "2.1.0-beta02"
+    def Navigation = "2.1.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$Navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$Navigation"
 
@@ -106,4 +108,11 @@ dependencies {
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation "com.jakewharton.timber:timber:4.7.1"
+
+    implementation "com.gitlab.mvysny.konsume-xml:konsume-xml:0.8"
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.1"
+
+    def RxBindings = "3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding:$RxBindings"
+
 }

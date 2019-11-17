@@ -25,3 +25,5 @@ private fun String.hash(type: String): String {
 
     return result.toString()
 }
+
+fun String.toXmlTag(tag: String) = "<$tag>$this</$tag>"

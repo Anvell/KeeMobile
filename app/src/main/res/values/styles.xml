@@ -17,4 +17,10 @@
         <item name="android:textColor">@color/onPrimary</item>
     </style>
 
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:textColor">@color/onBackground</item>
+        <item name="android:itemBackground">@drawable/popup_background</item>
+        <item name="android:popupBackground">@drawable/popup_background</item>
+    </style>
+
 </resources>
