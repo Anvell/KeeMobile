@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Typography.Header1" parent="TextAppearance.AppCompat.Display2">
+    <style name="Typography.Display2" parent="TextAppearance.AppCompat.Display2">
         <item name="android:fontFamily">@font/firasans_light</item>
     </style>
 
@@ -12,6 +12,11 @@
 
     <style name="Typography.Body" parent="@style/TextAppearance.AppCompat.Body1">
         <item name="android:fontFamily">@font/firasans_regular</item>
+    </style>
+
+    <style name="Typography.Body.Uppercase">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
     </style>
 
     <style name="Typography.Caption" parent="@style/TextAppearance.AppCompat.Caption">
