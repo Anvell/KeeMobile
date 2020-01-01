@@ -20,7 +20,7 @@ class DividerDecoration(context: Context, @DrawableRes id: Int, private val orie
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if (parent.layoutManager != null || parent.childCount > 1) {
             when (orientation) {
-                LinearLayout.VERTICAL -> drawVertical(c, parent)
+                RecyclerView.VERTICAL -> drawVertical(c, parent)
                 else -> drawHorizontal(c, parent)
             }
         }
@@ -88,12 +88,15 @@ class DividerDecoration(context: Context, @DrawableRes id: Int, private val orie
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (parent.childCount > 1) {
-            if (orientation == LinearLayout.VERTICAL) {
-                outRect[0, 0, 0] = divider.intrinsicHeight
-            } else {
-                outRect[0, 0, divider.intrinsicWidth] = 0
+        val position = (view.layoutParams as RecyclerView.LayoutParams).viewLayoutPosition
+
+        if (state.itemCount > 1 && position < state.itemCount - 1) {
+            when (orientation) {
+                RecyclerView.VERTICAL -> outRect.set(0, 0, 0, divider.intrinsicHeight)
+                else -> outRect.set(0, 0, divider.intrinsicWidth, 0)
             }
+        } else {
+            outRect.set(0, 0, 0, 0)
         }
     }
 }
