@@ -16,6 +16,7 @@ import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.itemRecentFile
 import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
+import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 import javax.inject.Inject
 
 class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::inflate) {
@@ -37,7 +38,13 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
 
         binding.dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
-        binding.recentFiles.addDivider(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
+        binding.recentFiles.addItemDecoration(
+            DividerDecoration(
+                requireContext(),
+                R.drawable.list_divider,
+                LinearLayoutManager.VERTICAL
+            )
+        )
 
         binding.fileCreate.setOnClickListener { requestCreateFile(getString(R.string.default_file_name)) }
         binding.fileOpen.setOnClickListener { requestOpenFile() }
