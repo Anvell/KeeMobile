@@ -5,10 +5,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.github.anvell.keemobile.common.io.InternalFile
-import io.github.anvell.keemobile.common.io.InternalFileImpl
-import io.github.anvell.keemobile.common.io.StorageFile
-import io.github.anvell.keemobile.common.io.StorageFileImpl
+import io.github.anvell.keemobile.common.io.*
 import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.common.rx.RxSchedulersImpl
 
@@ -26,6 +23,10 @@ object CommonModule {
     @Provides
     @JvmStatic
     fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile = InternalFile
+
+    @Provides
+    @JvmStatic
+    fun provideClipboardProvider(clipboardProvider: ClipboardProviderImpl): ClipboardProvider = clipboardProvider
 
     @Provides
     @JvmStatic

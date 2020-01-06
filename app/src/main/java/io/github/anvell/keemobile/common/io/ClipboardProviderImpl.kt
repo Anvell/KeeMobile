@@ -1,0 +1,28 @@
+package io.github.anvell.keemobile.common.io
+
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import androidx.core.content.getSystemService
+import dagger.Reusable
+import javax.inject.Inject
+
+@Reusable
+class ClipboardProviderImpl @Inject constructor(private val context: Context) : ClipboardProvider {
+
+    override fun putText(label: String, content: String): Boolean {
+        val clipboard = context.getSystemService<ClipboardManager>()
+
+        return if (clipboard != null) {
+            try {
+                clipboard.primaryClip = ClipData.newPlainText(label, content)
+                true
+            } catch (e: RuntimeException) {
+                false
+            }
+
+        } else {
+            false
+        }
+    }
+}

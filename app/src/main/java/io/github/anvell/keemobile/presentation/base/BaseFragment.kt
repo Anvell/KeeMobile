@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.databinding.ViewDataBinding
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxFragment
@@ -16,10 +15,10 @@ import com.airbnb.mvrx.MvRxState
 import com.google.android.material.snackbar.Snackbar
 import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
+import io.github.anvell.keemobile.common.io.ClipboardProvider
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.presentation.home.DrawerHolder
-import io.github.anvell.keemobile.presentation.home.NavControllerHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -37,6 +36,9 @@ abstract class BaseFragment<T>(
 
     @Inject
     lateinit var errorMapper: ErrorMapper
+
+    @Inject
+    lateinit var clipboardProvider: ClipboardProvider
 
     protected lateinit var binding: T
 
