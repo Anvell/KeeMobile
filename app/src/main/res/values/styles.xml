@@ -23,4 +23,9 @@
         <item name="android:popupBackground">@drawable/popup_background</item>
     </style>
 
+    <style name="DetailsTabLayout" parent="TextAppearance.Design.Tab">
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

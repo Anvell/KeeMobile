@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Typography.Display2" parent="TextAppearance.AppCompat.Display2">
+    <style name="Typography.Display1" parent="Typography.Body">
         <item name="android:fontFamily">@font/firasans_light</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Typography.Display2" parent="Typography.Display1">
+        <item name="android:textSize">45sp</item>
     </style>
 
     <style name="Typography.Title" parent="TextAppearance.AppCompat.Title">

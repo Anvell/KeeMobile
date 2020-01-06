@@ -8,6 +8,7 @@
 
     <dimen name="surface_corner_radius">10dp</dimen>
     <dimen name="dock_height">64dp</dimen>
+    <dimen name="tabs_height">42sp</dimen>
     <dimen name="content_margin_medium">32dp</dimen>
     <dimen name="explore_list_item_height">64sp</dimen>
     <dimen name="explore_search_bar_height">54sp</dimen>
