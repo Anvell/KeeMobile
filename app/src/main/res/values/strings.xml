@@ -22,4 +22,19 @@
     <string name="drawer_file_list_open">Open vault</string>
     <string name="drawer_content_description_close">Close vault %s</string>
 
+    <array name="details_tabs">
+        <item>General</item>
+        <item>Files</item>
+        <item>History</item>
+    </array>
+
+    <string name="details_title">Title</string>
+    <string name="details_username">Username</string>
+    <string name="details_password">Password</string>
+    <string name="details_website">Website</string>
+    <string name="details_notes">Notes</string>
+    <string name="details_expires">Expires</string>
+    <string name="details_tags">Tags</string>
+    <string name="details_copy_notice">%s copied to the clipboard</string>
+
 </resources>

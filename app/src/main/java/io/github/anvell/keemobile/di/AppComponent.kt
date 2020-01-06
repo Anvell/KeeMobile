@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import io.github.anvell.keemobile.presentation.drawer.DrawerFragment
+import io.github.anvell.keemobile.presentation.entry.EntryDetailsFragment
 import io.github.anvell.keemobile.presentation.explore.ExploreFragment
 import io.github.anvell.keemobile.presentation.home.HomeActivity
 import io.github.anvell.keemobile.presentation.open.OpenFragment
@@ -26,4 +27,5 @@ interface AppComponent {
     fun inject(fragment: OpenFragment)
     fun inject(fragment: ExploreFragment)
     fun inject(fragment: DrawerFragment)
+    fun inject(fragment: EntryDetailsFragment)
 }

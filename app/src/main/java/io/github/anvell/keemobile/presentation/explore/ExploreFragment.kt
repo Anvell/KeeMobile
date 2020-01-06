@@ -9,14 +9,12 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
+import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
@@ -28,6 +26,7 @@ import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
 import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -230,7 +229,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     iconId(iconMapper.map(entry.iconId))
                     iconTint(filterColorMapper.map(entry.backgroundColor))
                     isSelected(false)
-                    clickListener(View.OnClickListener { })
+                    clickListener(View.OnClickListener { onEntryClicked(entry.uuid) })
                 }
             }
         }
@@ -264,7 +263,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                                     iconId(iconMapper.map(entry.iconId))
                                     iconTint(filterColorMapper.map(entry.backgroundColor))
                                     isSelected(false)
-                                    clickListener(View.OnClickListener { })
+                                    clickListener(View.OnClickListener { onEntryClicked(entry.uuid) })
                                 }
                             }
                     }
@@ -275,6 +274,15 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     private fun onGroupClicked(id: UUID) {
         updateUiOnNavigation(true)
         viewModel.activateGroup(id)
+    }
+
+    private fun onEntryClicked(id: UUID) {
+        withState(viewModel) { state ->
+            findNavController().navigate(
+                R.id.action_entry_details,
+                bundleOf(MvRx.KEY_ARG to EntryDetailsArgs(state.activeDatabaseId, id))
+            )
+        }
     }
 
     private fun updateUiOnNavigation(isForward: Boolean) {
