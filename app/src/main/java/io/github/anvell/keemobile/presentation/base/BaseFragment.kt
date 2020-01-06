@@ -15,6 +15,7 @@ import com.airbnb.mvrx.MvRxState
 import com.google.android.material.snackbar.Snackbar
 import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
+import io.github.anvell.keemobile.common.extensions.snackbar
 import io.github.anvell.keemobile.common.io.ClipboardProvider
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import io.github.anvell.keemobile.common.rx.RxSchedulers
@@ -94,7 +95,7 @@ abstract class BaseFragment<T>(
             viewModel.asyncSubscribe(property, onFail = { t ->
                 val message = errorMapper.map(t)
                 if (message != null && view != null) {
-                    Snackbar.make(view!!, message, Snackbar.LENGTH_SHORT).show()
+                    snackbar(message)
                 }
             }, deliveryMode = uniqueOnly())
         }
