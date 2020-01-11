@@ -56,6 +56,7 @@ dependencies {
 
     /* Testing */
     testImplementation 'junit:junit:4.12'
+    testImplementation 'io.strikt:strikt-core:0.23.4'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
@@ -115,5 +116,7 @@ dependencies {
 
     def RxBindings = "3.0.0"
     implementation "com.jakewharton.rxbinding3:rxbinding:$RxBindings"
+
+    implementation 'commons-codec:commons-codec:1.13'
 
 }
