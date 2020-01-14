@@ -32,7 +32,11 @@ class OneTimePassword(
     fun calculate(time: Instant) = calculate(timeToCounter(time))
 
     fun calculate(counter: Long): String {
-        val key = Base32().decode(secret.toUpperCase(Locale.ENGLISH))
+        val key = try {
+            Base32().decode(secret.toUpperCase(Locale.ENGLISH))
+        } catch (e: IllegalArgumentException) {
+            secret.toByteArray()
+        }
         val keySpec = SecretKeySpec(key, "RAW")
 
         try {
