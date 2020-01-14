@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.common.authentication
 
+import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.domain.exceptions.OneTimePasswordException
 import org.apache.commons.codec.binary.Base32
 import org.threeten.bp.Instant
@@ -87,6 +88,10 @@ class OneTimePassword(
         private const val QUERY_DIGITS = "digits"
         private const val QUERY_PERIOD = "period"
 
+        private const val PROPERTY_OTP_URI = "otp"
+        private const val PROPERTY_OTP_SEED = "TOTP Seed"
+        private const val PROPERTY_OTP_SETTINGS = "TOTP Settings"
+
         @Throws(URISyntaxException::class)
         fun from(sourceUri: String): OneTimePassword {
             val params = mutableMapOf<String, String>()
@@ -112,6 +117,29 @@ class OneTimePassword(
                 period = params[QUERY_PERIOD]?.toInt() ?: 30,
                 algorithm = params[QUERY_ALGORITHM]?.toAlgorithm() ?: Algorithm.SHA1
             )
+        }
+
+        fun from(entry: KeyEntry): OneTimePassword? {
+            entry.getCustomPropertyByName(PROPERTY_OTP_URI)?.apply {
+                return from(value)
+            }
+
+            var result: OneTimePassword? = null
+
+            entry.getCustomPropertyByName(PROPERTY_OTP_SEED)?.let {
+                result = OneTimePassword(it.value)
+                val settings = entry.getCustomPropertyByName(PROPERTY_OTP_SETTINGS)
+
+                if (settings != null) {
+                    val values = settings.value.split(';')
+
+                    if (values.size == 2) {
+                        result = OneTimePassword(it.value, values[1].toInt(), values[0].toInt())
+                    }
+                }
+            }
+
+            return result
         }
     }
 
