@@ -16,6 +16,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.anvell.keemobile.*
+import io.github.anvell.keemobile.common.authentication.OneTimePassword
 import io.github.anvell.keemobile.common.extensions.clipToCornerRadius
 import io.github.anvell.keemobile.common.extensions.formatAsDateTime
 import io.github.anvell.keemobile.common.extensions.injector
@@ -27,6 +28,8 @@ import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.presentation.base.BaseEpoxyAdapter
 import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
+import timber.log.Timber
+import java.net.URISyntaxException
 import javax.inject.Inject
 
 @SuppressLint("ClickableViewAccessibility")
@@ -112,9 +115,24 @@ class EntryDetailsFragment :
         buildProperty(R.string.details_website, entry.url)
         buildProperty(R.string.details_notes, entry.notes)
 
-        entry.customProperties.forEachIndexed { i, p ->
-            buildProperty("$ID_CUSTOM_PROPERTY:$i", p.key, p.value, p.isProtected)
+        try {
+            OneTimePassword.from(entry)?.let {
+                itemDetailsOtp {
+                    id(R.string.details_otp)
+                    title(getString(R.string.details_otp))
+                    otp(it)
+                    longClickListener { _ -> copyToClipboard(getString(R.string.details_otp), it.calculate()) }
+                }
+            }
+        } catch (e: URISyntaxException) {
+            Timber.d(e, "Malformed OTP property.")
         }
+
+        entry.customProperties
+            .filter { p -> !OTP_PROPERTIES.any { it.equals(p.key, true) } }
+            .forEachIndexed { i, p ->
+                buildProperty("$ID_CUSTOM_PROPERTY:$i", p.key, p.value, p.isProtected)
+            }
 
         entry.times?.apply {
             if (expires && expiryTime != null) {
@@ -129,7 +147,6 @@ class EntryDetailsFragment :
                 tags(entry.tags)
             }
         }
-
     }
 
     private fun buildHistoryTab(entry: KeyEntry): EpoxyController.() -> Unit = {
@@ -185,6 +202,8 @@ class EntryDetailsFragment :
     companion object {
         private const val ID_PROPERTY = "PROPERTY"
         private const val ID_CUSTOM_PROPERTY = "CUSTOM_PROPERTY"
+
+        private val OTP_PROPERTIES = listOf("otp", "TOTP Seed", "TOTP Settings")
     }
 
 }

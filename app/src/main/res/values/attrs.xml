@@ -11,4 +11,9 @@
     <declare-styleable name="PasswordTextView">
         <attr name="hideLength" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="OneTimePasswordView">
+        <attr name="progressBar" format="reference" />
+        <attr name="oneTimePassword" format="reference" />
+    </declare-styleable>
 </resources>
