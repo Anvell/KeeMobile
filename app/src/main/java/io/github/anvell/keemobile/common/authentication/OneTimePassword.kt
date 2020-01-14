@@ -82,6 +82,8 @@ class OneTimePassword(
 
     companion object {
 
+        private const val OTP_PROTOCOL = "otpauth://"
+
         private const val QUERY_SECRET = "secret"
         private const val QUERY_ISSUER = "issuer"
         private const val QUERY_ALGORITHM = "algorithm"
@@ -94,8 +96,16 @@ class OneTimePassword(
 
         @Throws(URISyntaxException::class)
         fun from(sourceUri: String): OneTimePassword {
+            if (!sourceUri.startsWith(OTP_PROTOCOL, true)) {
+                return OneTimePassword(sourceUri)
+            }
+
             val params = mutableMapOf<String, String>()
             val uri = URI.create(sourceUri)
+
+            if (uri.query == null) {
+                throw URISyntaxException(sourceUri, "Query is not properly formatted.")
+            }
 
             uri.query.split('&').forEach {
                 val index = it.indexOf('=')
