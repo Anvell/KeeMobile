@@ -15,7 +15,7 @@ class ClipboardProviderImpl @Inject constructor(private val context: Context) : 
 
         return if (clipboard != null) {
             try {
-                clipboard.primaryClip = ClipData.newPlainText(label, content)
+                clipboard.setPrimaryClip(ClipData.newPlainText(label, content))
                 true
             } catch (e: RuntimeException) {
                 false
