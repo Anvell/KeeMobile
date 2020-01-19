@@ -77,6 +77,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$Lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$Lifecycle"
     kapt "androidx.lifecycle:lifecycle-common-java8:$Lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$Lifecycle"
 
     def Fragment = "1.1.0"
     implementation "androidx.fragment:fragment:$Fragment"

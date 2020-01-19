@@ -21,9 +21,8 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
     private var otpJob: Job? = null
     private val viewScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private val progressBarId: Int
+    private var progressBarId: Int = -1
     private var progressBar: ProgressBar? = null
-
     private var oneTimePassword: OneTimePassword? = null
 
     init {
@@ -57,7 +56,7 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun resume() {
+    internal fun resume() {
         oneTimePassword?.let {
             otpJob?.cancel()
             otpJob = launchOtp(it)
@@ -65,7 +64,7 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    private fun pause() {
+    internal fun pause() {
         otpJob?.cancel()
     }
 
@@ -80,9 +79,11 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
 
             if (rounded > currentStep) {
                 currentStep = rounded
-
                 val result = otp.calculate()
-                text = withContext(Dispatchers.Main) { result }
+
+                launch(Dispatchers.Main) {
+                    text = result
+                }
             }
             delay(1000)
         } while (true)
