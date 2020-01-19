@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatToggleButton
 import io.github.anvell.keemobile.R
 
-class PasswordVisibilityToggle(context: Context, attrs: AttributeSet) : AppCompatToggleButton(context, attrs) {
+class PasswordVisibilityToggle(context: Context, attrs: AttributeSet?) : AppCompatToggleButton(context, attrs) {
 
     private val boundViewId: Int
 

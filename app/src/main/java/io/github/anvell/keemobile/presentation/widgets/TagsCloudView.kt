@@ -7,7 +7,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.github.anvell.keemobile.R
 
-class TagsCloudView(context: Context, attrs: AttributeSet) : ChipGroup(context, attrs) {
+class TagsCloudView(context: Context, attrs: AttributeSet?) : ChipGroup(context, attrs) {
 
     fun setTags(tags: List<String>) {
         removeAllViews()

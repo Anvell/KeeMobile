@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import io.github.anvell.keemobile.R
 
-class AnimatedImageView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
+class AnimatedImageView(context: Context, attrs: AttributeSet?) : AppCompatImageView(context, attrs) {
 
     private val animDrawable: Drawable?
     private val animReversedDrawable: Drawable?

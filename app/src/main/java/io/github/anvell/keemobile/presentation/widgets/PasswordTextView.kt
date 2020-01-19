@@ -16,7 +16,7 @@ interface MaskedText {
     fun setMasked(hide: Boolean)
 }
 
-class PasswordTextView(context: Context, attrs: AttributeSet) : AppCompatTextView(context, attrs), MaskedText {
+class PasswordTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs), MaskedText {
 
     private val dotsRadius = DOTS_RADIUS.toPxScaled()
 

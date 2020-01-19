@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
 import org.threeten.bp.Instant
 import kotlin.math.ceil
 
-class OneTimePasswordView(context: Context, attrs: AttributeSet) :
+class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
     AppCompatTextView(context, attrs), LifecycleObserver {
 
     private var otpJob: Job? = null
