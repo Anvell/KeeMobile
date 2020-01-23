@@ -6,7 +6,13 @@
                     <solid android:color="@android:color/white" />
                 </shape>
             </item>
-            <item android:drawable="@drawable/ic_eye_show" android:gravity="center" />
+            <item>
+                <inset android:drawable="@drawable/ic_eye_show"
+                    android:insetRight="8dp"
+                    android:insetTop="8dp"
+                    android:insetLeft="8dp"
+                    android:insetBottom="8dp" />
+            </item>
         </ripple>
     </item>
     <item>
@@ -16,7 +22,13 @@
                     <solid android:color="@android:color/white" />
                 </shape>
             </item>
-            <item android:drawable="@drawable/ic_eye_hide" android:gravity="center" />
+            <item>
+                <inset android:drawable="@drawable/ic_eye_hide"
+                    android:insetRight="8dp"
+                    android:insetTop="8dp"
+                    android:insetLeft="8dp"
+                    android:insetBottom="8dp" />
+            </item>
         </ripple>
     </item>
 </selector>
