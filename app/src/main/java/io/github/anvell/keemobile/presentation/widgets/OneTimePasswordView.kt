@@ -75,7 +75,6 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
             val step = Instant.now().epochSecond.toDouble() / otp.period
             val rounded = ceil(step)
             progressBar?.progress = ((rounded - step) * 100).toInt()
-            println(rounded)
 
             if (rounded > currentStep) {
                 currentStep = rounded
