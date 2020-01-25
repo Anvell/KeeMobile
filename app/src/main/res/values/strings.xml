@@ -37,5 +37,7 @@
     <string name="details_tags">Tags</string>
     <string name="details_otp">One Time Password</string>
     <string name="details_copy_notice">%s copied to the clipboard</string>
+    <string name="details_downloads_size">%,.2f KB</string>
+    <string name="details_downloads_empty">No files attached</string>
 
 </resources>

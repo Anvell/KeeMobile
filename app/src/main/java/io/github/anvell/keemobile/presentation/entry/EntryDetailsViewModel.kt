@@ -5,16 +5,19 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.AppSettings
+import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
+import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
 import timber.log.Timber
 
 class EntryDetailsViewModel @AssistedInject constructor(
     @Assisted initialState: EntryDetailsViewState,
     private val getOpenDatabase: GetOpenDatabase,
-    private val getAppSettings: GetAppSettings
+    private val getAppSettings: GetAppSettings,
+    private val saveAttachment: SaveAttachment
 ) : BaseViewModel<EntryDetailsViewState>(initialState) {
 
     init {
@@ -62,6 +65,23 @@ class EntryDetailsViewModel @AssistedInject constructor(
             .execute {
                 copy(entry = it)
             }
+    }
+
+    fun saveAttachmentFile(attachment: KeyAttachment) = withState { state ->
+        val (name, ref) = attachment
+        val binaryData = state.activeDatabase()?.database?.meta?.binaries?.find { it.id == ref }
+
+        if (binaryData != null && !state.saveAttachmentQueue.contains(ref)) {
+            setState { copy(saveAttachmentQueue = saveAttachmentQueue + ref) }
+
+            saveAttachment
+                .use(name, binaryData)
+                .doOnError(Timber::d)
+                .onErrorComplete()
+                .subscribe {
+                    setState { copy(saveAttachmentQueue = saveAttachmentQueue - ref) }
+                }
+        }
     }
 
     @AssistedInject.Factory

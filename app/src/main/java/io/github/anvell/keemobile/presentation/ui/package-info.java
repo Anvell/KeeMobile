@@ -8,7 +8,8 @@
         R.layout.item_details_property_masked,
         R.layout.item_details_header,
         R.layout.item_details_tags,
-        R.layout.item_details_otp
+        R.layout.item_details_otp,
+        R.layout.item_details_attachment
 })
 package io.github.anvell.keemobile.presentation.ui;
 

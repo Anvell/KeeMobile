@@ -83,6 +83,7 @@
                     android:autofillHints="password"
                     android:background="@drawable/card_background"
                     android:hint="@string/text_hint_password"
+                    android:text="1"
                     android:inputType="textPassword"
                     android:padding="@dimen/content_margin" />
 
