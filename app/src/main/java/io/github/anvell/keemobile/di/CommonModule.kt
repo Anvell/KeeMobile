@@ -26,6 +26,10 @@ object CommonModule {
 
     @Provides
     @JvmStatic
+    fun provideMediaStoreFile(mediaStoreFile: MediaStoreFileImpl): MediaStoreFile = mediaStoreFile
+
+    @Provides
+    @JvmStatic
     fun provideClipboardProvider(clipboardProvider: ClipboardProviderImpl): ClipboardProvider = clipboardProvider
 
     @Provides
