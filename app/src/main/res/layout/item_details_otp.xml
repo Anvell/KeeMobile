@@ -7,12 +7,14 @@
 
         <variable name="title" type="String" />
         <variable name="otp" type="io.github.anvell.keemobile.common.authentication.OneTimePassword" />
+        <variable name="isSurface" type="Boolean" />
         <variable name="longClickListener" type="OnLongClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@{isSurface? @color/surface : @android:color/transparent}"
         android:focusable="true"
         android:gravity="center_vertical"
         android:longClickable="true"

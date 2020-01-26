@@ -116,6 +116,7 @@ class EntryDetailsFragment :
             title(entry.title)
             iconId(iconMapper.map(entry.iconId))
             iconTint(filterColorMapper.map(entry.backgroundColor))
+            isSurface(true)
         }
 
         buildProperty(R.string.details_username, entry.username)
@@ -128,6 +129,7 @@ class EntryDetailsFragment :
                 itemDetailsOtp {
                     id(R.string.details_otp)
                     title(getString(R.string.details_otp))
+                    isSurface(true)
                     otp(it)
                     longClickListener { _ -> copyToClipboard(getString(R.string.details_otp), it.calculate()) }
                 }
@@ -152,6 +154,7 @@ class EntryDetailsFragment :
             itemDetailsTags {
                 id("$ID_PROPERTY:${R.string.details_tags}")
                 title(getString(R.string.details_tags))
+                isSurface(true)
                 tags(entry.tags)
             }
         }
@@ -168,12 +171,14 @@ class EntryDetailsFragment :
                 entry.attachments.forEach { item ->
                     val isProcessing = state.saveAttachmentQueue.contains(item.ref)
 
-                    itemDetailsAttachment {
+                    itemDetailsAsset {
                         id(item.ref)
                         title(item.key)
                         subtitle(getString(R.string.details_downloads_size, binaries[item.ref].data.size / 1024f))
+                        iconId(R.drawable.ic_download)
                         isClickable(!isProcessing)
                         isProcessing(isProcessing)
+                        isSurface(true)
                         clickListener(View.OnClickListener { saveAttachment(item) })
                     }
                 }
@@ -200,6 +205,7 @@ class EntryDetailsFragment :
                     id(id)
                     title(title)
                     subtitle(content)
+                    isSurface(true)
                     longClickListener { _ -> copyToClipboard(title, content) }
                 }
             } else {
@@ -207,6 +213,7 @@ class EntryDetailsFragment :
                     id(id)
                     title(title)
                     subtitle(content)
+                    isSurface(true)
                     longClickListener { _ -> copyToClipboard(title, content) }
                 }
             }

@@ -11,10 +11,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/content_margin"
-            android:background="@drawable/card_background"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="6"
-            tools:listitem="@layout/item_recent_file" />
+            tools:listitem="@layout/item_details_property" />
     </FrameLayout>
 </layout>

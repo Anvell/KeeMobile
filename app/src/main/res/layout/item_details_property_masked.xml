@@ -12,12 +12,14 @@
         <variable name="iconId" type="Integer" />
         <variable name="iconTint" type="Integer" />
         <variable name="isSelected" type="Boolean" />
+        <variable name="isSurface" type="Boolean" />
         <variable name="longClickListener" type="OnLongClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@{isSurface? @color/surface : @android:color/transparent}"
         android:focusable="true"
         android:gravity="center_vertical"
         android:longClickable="true"
