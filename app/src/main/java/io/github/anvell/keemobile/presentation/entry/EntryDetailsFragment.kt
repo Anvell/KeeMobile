@@ -187,17 +187,42 @@ class EntryDetailsFragment :
     }
 
     private fun buildHistoryTab(entry: KeyEntry): EpoxyController.() -> Unit = {
-        //TODO: Implement builder
+        entry.times?.apply {
+            creationTime?.let {
+                buildProperty(R.string.details_date_created, it.time.formatAsDateTime(), isSurface = false)
+            }
+
+            lastModificationTime?.let {
+                buildProperty(R.string.details_date_updated, it.time.formatAsDateTime(), isSurface = false)
+            }
+        }
+
+        itemDetailsHeaderSmall {
+            id(R.string.details_date_historic_title)
+            title(getString(R.string.details_date_historic_title))
+        }
+
+        entry.history.forEachIndexed { i, item ->
+            item.times?.lastModificationTime?.let {
+                itemDetailsAsset {
+                    id("${ID_HISTORIC_ENTRY}:$i")
+                    title(it.time.formatAsDateTime())
+                    iconId(R.drawable.ic_clock)
+                    isClickable(true)
+                    clickListener(View.OnClickListener { /* TODO: History browser */ })
+                }
+            }
+        }
     }
 
     private fun EpoxyController.buildProperty(
         @StringRes titleId: Int, content: String?,
-        isMasked: Boolean = false
-    ) = buildProperty("$ID_PROPERTY:$titleId", getString(titleId), content, isMasked)
+        isMasked: Boolean = false, isSurface: Boolean = true
+    ) = buildProperty("$ID_PROPERTY:$titleId", getString(titleId), content, isMasked, isSurface)
 
     private fun EpoxyController.buildProperty(
         id: String, title: String, content: String?,
-        isMasked: Boolean = false
+        isMasked: Boolean = false, isSurface: Boolean = true
     ) {
         if (content != null && content.isNotBlank()) {
             if (isMasked) {
@@ -205,7 +230,7 @@ class EntryDetailsFragment :
                     id(id)
                     title(title)
                     subtitle(content)
-                    isSurface(true)
+                    isSurface(isSurface)
                     longClickListener { _ -> copyToClipboard(title, content) }
                 }
             } else {
@@ -213,7 +238,7 @@ class EntryDetailsFragment :
                     id(id)
                     title(title)
                     subtitle(content)
-                    isSurface(true)
+                    isSurface(isSurface)
                     longClickListener { _ -> copyToClipboard(title, content) }
                 }
             }
@@ -254,6 +279,7 @@ class EntryDetailsFragment :
         private const val ID_PROPERTY = "PROPERTY"
         private const val ID_CUSTOM_PROPERTY = "CUSTOM_PROPERTY"
         private const val ID_DOWNLOADS = "DOWNLOADS"
+        private const val ID_HISTORIC_ENTRY = "HISTORIC_ENTRY"
 
         private val OTP_PROPERTIES = listOf("otp", "TOTP Seed", "TOTP Settings")
     }

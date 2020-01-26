@@ -34,6 +34,9 @@
     <string name="details_website">Website</string>
     <string name="details_notes">Notes</string>
     <string name="details_expires">Expires</string>
+    <string name="details_date_created">Created</string>
+    <string name="details_date_updated">Updated</string>
+    <string name="details_date_historic_title">Changes</string>
     <string name="details_tags">Tags</string>
     <string name="details_otp">One Time Password</string>
     <string name="details_copy_notice">%s copied to the clipboard</string>
