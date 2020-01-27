@@ -8,5 +8,6 @@ import java.util.*
 @Parcelize
 data class EntryDetailsArgs(
     val databaseId: VaultId,
-    val entryId: UUID
+    val entryId: UUID,
+    val historicEntryOf: UUID? = null
 ) : Parcelable

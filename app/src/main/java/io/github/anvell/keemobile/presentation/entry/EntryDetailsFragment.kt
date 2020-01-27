@@ -9,11 +9,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.forEach
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
+import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -35,6 +37,7 @@ import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 import timber.log.Timber
 import java.net.URISyntaxException
+import java.util.*
 import javax.inject.Inject
 
 @SuppressLint("ClickableViewAccessibility")
@@ -99,13 +102,19 @@ class EntryDetailsFragment :
     override fun invalidate(): Unit = withState(viewModel) { state ->
         if (state.entry is Success) {
             state.entry()?.also {
-                pagesAdapter.updateModels(
+                val tabs = if(state.historicEntryOf != null) {
+                    listOf(
+                        buildGeneralTab(it),
+                        buildFilesTab(it, state)
+                    )
+                } else {
                     listOf(
                         buildGeneralTab(it),
                         buildFilesTab(it, state),
                         buildHistoryTab(it)
                     )
-                )
+                }
+                pagesAdapter.updateModels(tabs)
             }
         }
     }
@@ -209,7 +218,7 @@ class EntryDetailsFragment :
                     title(it.time.formatAsDateTime())
                     iconId(R.drawable.ic_clock)
                     isClickable(true)
-                    clickListener(View.OnClickListener { /* TODO: History browser */ })
+                    clickListener(View.OnClickListener { onHistoricEntryClicked(item.uuid, entry.uuid) })
                 }
             }
         }
@@ -273,6 +282,13 @@ class EntryDetailsFragment :
                 }, Timber::d)
                 .disposeOnStop()
         }
+    }
+
+    private fun onHistoricEntryClicked(id: UUID, parentId: UUID) = withState(viewModel) { state ->
+        findNavController().navigate(
+            R.id.action_historic_entry_details,
+            bundleOf(MvRx.KEY_ARG to EntryDetailsArgs(state.activeDatabaseId, id, parentId))
+        )
     }
 
     companion object {
