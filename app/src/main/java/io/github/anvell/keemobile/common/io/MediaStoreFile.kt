@@ -4,5 +4,5 @@ import java.io.OutputStream
 
 interface MediaStoreFile {
 
-    fun openOutputStream(fileName: String, directory: String, overwrite: Boolean = false): OutputStream?
+    fun openOutputStream(fileName: String, directory: String, overwrite: Boolean = false): Pair<String, OutputStream>?
 }

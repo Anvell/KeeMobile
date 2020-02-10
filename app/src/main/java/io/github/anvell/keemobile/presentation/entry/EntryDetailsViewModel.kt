@@ -12,6 +12,7 @@ import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import io.github.anvell.keemobile.presentation.base.BaseViewModel
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class EntryDetailsViewModel @AssistedInject constructor(
     @Assisted initialState: EntryDetailsViewState,
@@ -76,11 +77,20 @@ class EntryDetailsViewModel @AssistedInject constructor(
 
             saveAttachment
                 .use(name, binaryData)
+                .delay(300, TimeUnit.MILLISECONDS)
                 .doOnError(Timber::d)
-                .onErrorComplete()
-                .subscribe {
-                    setState { copy(saveAttachmentQueue = saveAttachmentQueue - ref) }
-                }
+                .subscribe({ uri ->
+                    setState {
+                        copy(
+                            saveAttachmentQueue = saveAttachmentQueue - ref,
+                            savedAttachments = savedAttachments + (ref to uri)
+                        )
+                    }
+                }, { error ->
+                    setState {
+                        copy(saveAttachmentQueue = saveAttachmentQueue - ref, errorSink = error)
+                    }
+                })
         }
     }
 

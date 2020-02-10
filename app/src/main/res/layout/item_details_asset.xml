@@ -4,6 +4,7 @@
 
     <data>
         <import type="android.view.View.OnClickListener" />
+        <import type="android.view.View.OnLongClickListener" />
         <import type="android.view.View" />
         <import type="android.text.TextUtils" />
 
@@ -14,6 +15,7 @@
         <variable name="isClickable" type="Boolean" />
         <variable name="isSurface" type="Boolean" />
         <variable name="clickListener" type="OnClickListener" />
+        <variable name="longClickListener" type="OnLongClickListener" />
     </data>
 
     <FrameLayout
@@ -28,9 +30,11 @@
             android:clickable="@{isClickable}"
             android:focusable="@{isClickable}"
             android:gravity="center_vertical"
+            android:longClickable="@{isClickable &amp;&amp; longClickListener != null}"
             android:onClick="@{clickListener}"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:onLongClick="@{longClickListener}">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title_text"
@@ -69,7 +73,7 @@
                 android:id="@+id/asset_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.25"
+                android:alpha="0.75"
                 android:background="@null"
                 android:tint="@color/onSurface"
                 android:visibility="@{isProcessing? View.INVISIBLE : View.VISIBLE}"

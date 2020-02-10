@@ -16,7 +16,9 @@ data class EntryDetailsViewState(
     val activeDatabase: Async<OpenDatabase> = Uninitialized,
     val entry: Async<KeyEntry> = Uninitialized,
     val saveAttachmentQueue: List<Int> = listOf(),
-    val appSettings: Async<AppSettings> = Uninitialized
+    val savedAttachments: Map<Int, String> = mapOf(),
+    val appSettings: Async<AppSettings> = Uninitialized,
+    val errorSink: Throwable? = null
 ) : MvRxState {
     constructor(args: EntryDetailsArgs) : this(args.databaseId, args.entryId, args.historicEntryOf)
 }

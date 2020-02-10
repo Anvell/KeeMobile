@@ -3,7 +3,9 @@ package io.github.anvell.keemobile.presentation.entry
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -22,10 +24,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.anvell.keemobile.*
 import io.github.anvell.keemobile.common.authentication.OneTimePassword
-import io.github.anvell.keemobile.common.extensions.clipToCornerRadius
-import io.github.anvell.keemobile.common.extensions.formatAsDateTime
-import io.github.anvell.keemobile.common.extensions.injector
-import io.github.anvell.keemobile.common.extensions.toast
+import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.common.permissions.PermissionsProvider
@@ -74,6 +73,7 @@ class EntryDetailsFragment :
         binding.navigateButton.setOnClickListener { findNavController().navigateUp() }
 
         initTabs()
+        initErrorObservers()
     }
 
     private fun initTabs() {
@@ -97,6 +97,23 @@ class EntryDetailsFragment :
                 overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             }
         }
+    }
+
+    private fun initErrorObservers() {
+        viewModel.selectSubscribe(
+            viewLifecycleOwner,
+            EntryDetailsViewState::errorSink,
+            deliveryMode = uniqueOnly()
+        ) { error ->
+            if (error != null) {
+                errorMapper.map(error)?.let { snackbar(it) }
+            }
+        }
+
+        snackbarOnFailedState(viewModel,
+            EntryDetailsViewState::entry,
+            EntryDetailsViewState::activeDatabase
+        )
     }
 
     override fun invalidate(): Unit = withState(viewModel) { state ->
@@ -177,18 +194,27 @@ class EntryDetailsFragment :
             }
         } else {
             state.activeDatabase()?.database?.meta?.binaries?.let { binaries ->
-                entry.attachments.forEach { item ->
+                for (item in entry.attachments) {
+                    val fileSize = binaries.find { it.id == item.ref }?.data?.size?.toLong() ?: 0L
                     val isProcessing = state.saveAttachmentQueue.contains(item.ref)
+                    val savedFileUri = state.savedAttachments[item.ref]
 
                     itemDetailsAsset {
                         id(item.ref)
                         title(item.key)
-                        subtitle(getString(R.string.details_downloads_size, binaries[item.ref].data.size / 1024f))
-                        iconId(R.drawable.ic_download)
+                        subtitle(android.text.format.Formatter.formatShortFileSize(context, fileSize))
+                        iconId(
+                            if (savedFileUri != null) {
+                                R.drawable.ic_arrow_simple_forward
+                            } else {
+                                R.drawable.ic_download
+                            }
+                        )
                         isClickable(!isProcessing)
                         isProcessing(isProcessing)
                         isSurface(true)
-                        clickListener(View.OnClickListener { saveAttachment(item) })
+                        clickListener(View.OnClickListener { onAttachmentClicked(item) })
+                        longClickListener { _ -> copyToClipboard(item.key, item.key) }
                     }
                 }
             }
@@ -266,6 +292,24 @@ class EntryDetailsFragment :
         }
 
         return copied
+    }
+
+    private fun onAttachmentClicked(attachment: KeyAttachment) = withState(viewModel) { state ->
+        val savedFileUri = state.savedAttachments[attachment.ref]
+
+        if (savedFileUri != null) {
+            val mimeType = attachment.key.getMimeTypeFromFileName()
+
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(Uri.parse(savedFileUri), mimeType)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(intent, getString(R.string.dialogs_open_with)))
+
+        } else {
+            saveAttachment(attachment)
+        }
     }
 
     private fun saveAttachment(attachment: KeyAttachment) {

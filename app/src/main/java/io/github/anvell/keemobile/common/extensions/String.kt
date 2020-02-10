@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.common.extensions
 
+import android.webkit.MimeTypeMap
 import java.lang.StringBuilder
 import java.security.MessageDigest
 
@@ -27,3 +28,9 @@ private fun String.hash(type: String): String {
 }
 
 fun String.toXmlTag(tag: String) = "<$tag>$this</$tag>"
+
+fun String.getMimeTypeFromFileName(): String {
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+        substringAfterLast('.', "")
+    ) ?: "*/*"
+}

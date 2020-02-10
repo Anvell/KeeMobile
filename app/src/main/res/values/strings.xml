@@ -11,6 +11,8 @@
     <string name="text_hint_password">Password</string>
     <string name="text_hint_search">Search</string>
 
+    <string name="dialogs_open_with">Open with</string>
+
     <string name="explore_search_no_results">No results</string>
     <string name="explore_menu_show_list">Show as list</string>
     <string name="explore_menu_show_folders">Show as folders</string>

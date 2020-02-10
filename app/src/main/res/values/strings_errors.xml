@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_wrong_master_key">Failed to decrypt the file, perhaps master key is wrong?</string>
+    <string name="error_downloads_save_failed">Failed to save file to the downloads folder.</string>
 </resources>
