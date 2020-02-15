@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.forEach
+import androidx.core.widget.ImageViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -119,7 +121,17 @@ class EntryDetailsFragment :
     override fun invalidate(): Unit = withState(viewModel) { state ->
         if (state.entry is Success) {
             state.entry()?.also {
-                val tabs = if(state.historicEntryOf != null) {
+                binding.entryTitle.text = it.title
+                binding.entryIcon.setImageResource(iconMapper.map(it.iconId))
+
+                ImageViewCompat.setImageTintList(
+                    binding.entryIcon,
+                    ColorStateList.valueOf(
+                        filterColorMapper.map(it.backgroundColor)
+                    )
+                )
+
+                val tabs = if (state.historicEntryOf != null) {
                     listOf(
                         buildGeneralTab(it),
                         buildFilesTab(it, state)
@@ -137,14 +149,6 @@ class EntryDetailsFragment :
     }
 
     private fun buildGeneralTab(entry: KeyEntry): EpoxyController.() -> Unit = {
-        itemDetailsHeader {
-            id("$ID_PROPERTY:${R.string.details_title}")
-            title(entry.title)
-            iconId(iconMapper.map(entry.iconId))
-            iconTint(filterColorMapper.map(entry.backgroundColor))
-            isSurface(true)
-        }
-
         buildProperty(R.string.details_username, entry.username)
         buildProperty(R.string.details_password, entry.password, true)
         buildProperty(R.string.details_website, entry.url)
@@ -232,7 +236,7 @@ class EntryDetailsFragment :
             }
         }
 
-        itemDetailsHeaderSmall {
+        itemDetailsHeader {
             id(R.string.details_date_historic_title)
             title(getString(R.string.details_date_historic_title))
         }

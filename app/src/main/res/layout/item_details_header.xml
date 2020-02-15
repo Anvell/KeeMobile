@@ -1,63 +1,32 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View.OnLongClickListener" />
-        <import type="android.view.View" />
-        <import type="android.text.TextUtils" />
-
         <variable name="title" type="String" />
-        <variable name="iconId" type="Integer" />
-        <variable name="iconTint" type="Integer" />
-        <variable name="isSurface" type="Boolean" />
-        <variable name="longClickListener" type="OnLongClickListener" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingTop="24dp">
 
-        <LinearLayout
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title_text"
+            style="@style/Typography.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:background="@{isSurface? @drawable/card_background_top : null}"
-            android:focusable="true"
-            android:longClickable="true"
-            android:orientation="vertical"
-            android:padding="@dimen/content_margin"
-            app:onLongClick="@{longClickListener}"
-            tools:background="@drawable/card_background_top">
+            android:paddingBottom="6dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{title}"
+            tools:text="@tools:sample/lorem" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/title_text"
-                style="@style/Typography.Display1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="2"
-                android:text="@{title}"
-                tools:text="@tools:sample/lorem" />
-        </LinearLayout>
+    </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/shape_avatar_circle"
-            android:padding="16dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:tint="@color/onSurface"
-                app:customSrc="@{iconId}"
-                app:customTint="@{iconTint}"
-                tools:src="@drawable/ic_code" />
-        </FrameLayout>
-    </FrameLayout>
 </layout>
