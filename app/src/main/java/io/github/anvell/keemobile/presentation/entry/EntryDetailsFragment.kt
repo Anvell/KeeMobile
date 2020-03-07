@@ -18,6 +18,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.Success
@@ -60,6 +61,8 @@ class EntryDetailsFragment :
 
     private lateinit var pagesAdapter: BaseEpoxyAdapter
 
+    private var currentPage: Int by stateProperty(PAGES_FIRST)
+
     override fun onAttach(context: Context) {
         requireActivity().injector.inject(this)
         super.onAttach(context)
@@ -99,6 +102,14 @@ class EntryDetailsFragment :
                 overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             }
         }
+
+        binding.pager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    currentPage = position
+                }
+            }
+        )
     }
 
     private fun initErrorObservers() {
@@ -144,6 +155,10 @@ class EntryDetailsFragment :
                     )
                 }
                 pagesAdapter.updateModels(tabs)
+
+                if (binding.pager.currentItem != currentPage) {
+                    binding.pager.setCurrentItem(currentPage, false)
+                }
             }
         }
     }
@@ -346,6 +361,8 @@ class EntryDetailsFragment :
         private const val ID_CUSTOM_PROPERTY = "CUSTOM_PROPERTY"
         private const val ID_DOWNLOADS = "DOWNLOADS"
         private const val ID_HISTORIC_ENTRY = "HISTORIC_ENTRY"
+
+        private const val PAGES_FIRST = 0
 
         private val OTP_PROPERTIES = listOf("otp", "TOTP Seed", "TOTP Settings")
     }
