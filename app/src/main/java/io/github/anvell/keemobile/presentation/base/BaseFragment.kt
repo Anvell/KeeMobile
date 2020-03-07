@@ -12,13 +12,15 @@ import androidx.databinding.ViewDataBinding
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.airbnb.mvrx.MvRxState
-import com.google.android.material.snackbar.Snackbar
 import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.common.extensions.snackbar
 import io.github.anvell.keemobile.common.io.ClipboardProvider
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import io.github.anvell.keemobile.common.rx.RxSchedulers
+import io.github.anvell.keemobile.common.state.NullableStateProperty
+import io.github.anvell.keemobile.common.state.StateHandler
+import io.github.anvell.keemobile.common.state.StateProperty
 import io.github.anvell.keemobile.presentation.home.DrawerHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -30,7 +32,7 @@ abstract class BaseFragment<T>(
         inflater: LayoutInflater,
         root: ViewGroup?, attachToRoot: Boolean
     ) -> T
-) : BaseMvRxFragment() where T : ViewDataBinding {
+) : BaseMvRxFragment(), StateHandler where T : ViewDataBinding {
 
     @Inject
     lateinit var rxSchedulers: RxSchedulers
@@ -44,6 +46,13 @@ abstract class BaseFragment<T>(
     protected lateinit var binding: T
 
     private val disposables = CompositeDisposable()
+
+    override val stateBundle = Bundle()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        restoreState(savedInstanceState)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +84,11 @@ abstract class BaseFragment<T>(
     override fun onStop() {
         disposables.clear()
         super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        saveState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     protected fun Disposable.disposeOnStop(): Disposable {
@@ -129,5 +143,9 @@ abstract class BaseFragment<T>(
     protected open fun onFileOpened(uri: Uri) = Unit
 
     protected open fun getDrawer() = (activity as? DrawerHolder)?.getDrawer()
+
+    protected fun <T> stateProperty() = NullableStateProperty<T>()
+
+    protected fun <T> stateProperty(defaultValue: T) = StateProperty(defaultValue)
 
 }
