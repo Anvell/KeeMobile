@@ -236,19 +236,21 @@ class EntryDetailsFragment :
             }
         }
 
-        itemDetailsHeader {
-            id(R.string.details_date_historic_title)
-            title(getString(R.string.details_date_historic_title))
-        }
+        if (entry.history.isNotEmpty()) {
+            itemDetailsHeader {
+                id(R.string.details_date_historic_title)
+                title(getString(R.string.details_date_historic_title))
+            }
 
-        entry.history.forEachIndexed { i, item ->
-            item.times?.lastModificationTime?.let {
-                itemDetailsAsset {
-                    id("${ID_HISTORIC_ENTRY}:$i")
-                    title(it.time.formatAsDateTime())
-                    iconId(R.drawable.ic_clock)
-                    isClickable(true)
-                    clickListener(View.OnClickListener { onHistoricEntryClicked(item.uuid, entry.uuid) })
+            entry.history.forEachIndexed { i, item ->
+                item.times?.lastModificationTime?.let {
+                    itemDetailsAsset {
+                        id("${ID_HISTORIC_ENTRY}:$i")
+                        title(it.time.formatAsDateTime())
+                        iconId(R.drawable.ic_clock)
+                        isClickable(true)
+                        clickListener(View.OnClickListener { onHistoricEntryClicked(item.uuid, entry.uuid) })
+                    }
                 }
             }
         }
