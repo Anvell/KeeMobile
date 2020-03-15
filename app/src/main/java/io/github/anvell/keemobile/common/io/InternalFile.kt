@@ -8,4 +8,6 @@ interface InternalFile {
     fun openInputStream(fileName: String): InputStream?
 
     fun openOutputStream(fileName: String): OutputStream?
+
+    fun exists(fileName: String): Boolean
 }

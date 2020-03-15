@@ -2,6 +2,7 @@ package io.github.anvell.keemobile.common.io
 
 import android.content.Context
 import dagger.Reusable
+import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
@@ -17,4 +18,6 @@ class InternalFileImpl @Inject constructor(private val context: Context) :
     override fun openOutputStream(fileName: String): OutputStream? {
         return context.openFileOutput(fileName, Context.MODE_PRIVATE)
     }
+
+    override fun exists(fileName: String) = File(context.filesDir, fileName).exists()
 }
