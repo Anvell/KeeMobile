@@ -6,6 +6,9 @@ import io.github.anvell.keemobile.domain.alias.VaultId
 sealed class FileSource(open val id: VaultId, open val name: String) {
     abstract fun toXml() : String
 
+    open val nameWithoutExtension: String
+        get() = name.substringBeforeLast('.', name)
+
     class Storage(
         override val id: VaultId,
         override val name: String,
