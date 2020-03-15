@@ -25,8 +25,11 @@ class OpenViewModel @AssistedInject constructor(
             if (state.recentFiles is Uninitialized) {
                 getRecentFiles
                     .use()
+                    .doOnError(Timber::d)
                     .execute {
-                        copy(recentFiles = it, selectedFile = it()?.last())
+                        copy(recentFiles = it, selectedFile = it()?.let { items ->
+                            if (items.isEmpty()) null else items.last()
+                        })
                     }
             }
         }
@@ -36,7 +39,7 @@ class OpenViewModel @AssistedInject constructor(
         createNewFile
             .use(source, secrets)
             .execute {
-                copy(opened = it)
+                copy(openFile = it)
             }
     }
 
@@ -69,7 +72,6 @@ class OpenViewModel @AssistedInject constructor(
         setState {
             copy(selectedFile = source)
         }
-
     }
 
     fun openFromSource(source: FileSource, secrets: FileSecrets) {
@@ -78,8 +80,14 @@ class OpenViewModel @AssistedInject constructor(
             .map { it.id }
             .onErrorResumeNext(openFileSource.use(source, secrets))
             .execute {
-                copy(opened = it)
+                copy(openFile = it)
             }
+    }
+
+    fun setInitialSetup(initialSetup: Boolean) {
+        setState {
+            copy(initialSetup = initialSetup)
+        }
     }
 
     private fun saveRecentFiles(recentFiles: List<FileSource>) {

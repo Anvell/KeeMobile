@@ -23,6 +23,10 @@ class RecentFilesRepositoryImpl @Inject constructor(
     }
 
     override fun readRecentFiles(): List<FileSource> {
+        if (!internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
+            return listOf()
+        }
+
         internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
             return stream
                 .readAsString()

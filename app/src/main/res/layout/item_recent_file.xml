@@ -1,24 +1,46 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="android.view.View.OnClickListener"/>
+        <import type="android.view.View" />
+
         <variable name="title" type="String"/>
         <variable name="isSelected" type="Boolean"/>
+        <variable name="isProcessing" type="Boolean" />
+        <variable name="isClickable" type="Boolean" />
         <variable name="clickListener" type="OnClickListener"/>
     </data>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/Typography.Body"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/selectable_surface_background"
-        android:drawSelectorOnTop="true"
-        android:clickable="@{clickListener != null}"
-        android:focusable="@{clickListener != null}"
-        android:gravity="start|center_vertical"
-        android:onClick="@{clickListener}"
-        android:padding="16dp"
-        android:selected="@{isSelected}"
-        android:text="@{title}"
-        tools:text="@tools:sample/lorem" />
+        android:background="@color/surface">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Typography.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_surface_background"
+            android:clickable="@{isClickable}"
+            android:focusable="@{isClickable}"
+            android:gravity="start|center_vertical"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:onClick="@{clickListener}"
+            android:paddingStart="@dimen/content_margin"
+            android:paddingTop="@dimen/content_margin"
+            android:paddingEnd="56dp"
+            android:paddingBottom="@dimen/content_margin"
+            android:selected="@{isSelected}"
+            android:text="@{title}"
+            tools:text="@tools:sample/lorem/random" />
+
+        <ProgressBar
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/content_margin"
+            android:indeterminateTint="@color/colorPrimary"
+            android:visibility="@{isProcessing? View.VISIBLE : View.GONE}" />
+    </FrameLayout>
 </layout>

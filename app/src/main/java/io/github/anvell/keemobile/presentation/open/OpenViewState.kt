@@ -8,7 +8,8 @@ import io.github.anvell.keemobile.domain.entity.FileSource
 import java.util.*
 
 data class OpenViewState(
+    val initialSetup: Boolean = true,
     val recentFiles: Async<List<FileSource>> = Uninitialized,
     val selectedFile: FileSource? = null,
-    val opened: Async<VaultId> = Uninitialized
+    val openFile: Async<VaultId> = Uninitialized
 ) : MvRxState

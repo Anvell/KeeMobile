@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/motionLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/open_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        android:orientation="vertical"
-        app:layoutDescription="@xml/fragment_open_motion">
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/landing_layout"
@@ -18,10 +18,12 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/dock"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -54,12 +56,16 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:overScrollMode="never"
             android:paddingStart="@dimen/layout_horizontal_margin"
             android:paddingTop="@dimen/layout_vertical_margin"
             android:paddingEnd="@dimen/layout_horizontal_margin"
             android:paddingBottom="@dimen/layout_vertical_margin"
-            android:overScrollMode="never"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/dock"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,5 +160,5 @@
 
         </LinearLayout>
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

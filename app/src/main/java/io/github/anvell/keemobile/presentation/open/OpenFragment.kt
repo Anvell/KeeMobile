@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isGone
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
 import io.github.anvell.keemobile.R
@@ -56,7 +58,12 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        snackbarOnFailedState(viewModel, OpenViewState::opened)
+        snackbarOnFailedState(viewModel, OpenViewState::openFile)
+    }
+
+    override fun onDetach() {
+        viewModel.setInitialSetup(true)
+        super.onDetach()
     }
 
     //TODO: Implement proper user flow for file creation
@@ -78,11 +85,13 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
     }
 
     override fun invalidate() = withState(viewModel) { state ->
+        switchToOpenFile(state.openFile)
 
-        handleOpening(state.opened)
-
-        binding.title.text = state.selectedFile?.name
-        binding.unlock.isEnabled = state.selectedFile != null
+        val fileIsLoading = state.openFile is Loading
+        binding.title.text = state.selectedFile?.nameWithoutExtension
+        binding.unlock.isEnabled = state.selectedFile != null && !fileIsLoading
+        binding.password.isEnabled = !fileIsLoading
+        setDockVisibility(!fileIsLoading)
 
         if (state.recentFiles is Success) {
             binding.recentFiles.withModels {
@@ -93,6 +102,8 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
                             id(entry.id)
                             title(entry.name)
                             isSelected(entry == state.selectedFile)
+                            isClickable(!fileIsLoading)
+                            isProcessing(fileIsLoading && entry == state.selectedFile)
                             clickListener(View.OnClickListener { viewModel.selectFileSource(entry) })
                         }
                     }
@@ -100,20 +111,53 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        handleAnimation(state.recentFiles is Success)
-    }
-
-    private fun handleAnimation(showRecentFiles: Boolean) {
-        if (showRecentFiles) {
-            binding.motionLayout.transitionToEnd()
-        } else {
-            binding.motionLayout.transitionToStart()
+        if (state.recentFiles is Success) {
+            state.recentFiles()?.run {
+                switchPage(isEmpty(), state.initialSetup)
+            }
         }
     }
 
-    private fun handleOpening(opened: Async<VaultId>) {
-        when(opened) {
-            is Success -> homeViewModel.switchDatabase(opened())
+    private fun setDockVisibility(visible: Boolean) {
+        val shiftY = if (visible) 0f else 100f.toPx()
+
+        if (binding.dock.translationY != shiftY) {
+            binding.dock.springAnimation(SpringAnimation.TRANSLATION_Y)
+                .animateToFinalPosition(shiftY)
+        }
+    }
+
+    private fun switchPage(isLanding: Boolean, performInitialSetup: Boolean = false) {
+        val landingShiftX = if (isLanding) 0f else -binding.openRoot.measuredWidth.toFloat()
+        val recentFilesShiftX = if (isLanding) binding.openRoot.measuredWidth.toFloat() else 0f
+
+        if (performInitialSetup) {
+            binding.landingLayout.translationX = landingShiftX
+            binding.recentFilesLayout.translationX = recentFilesShiftX
+
+            if (binding.landingLayout.isGone) binding.landingLayout.isGone = false
+            if (binding.recentFilesLayout.isGone) binding.recentFilesLayout.isGone = false
+
+            viewModel.setInitialSetup(false)
+        } else {
+            if (binding.landingLayout.isGone) binding.landingLayout.isGone = false
+            if (binding.recentFilesLayout.isGone) binding.recentFilesLayout.isGone = false
+
+            if (binding.landingLayout.translationX != landingShiftX) {
+                binding.landingLayout.springAnimation(SpringAnimation.TRANSLATION_X)
+                    .animateToFinalPosition(landingShiftX)
+            }
+
+            if (binding.recentFilesLayout.translationX != recentFilesShiftX) {
+                binding.recentFilesLayout.springAnimation(SpringAnimation.TRANSLATION_X)
+                    .animateToFinalPosition(recentFilesShiftX)
+            }
+        }
+    }
+
+    private fun switchToOpenFile(openFile: Async<VaultId>) {
+        when (openFile) {
+            is Success -> homeViewModel.switchDatabase(openFile())
         }
     }
 
