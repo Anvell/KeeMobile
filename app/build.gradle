@@ -21,13 +21,13 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "io.github.anvell.keemobile"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
@@ -45,6 +45,9 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -55,53 +58,53 @@ dependencies {
     debugImplementation "nl.littlerobots.rxlint:rxlint:1.7.4"
 
     /* Testing */
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'io.strikt:strikt-core:0.23.4'
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'io.strikt:strikt-core:0.24.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /* Material */
-    implementation "com.google.android.material:material:1.1.0-beta02"
+    implementation "com.google.android.material:material:1.1.0"
 
     /* AndroidX */
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.preference:preference:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta4"
     implementation "androidx.documentfile:documentfile:1.0.1"
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
-    def Lifecycle = "2.1.0"
+    def Lifecycle = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$Lifecycle"
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$Lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$Lifecycle"
-    kapt "androidx.lifecycle:lifecycle-common-java8:$Lifecycle"
     kapt "androidx.lifecycle:lifecycle-compiler:$Lifecycle"
 
-    def Fragment = "1.1.0"
+    def Fragment = "1.2.2"
     implementation "androidx.fragment:fragment:$Fragment"
     implementation "androidx.fragment:fragment-ktx:$Fragment"
 
-    def Navigation = "2.1.0"
+    def Navigation = "2.2.1"
     implementation "androidx.navigation:navigation-fragment-ktx:$Navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$Navigation"
 
-    def AssistedInject = "0.5.1"
+    def AssistedInject = "0.5.2"
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:$AssistedInject"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:$AssistedInject"
 
-    implementation "io.reactivex.rxjava2:rxjava:2.2.14"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.19"
     implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
-    def Dagger = "2.25.2"
+    def Dagger = "2.27"
     implementation "com.google.dagger:dagger:$Dagger"
     implementation "com.google.dagger:dagger-android-support:$Dagger"
     kapt "com.google.dagger:dagger-compiler:$Dagger"
     kapt "com.google.dagger:dagger-android-processor:$Dagger"
 
-    def Epoxy = "3.8.0"
+    def Epoxy = "3.9.0"
     implementation "com.airbnb.android:epoxy:$Epoxy"
     implementation "com.airbnb.android:epoxy-databinding:$Epoxy"
     kapt "com.airbnb.android:epoxy-processor:$Epoxy"
@@ -112,10 +115,10 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation "com.jakewharton.timber:timber:4.7.1"
 
-    implementation "com.gitlab.mvysny.konsume-xml:konsume-xml:0.8"
-    implementation "com.squareup.moshi:moshi-kotlin:1.9.1"
+    implementation "com.gitlab.mvysny.konsume-xml:konsume-xml:0.10"
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.2"
 
-    def RxBindings = "3.0.0"
+    def RxBindings = "3.1.0"
     implementation "com.jakewharton.rxbinding3:rxbinding:$RxBindings"
 
     implementation 'commons-codec:commons-codec:1.13'
