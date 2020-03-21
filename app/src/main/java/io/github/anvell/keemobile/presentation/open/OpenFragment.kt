@@ -111,10 +111,8 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        if (state.recentFiles is Success) {
-            state.recentFiles()?.run {
-                switchPage(isEmpty(), state.initialSetup)
-            }
+        if (state.recentFiles is Success || state.recentFiles is Fail) {
+            switchPage(state.recentFiles()?.isEmpty() ?: true, state.initialSetup)
         }
     }
 

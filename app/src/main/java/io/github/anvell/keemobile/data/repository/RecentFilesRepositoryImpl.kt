@@ -1,10 +1,10 @@
 package io.github.anvell.keemobile.data.repository
 
-import com.gitlab.mvysny.konsumexml.konsumeXml
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import dagger.Reusable
 import io.github.anvell.keemobile.common.constants.AppConstants
 import io.github.anvell.keemobile.common.extensions.readAsString
-import io.github.anvell.keemobile.common.extensions.toXmlTag
 import io.github.anvell.keemobile.common.io.InternalFile
 import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.domain.entity.FileSource
@@ -15,50 +15,33 @@ import javax.inject.Inject
 @Reusable
 class RecentFilesRepositoryImpl @Inject constructor(
     private val internalFile: InternalFile,
-    private val storageFile: StorageFile
+    private val storageFile: StorageFile,
+    private val moshi: Moshi
 ) : RecentFilesRepository {
-
-    companion object {
-        private const val RECENT_FILES_TAG = "recent-files"
-    }
 
     override fun readRecentFiles(): List<FileSource> {
         if (!internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
-            return listOf()
+            throw RuntimeException("${AppConstants.FILE_RECENT_FILES} does not exist.")
         }
 
         internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
-            return stream
-                .readAsString()
-                .konsumeXml()
-                .child(RECENT_FILES_TAG) {
-                    checkCurrent(RECENT_FILES_TAG)
-                    children(FileSource.Storage.TAG) {
-                        checkCurrent(FileSource.Storage.TAG)
-
-                        FileSource.Storage(
-                            childText(FileSource.Storage.ID),
-                            childText(FileSource.Storage.NAME),
-                            childText(FileSource.Storage.URI)
-                        )
-                    }
-                }.filter {
+            val type = Types.newParameterizedType(List::class.java, FileSource::class.java)
+            return moshi.adapter<List<FileSource>>(type)
+                .fromJson(stream.readAsString())
+                ?.filterIsInstance<FileSource.Storage>()
+                ?.filter {
                     storageFile.checkUriPermission(it.uri) && storageFile.exists(it.uri)
-                }
+                } ?: throw IOException("Failed to parse ${AppConstants.FILE_RECENT_FILES}")
         }
 
         throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
     }
 
     override fun writeRecentFiles(recentFiles: List<FileSource>) {
-
-        val contents = recentFiles
-            .map(FileSource::toXml)
-            .reduce { acc, element -> acc + element }
-            .toXmlTag(RECENT_FILES_TAG)
-
         internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
-            stream.write(contents.toByteArray())
+            val type = Types.newParameterizedType(List::class.java, FileSource::class.java)
+            val data = moshi.adapter<List<FileSource>>(type).toJson(recentFiles)
+            stream.write(data.toByteArray())
             return
         }
 
