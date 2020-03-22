@@ -83,7 +83,9 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        switchToOpenFile(state.openFile)
+        if (switchToOpenFile(state.openFile)) {
+            return@withState
+        }
 
         val fileIsLoading = state.openFile is Loading
         binding.title.text = state.selectedFile?.nameWithoutExtension
@@ -161,9 +163,13 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         }
     }
 
-    private fun switchToOpenFile(openFile: Async<VaultId>) {
-        when (openFile) {
-            is Success -> homeViewModel.switchDatabase(openFile())
+    private fun switchToOpenFile(openFile: Async<VaultId>): Boolean {
+        return when (openFile) {
+            is Success -> {
+                homeViewModel.switchDatabase(openFile())
+                true
+            }
+            else -> false
         }
     }
 

@@ -81,18 +81,48 @@
                     android:maxLines="1"
                     tools:text="MyVault" />
 
-                <EditText
-                    android:id="@+id/password"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/content_margin_medium"
-                    android:autofillHints="password"
                     android:background="@drawable/card_background"
-                    android:hint="@string/text_hint_password"
-                    android:imeOptions="actionGo|flagNoPersonalizedLearning"
-                    android:inputType="textPassword"
-                    android:padding="@dimen/content_margin"
-                    android:text="1" />
+                    android:orientation="horizontal"
+                    android:animateLayoutChanges="true"
+                    app:clipToCornerRadius="@{@dimen/surface_corner_radius}">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/content_margin"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="@dimen/content_margin"
+                        android:layout_marginBottom="12dp"
+                        android:layout_weight="0.5"
+                        android:autofillHints="password"
+                        android:background="@null"
+                        android:hint="@string/text_hint_password"
+                        android:imeOptions="actionGo|flagNoPersonalizedLearning"
+                        android:inputType="textPassword"
+                        android:text="1" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/background" />
+
+                    <ImageView
+                        android:id="@+id/unlock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end|center_vertical"
+                        android:alpha="0.8"
+                        android:background="@drawable/unlock_button_background"
+                        android:contentDescription="@string/button_unlock"
+                        android:padding="@dimen/content_margin"
+                        android:src="@drawable/ic_unlock"
+                        android:tint="@color/onBackground" />
+                </LinearLayout>
 
                 <com.airbnb.epoxy.EpoxyRecyclerView
                     android:id="@+id/recent_files"
@@ -105,14 +135,6 @@
                     android:overScrollMode="never"
                     tools:listitem="@layout/item_recent_file" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/unlock"
-                    style="@style/Button.Round"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/content_margin_medium"
-                    android:text="@string/button_unlock" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
