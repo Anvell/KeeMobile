@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isGone
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.dynamicanimation.animation.SpringAnimation
@@ -41,20 +42,17 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         binding.recentFiles.addItemDecoration(
-            DividerDecoration(
-                requireContext(),
-                R.drawable.list_divider,
-                LinearLayoutManager.VERTICAL
-            )
+            DividerDecoration(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
         )
 
         binding.fileCreate.setOnClickListener { requestCreateFile(getString(R.string.default_file_name)) }
         binding.fileOpen.setOnClickListener { requestOpenFile() }
-        binding.unlock.setOnClickListener {
-            withState(viewModel) { state ->
-                state.selectedFile?.let {
-                    viewModel.openFromSource(state.selectedFile, FileSecrets(binding.password.text.toString()))
-                }
+        binding.unlock.setOnClickListener { unlockSelected() }
+        binding.password.setOnEditorActionListener { _, action, _ ->
+            if (action == EditorInfo.IME_ACTION_GO) {
+                unlockSelected()
+            } else {
+                false
             }
         }
 
@@ -150,6 +148,16 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
                 binding.recentFilesLayout.springAnimation(SpringAnimation.TRANSLATION_X)
                     .animateToFinalPosition(recentFilesShiftX)
             }
+        }
+    }
+
+    private fun unlockSelected(): Boolean = withState(viewModel) { state ->
+        val selected = state.selectedFile
+        return@withState if (binding.password.text.isNotEmpty() && selected != null) {
+            viewModel.openFromSource(selected, FileSecrets(binding.password.text.toString()))
+            true
+        } else {
+            false
         }
     }
 
