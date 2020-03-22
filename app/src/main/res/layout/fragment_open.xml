@@ -135,6 +135,18 @@
                     android:overScrollMode="never"
                     tools:listitem="@layout/item_recent_file" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clear_all"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:text="@string/button_clear_all"
+                    android:textColor="@color/onBackground"
+                    android:textSize="12sp"
+                    app:cornerRadius="@dimen/surface_corner_radius" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

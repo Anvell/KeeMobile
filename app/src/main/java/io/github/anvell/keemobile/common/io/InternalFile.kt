@@ -10,4 +10,6 @@ interface InternalFile {
     fun openOutputStream(fileName: String): OutputStream?
 
     fun exists(fileName: String): Boolean
+
+    fun remove(fileName: String): Boolean
 }

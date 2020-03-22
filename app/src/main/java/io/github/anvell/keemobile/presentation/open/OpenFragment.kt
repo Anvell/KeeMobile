@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
+import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
@@ -48,6 +49,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.fileCreate.setOnClickListener { requestCreateFile(getString(R.string.default_file_name)) }
         binding.fileOpen.setOnClickListener { requestOpenFile() }
         binding.unlock.setOnClickListener { unlockSelected() }
+        binding.clearAll.setOnClickListener { viewModel.pushRecentFiles() }
         binding.password.setOnEditorActionListener { _, action, _ ->
             if (action == EditorInfo.IME_ACTION_GO) {
                 unlockSelected()
@@ -56,7 +58,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             }
         }
 
-        snackbarOnFailedState(viewModel, OpenViewState::openFile)
+        initObservers()
     }
 
     override fun onDetach() {
@@ -91,6 +93,7 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.title.text = state.selectedFile?.nameWithoutExtension
         binding.unlock.isEnabled = state.selectedFile != null && !fileIsLoading
         binding.password.isEnabled = !fileIsLoading
+        binding.clearAll.isEnabled = !fileIsLoading
         setDockVisibility(!fileIsLoading)
 
         if (state.recentFiles is Success) {
@@ -114,6 +117,27 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         if (state.recentFiles is Success || state.recentFiles is Fail) {
             switchPage(state.recentFiles()?.isEmpty() ?: true, state.initialSetup)
         }
+    }
+
+    private fun initObservers() {
+        viewModel.selectSubscribe(viewLifecycleOwner,
+            OpenViewState::recentFilesStash,
+            deliveryMode = uniqueOnly()) {
+            it?.let {
+                snackbar(
+                    getString(R.string.landing_popup_clear_all_info),
+                    getString(R.string.button_undo),
+                    action = {
+                        viewModel.popRecentFiles()
+                    },
+                    onDismissed = { event ->
+                        if (event != DISMISS_EVENT_ACTION) {
+                            viewModel.clearRecentFiles()
+                        }
+                    })
+            }
+        }
+        snackbarOnFailedState(viewModel, OpenViewState::openFile)
     }
 
     private fun setDockVisibility(visible: Boolean) {

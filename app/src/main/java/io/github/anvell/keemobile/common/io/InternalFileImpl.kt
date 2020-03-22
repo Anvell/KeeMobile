@@ -20,4 +20,6 @@ class InternalFileImpl @Inject constructor(private val context: Context) :
     }
 
     override fun exists(fileName: String) = File(context.filesDir, fileName).exists()
+
+    override fun remove(fileName: String) = File(context.filesDir, fileName).delete()
 }

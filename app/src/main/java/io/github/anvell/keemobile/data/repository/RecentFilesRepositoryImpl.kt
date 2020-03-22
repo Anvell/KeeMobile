@@ -47,4 +47,12 @@ class RecentFilesRepositoryImpl @Inject constructor(
 
         throw IOException("Cannot write ${AppConstants.FILE_RECENT_FILES}")
     }
+
+    override fun clearRecentFiles(): Boolean {
+        return if (internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
+            internalFile.remove(AppConstants.FILE_RECENT_FILES)
+        } else {
+            true
+        }
+    }
 }

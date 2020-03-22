@@ -17,6 +17,7 @@ class OpenViewModel @AssistedInject constructor(
     private val openFileSource: OpenFileSource,
     private val getRecentFiles: GetRecentFiles,
     private val saveRecentFiles: SaveRecentFiles,
+    private val clearRecentFiles: ClearRecentFiles,
     private val getOpenDatabase: GetOpenDatabase
 ) : BaseViewModel<OpenViewState>(initialState) {
 
@@ -88,6 +89,35 @@ class OpenViewModel @AssistedInject constructor(
         setState {
             copy(initialSetup = initialSetup)
         }
+    }
+
+    fun pushRecentFiles() = withState { state ->
+        setState {
+            copy(
+                recentFiles = Success(listOf()),
+                recentFilesStash = state.recentFiles()
+            )
+        }
+    }
+
+    fun popRecentFiles() = withState { state ->
+        state.recentFilesStash?.let {
+            setState {
+                copy(
+                    recentFiles = Success(it),
+                    recentFilesStash = null
+                )
+            }
+        }
+    }
+
+    fun clearRecentFiles() {
+        clearRecentFiles
+            .use()
+            .doOnError(Timber::d)
+            .execute {
+                copy(recentFiles = Success(listOf()), selectedFile = null)
+            }
     }
 
     private fun saveRecentFiles(recentFiles: List<FileSource>) {

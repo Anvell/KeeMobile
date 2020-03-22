@@ -8,8 +8,12 @@
     </string>
     <string name="landing_title">Welcome</string>
     <string name="button_unlock">Unlock</string>
+    <string name="button_clear_all">Clear All</string>
+    <string name="button_undo">Undo</string>
     <string name="text_hint_password">Password</string>
     <string name="text_hint_search">Search</string>
+
+    <string name="landing_popup_clear_all_info">All data related to recent files is cleared</string>
 
     <string name="dialogs_open_with">Open with</string>
 

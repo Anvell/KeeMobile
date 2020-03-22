@@ -10,6 +10,7 @@ import java.util.*
 data class OpenViewState(
     val initialSetup: Boolean = true,
     val recentFiles: Async<List<FileSource>> = Uninitialized,
+    val recentFilesStash: List<FileSource>? = null,
     val selectedFile: FileSource? = null,
     val openFile: Async<VaultId> = Uninitialized
 ) : MvRxState
