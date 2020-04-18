@@ -3,20 +3,25 @@ package io.github.anvell.keemobile.presentation.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.text.InputType
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.toPxScaled
+import io.github.anvell.keemobile.common.state.StateProperty
+import io.github.anvell.keemobile.common.state.StateHandlerView
 
 interface MaskedText {
-
     fun isMasked(): Boolean
-
-    fun setMasked(hide: Boolean)
+    fun setMasked(value: Boolean)
 }
 
-class PasswordTextView(context: Context, attrs: AttributeSet?) : AppCompatTextView(context, attrs), MaskedText {
+class PasswordTextView(context: Context, attrs: AttributeSet?)
+    : AppCompatTextView(context, attrs), MaskedText, StateHandlerView {
+
+    override val stateBundle = Bundle()
 
     private val dotsRadius = DOTS_RADIUS.toPxScaled()
 
@@ -26,32 +31,22 @@ class PasswordTextView(context: Context, attrs: AttributeSet?) : AppCompatTextVi
         style = Paint.Style.FILL
     }
 
-    private val hideLength: Boolean
+    private var maskedText: Boolean by StateProperty(true)
+    private var hideLength: Boolean by StateProperty(true)
 
     init {
         val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.PasswordTextView, 0, 0)
 
         try {
-            hideLength = attributes.getBoolean(R.styleable.PasswordTextView_hideLength, false)
+            hideLength = attributes.getBoolean(R.styleable.PasswordTextView_hideLength, true)
+            maskedText = attributes.getBoolean(R.styleable.PasswordTextView_isMasked, true)
         } finally {
             attributes.recycle()
         }
-
-        setMasked(true)
-    }
-
-    override fun isMasked() = inputType == MASKED
-
-    override fun setMasked(hide: Boolean) {
-        val currentTypeface = typeface
-        inputType = if (hide) MASKED else UNMASKED
-        typeface = currentTypeface
     }
 
     override fun onDraw(canvas: Canvas?) {
-        if (inputType != MASKED) {
-            super.onDraw(canvas)
-        } else {
+        if (isMasked()) {
             canvas?.run {
                 var shift = 0f
                 for (i in 1..getDotsCount()) {
@@ -59,7 +54,33 @@ class PasswordTextView(context: Context, attrs: AttributeSet?) : AppCompatTextVi
                     shift = (dotsRadius * 2) * i + DOTS_MARGIN_DP.toPxScaled() * i
                 }
             }
+        } else {
+            super.onDraw(canvas)
         }
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        return saveState(super.onSaveInstanceState())
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        super.onRestoreInstanceState(restoreState(state))
+    }
+
+    override fun isMasked() = maskedText
+
+    override fun setMasked(value: Boolean) {
+        maskedText = value
+        requestLayout()
+        invalidate()
+    }
+
+    fun isLengthHidden() = hideLength
+
+    fun setLengthHidden(value: Boolean) {
+        hideLength = value
+        requestLayout()
+        invalidate()
     }
 
     private fun getDotsCount() = if (hideLength) {
@@ -69,9 +90,6 @@ class PasswordTextView(context: Context, attrs: AttributeSet?) : AppCompatTextVi
     }
 
     companion object {
-        private const val MASKED = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-        private const val UNMASKED = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-
         private const val DOTS_RADIUS = 3f
         private const val DOTS_QUANTITY = 6
         private const val DOTS_MARGIN_DP = 2f
