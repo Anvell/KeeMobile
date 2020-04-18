@@ -2,18 +2,16 @@ package io.github.anvell.keemobile.common.state
 
 import android.os.Bundle
 
-interface StateHandler {
+interface StateHandler : StateStore {
 
-    val stateBundle: Bundle
+    fun saveState(outState: Bundle) {
+        outState.putBundle(BUNDLE_TAG, stateBundle)
+    }
 
     fun restoreState(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
             stateBundle.putAll(savedInstanceState.getBundle(BUNDLE_TAG))
         }
-    }
-
-    fun saveState(outState: Bundle) {
-        outState.putBundle(BUNDLE_TAG, stateBundle)
     }
 
     companion object {
