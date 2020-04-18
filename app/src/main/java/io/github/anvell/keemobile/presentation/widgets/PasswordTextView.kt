@@ -45,6 +45,17 @@ class PasswordTextView(context: Context, attrs: AttributeSet?)
         }
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        if (isMasked()) {
+            val minimumWidth = paddingLeft + paddingRight + suggestedMinimumWidth
+            val dotsWidth = (dotsRadius * 2 + DOTS_MARGIN_DP.toPxScaled()).toInt() * getDotsCount()
+            val width = View.resolveSizeAndState(minimumWidth + dotsWidth, widthMeasureSpec, 1)
+            setMeasuredDimension(width, measuredHeight)
+        }
+    }
+
     override fun onDraw(canvas: Canvas?) {
         if (isMasked()) {
             canvas?.run {
