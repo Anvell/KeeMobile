@@ -6,17 +6,11 @@ import kotlin.reflect.KProperty
 
 abstract class StatePropertyDelegate<T> {
 
-    private var field: T? = null
-
     operator fun setValue(thisRef: StateHandler, property: KProperty<*>, value: T) {
-        if (field != value) {
-            field = value
-            thisRef.stateBundle.put(property.name, value)
-        }
+        thisRef.stateBundle.put(property.name, value)
     }
 
-    protected fun retrieveValue(stateBundle: Bundle, key: String): T? =
-        field ?: (stateBundle.get(key) as T?).apply { field = this }
+    protected fun retrieveValue(stateBundle: Bundle, key: String) = stateBundle.get(key) as T?
 }
 
 class NullableStateProperty<T> : StatePropertyDelegate<T>() {
