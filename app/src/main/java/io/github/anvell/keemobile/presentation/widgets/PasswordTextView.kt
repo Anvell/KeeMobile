@@ -10,16 +10,11 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.toPxScaled
-import io.github.anvell.keemobile.common.state.StateProperty
 import io.github.anvell.keemobile.common.state.StateHandlerView
-
-interface MaskedText {
-    fun isMasked(): Boolean
-    fun setMasked(value: Boolean)
-}
+import io.github.anvell.keemobile.common.state.StateProperty
 
 class PasswordTextView(context: Context, attrs: AttributeSet?)
-    : AppCompatTextView(context, attrs), MaskedText, StateHandlerView {
+    : AppCompatTextView(context, attrs), StateHandlerView {
 
     override val stateBundle = Bundle()
 
@@ -78,9 +73,9 @@ class PasswordTextView(context: Context, attrs: AttributeSet?)
         super.onRestoreInstanceState(restoreState(state))
     }
 
-    override fun isMasked() = maskedText
+    fun isMasked() = maskedText
 
-    override fun setMasked(value: Boolean) {
+    fun setMasked(value: Boolean) {
         maskedText = value
         requestLayout()
         invalidate()

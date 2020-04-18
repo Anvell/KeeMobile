@@ -4,12 +4,9 @@
         <attr name="srcReversed" format="reference" />
     </declare-styleable>
 
-    <declare-styleable name="PasswordVisibilityToggle">
-        <attr name="boundView" format="reference" />
-    </declare-styleable>
-
     <declare-styleable name="PasswordTextView">
         <attr name="hideLength" format="boolean" />
+        <attr name="isMasked" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="OneTimePasswordView">
