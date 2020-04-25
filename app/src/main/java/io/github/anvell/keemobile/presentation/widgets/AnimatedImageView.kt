@@ -3,17 +3,23 @@ package io.github.anvell.keemobile.presentation.widgets
 import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
-import android.os.Parcel
+import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import io.github.anvell.keemobile.R
+import io.github.anvell.keemobile.common.state.StateHandlerView
+import io.github.anvell.keemobile.common.state.StateProperty
 
-class AnimatedImageView(context: Context, attrs: AttributeSet?) : AppCompatImageView(context, attrs) {
+class AnimatedImageView(context: Context, attrs: AttributeSet?) :
+    AppCompatImageView(context, attrs), StateHandlerView {
+
+    override val stateBundle = Bundle()
+
+    private var isAtStart by StateProperty(true)
 
     private val animDrawable: Drawable?
     private val animReversedDrawable: Drawable?
-    private var isAtStart = true
 
     init {
         animDrawable = drawable
@@ -68,44 +74,12 @@ class AnimatedImageView(context: Context, attrs: AttributeSet?) : AppCompatImage
     }
 
     override fun onSaveInstanceState(): Parcelable? {
-        return SavedState(super.onSaveInstanceState()).apply {
-            isAtStart = this@AnimatedImageView.isAtStart
-        }
+        return saveState(super.onSaveInstanceState())
     }
 
-    override fun onRestoreInstanceState(state: Parcelable) {
-        val savedState = state as SavedState
-        super.onRestoreInstanceState(savedState.superState)
-        isAtStart = savedState.isAtStart
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        super.onRestoreInstanceState(restoreState(state))
         setPosition(isAtStart)
     }
 
-    internal class SavedState : BaseSavedState {
-        var isAtStart = true
-
-        constructor(superState: Parcelable?) : super(superState)
-
-        constructor(parcel: Parcel) : super(parcel) {
-            isAtStart = parcel.readBoolean()
-        }
-
-        override fun writeToParcel(out: Parcel, flags: Int) {
-            super.writeToParcel(out, flags)
-            out.writeBoolean(isAtStart)
-        }
-
-        companion object {
-
-            @JvmField
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
-                override fun createFromParcel(parcel: Parcel): SavedState {
-                    return SavedState(parcel)
-                }
-
-                override fun newArray(size: Int): Array<SavedState?> {
-                    return arrayOfNulls(size)
-                }
-            }
-        }
-    }
 }
