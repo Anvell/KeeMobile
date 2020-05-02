@@ -122,6 +122,7 @@ dependencies {
     def RxBindings = "3.1.0"
     implementation "com.jakewharton.rxbinding3:rxbinding:$RxBindings"
 
+    implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
     implementation 'commons-codec:commons-codec:1.13'
 
 }
