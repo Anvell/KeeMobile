@@ -96,21 +96,24 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         binding.clearAll.isEnabled = !fileIsLoading
         setDockVisibility(!fileIsLoading)
 
+        val openIds = withState(homeViewModel) { homeState ->
+            homeState.openDatabases.map { it.source.id }
+        }
         if (state.recentFiles is Success) {
             binding.recentFiles.withModels {
-                state.recentFiles()!!.reversed().forEach { entry ->
-
-                    if(entry is FileSource.Storage) {
+                state.recentFiles()!!
+                    .reversed()
+                    .forEach { entry ->
                         itemRecentFile {
                             id(entry.id)
                             title(entry.name)
                             isSelected(entry == state.selectedFile)
                             isClickable(!fileIsLoading)
+                            isOpen(openIds.find { it == entry.id } != null)
                             isProcessing(fileIsLoading && entry == state.selectedFile)
                             clickListener(View.OnClickListener { viewModel.selectFileSource(entry) })
                         }
                     }
-                }
             }
         }
 
