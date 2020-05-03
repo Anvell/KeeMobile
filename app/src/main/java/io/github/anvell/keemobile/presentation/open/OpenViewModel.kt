@@ -81,7 +81,18 @@ class OpenViewModel @AssistedInject constructor(
             .map { it.id }
             .onErrorResumeNext(openFileSource.use(source, secrets))
             .execute {
-                copy(openFile = it)
+                copy(
+                    openFile = it,
+                    recentFiles = recentFiles()?.let { list ->
+                        if (list.last().id != source.id) {
+                            val items = (list - source) + source
+                            saveRecentFiles(items)
+                            Success(items)
+                        } else {
+                            recentFiles
+                        }
+                    } ?: recentFiles
+                )
             }
     }
 
