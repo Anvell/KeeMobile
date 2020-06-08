@@ -18,6 +18,7 @@ import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.injector
+import io.github.anvell.keemobile.common.extensions.toast
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
@@ -27,6 +28,7 @@ import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
 import io.github.anvell.keemobile.presentation.base.BaseFragment
 import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
+import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,6 +40,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     lateinit var viewModelFactory: ExploreViewModel.Factory
 
     private val viewModel: ExploreViewModel by fragmentViewModel()
+    private val homeViewModel: HomeViewModel by activityViewModel()
 
     @Inject
     lateinit var iconMapper: IconMapper
@@ -58,8 +61,10 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         )
 
         requireActivity().onBackPressedDispatcher
-            .addCallback(this, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() = onBackPressed()
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackPressed()
+                }
         })
 
         initSearch()
@@ -159,15 +164,17 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
             .disposeOnStop()
     }
 
-    private fun onBackPressed() {
+    private fun onBackPressed() = withState(viewModel) { state ->
         updateUiOnNavigation(false)
-        withState(viewModel) { state ->
-            when {
-                getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(GravityCompat.START)
-                state.searchResults !is Uninitialized -> binding.search.text.clear()
-                state.rootStack.isEmpty() -> findNavController().navigateUp()
-                else -> viewModel.navigateUp()
+        when {
+            getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(GravityCompat.START)
+            state.searchResults !is Uninitialized -> binding.search.text.clear()
+            state.rootStack.isEmpty() -> {
+                homeViewModel.closeAllDatabases()
+                toast(getString(R.string.explore_all_files_closed))
+                findNavController().navigateUp()
             }
+            else -> viewModel.navigateUp()
         }
     }
 

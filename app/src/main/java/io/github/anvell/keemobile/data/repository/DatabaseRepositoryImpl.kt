@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.data.repository
 
+import com.jakewharton.rxrelay2.BehaviorRelay
 import de.slackspace.openkeepass.KeePassDatabase
 import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
@@ -9,18 +10,21 @@ import io.github.anvell.keemobile.domain.exceptions.DatabaseAlreadyOpenException
 import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
 import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DatabaseRepositoryImpl @Inject constructor(private val storageFile: StorageFile) : DatabaseRepository {
 
+    private val openDatabasesRelay = BehaviorRelay.create<List<OpenDatabase>>()
     private var openDatabases = listOf<OpenDatabase>()
-    private val openDatabasesSubject = BehaviorSubject.create<List<OpenDatabase>>()
+        private set(value) {
+            field = value
+            openDatabasesRelay.accept(value)
+        }
 
     override fun getOpenDatabases(): Observable<List<OpenDatabase>> {
-       return openDatabasesSubject
+       return openDatabasesRelay
     }
 
     override fun getOpenDatabaseById(id: VaultId): OpenDatabase {
@@ -43,16 +47,19 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
         }
     }
 
-    override fun closeDatabase(id: VaultId): List<OpenDatabase> {
+    override fun close(id: VaultId): List<OpenDatabase> {
         val database = openDatabases.find { it.id == id }
 
         if(database != null) {
             openDatabases = openDatabases.filter { it.id != id }
-            openDatabasesSubject.onNext(openDatabases)
             return openDatabases
         } else {
             throw DatabaseNotOpenException()
         }
+    }
+
+    override fun closeAll() {
+        openDatabases = listOf()
     }
 
     override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
@@ -111,7 +118,6 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
 
     private fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): VaultId {
         openDatabases = openDatabases + OpenDatabase(database, source, secrets)
-        openDatabasesSubject.onNext(openDatabases)
         return source.id
     }
 

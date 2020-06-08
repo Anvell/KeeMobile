@@ -12,9 +12,11 @@ interface DatabaseRepository {
 
     fun getFilteredEntries(id: VaultId, filter: String): List<SearchResult>
 
-    fun closeDatabase(id: VaultId): List<OpenDatabase>
+    fun close(id: VaultId): List<OpenDatabase>
 
     fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId
 
     fun createDatabase(source: FileSource, secrets: FileSecrets): VaultId
+
+    fun closeAll()
 }

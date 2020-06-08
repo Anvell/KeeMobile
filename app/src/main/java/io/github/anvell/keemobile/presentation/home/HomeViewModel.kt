@@ -4,6 +4,7 @@ import com.airbnb.mvrx.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.usecase.CloseAllDatabases
 import io.github.anvell.keemobile.domain.usecase.CloseDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabases
@@ -13,6 +14,7 @@ class HomeViewModel @AssistedInject constructor(
     @Assisted initialState: HomeViewState,
     private val getOpenDatabase: GetOpenDatabase,
     private val getOpenDatabases: GetOpenDatabases,
+    private val closeAllDatabases: CloseAllDatabases,
     private val closeDatabase: CloseDatabase
 ) : BaseViewModel<HomeViewState>(initialState) {
 
@@ -42,6 +44,14 @@ class HomeViewModel @AssistedInject constructor(
             .map { if (it.isNotEmpty()) it.first().id else "" }
             .execute {
                 copy(activeDatabaseId = it)
+            }
+    }
+
+    fun closeAllDatabases() {
+        closeAllDatabases
+            .use()
+            .execute {
+                copy(activeDatabaseId = Uninitialized)
             }
     }
 
