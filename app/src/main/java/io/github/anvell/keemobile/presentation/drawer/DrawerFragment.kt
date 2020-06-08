@@ -55,7 +55,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding
                     itemDrawer {
                         id(entry.id)
                         title(entry.source.name)
-                        icon(R.drawable.ic_close_square_outline)
+                        icon(R.drawable.ic_close)
                         iconContentDescription(getString(R.string.drawer_content_description_close, entry.source.name))
                         iconClickListener(View.OnClickListener { viewModel.closeDatabase(entry.id) })
 
