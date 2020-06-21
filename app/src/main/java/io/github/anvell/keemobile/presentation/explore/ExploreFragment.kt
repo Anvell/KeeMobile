@@ -1,7 +1,6 @@
 package io.github.anvell.keemobile.presentation.explore
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -16,8 +15,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.extensions.injector
 import io.github.anvell.keemobile.common.extensions.toast
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
@@ -33,6 +32,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@AndroidEntryPoint
 @SuppressLint("ClickableViewAccessibility")
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
 
@@ -46,11 +46,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     lateinit var iconMapper: IconMapper
 
     private lateinit var filterColorMapper: FilterColorMapper
-
-    override fun onAttach(context: Context) {
-        requireActivity().injector.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

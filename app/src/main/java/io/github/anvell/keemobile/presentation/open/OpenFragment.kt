@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.presentation.open
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.mvrx.*
 import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
@@ -23,6 +23,7 @@ import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::inflate) {
 
     @Inject
@@ -30,11 +31,6 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
 
     private val viewModel: OpenViewModel by fragmentViewModel()
     private val homeViewModel: HomeViewModel by activityViewModel()
-
-    override fun onAttach(context: Context) {
-        requireActivity().injector.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

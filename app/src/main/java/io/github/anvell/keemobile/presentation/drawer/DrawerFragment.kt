@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.presentation.drawer
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -9,8 +8,8 @@ import androidx.navigation.NavOptions
 import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.extensions.injector
 import io.github.anvell.keemobile.databinding.FragmentDrawerBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.itemDrawer
@@ -22,14 +21,10 @@ import io.github.anvell.keemobile.presentation.home.HomeViewState
 import io.github.anvell.keemobile.presentation.home.NavControllerHolder
 import timber.log.Timber
 
+@AndroidEntryPoint
 class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding::inflate) {
 
     private val viewModel: HomeViewModel by activityViewModel()
-
-    override fun onAttach(context: Context) {
-        requireActivity().injector.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
