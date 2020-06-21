@@ -1,7 +1,9 @@
 package io.github.anvell.keemobile.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import io.github.anvell.keemobile.data.repository.AppSettingsRepositoryImpl
 import io.github.anvell.keemobile.data.repository.DatabaseRepositoryImpl
 import io.github.anvell.keemobile.data.repository.DownloadsRepositoryImpl
@@ -12,21 +14,17 @@ import io.github.anvell.keemobile.domain.repository.DownloadsRepository
 import io.github.anvell.keemobile.domain.repository.RecentFilesRepository
 
 @Module
-object DataModule {
+@InstallIn(ApplicationComponent::class)
+interface DataModule {
+    @Binds
+    fun provideDatabaseRepository(databaseRepository: DatabaseRepositoryImpl): DatabaseRepository
 
-    @Provides
-    @JvmStatic
-    fun provideDatabaseRepository(databaseRepository: DatabaseRepositoryImpl): DatabaseRepository = databaseRepository
+    @Binds
+    fun provideRecentFilesRepository(recentFilesRepository: RecentFilesRepositoryImpl): RecentFilesRepository
 
-    @Provides
-    @JvmStatic
-    fun provideRecentFilesRepository(recentFilesRepository: RecentFilesRepositoryImpl): RecentFilesRepository = recentFilesRepository
+    @Binds
+    fun provideAppSettingsRepository(appSettingsRepository: AppSettingsRepositoryImpl): AppSettingsRepository
 
-    @Provides
-    @JvmStatic
-    fun provideAppSettingsRepository(appSettingsRepository: AppSettingsRepositoryImpl): AppSettingsRepository = appSettingsRepository
-
-    @Provides
-    @JvmStatic
-    fun provideDownloadsRepository(downloadsRepository: DownloadsRepositoryImpl): DownloadsRepository = downloadsRepository
+    @Binds
+    fun provideDownloadsRepository(downloadsRepository: DownloadsRepositoryImpl): DownloadsRepository
 }

@@ -6,14 +6,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.extensions.injector
 import io.github.anvell.keemobile.common.permissions.PermissionsProvider
 import io.github.anvell.keemobile.common.permissions.PermissionsProxy
 import io.github.anvell.keemobile.databinding.ActivityHomeBinding
 import io.github.anvell.keemobile.presentation.base.BaseActivity
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeActivity : BaseActivity(), DrawerHolder, NavControllerHolder, PermissionsProxy {
 
     @Inject
@@ -27,8 +28,6 @@ class HomeActivity : BaseActivity(), DrawerHolder, NavControllerHolder, Permissi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE)
-        injector.inject(this)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
     }
 

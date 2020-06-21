@@ -1,43 +1,42 @@
 package io.github.anvell.keemobile.di
 
 import com.squareup.moshi.Moshi
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import io.github.anvell.keemobile.common.io.*
 import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.common.rx.RxSchedulersImpl
 import io.github.anvell.keemobile.data.serialization.FileSourceJsonAdapterFactory
 
 @Module
-object CommonModule {
+@InstallIn(ApplicationComponent::class)
+interface CommonModule {
+    @Binds
+    fun provideRxSchedulers(rxSchedulers: RxSchedulersImpl): RxSchedulers
 
-    @Provides
-    @JvmStatic
-    fun provideRxSchedulers(rxSchedulers: RxSchedulersImpl): RxSchedulers = rxSchedulers
+    @Binds
+    fun provideStorageFile(storageFile: StorageFileImpl): StorageFile
 
-    @Provides
-    @JvmStatic
-    fun provideStorageFile(storageFile: StorageFileImpl): StorageFile = storageFile
+    @Binds
+    fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile
 
-    @Provides
-    @JvmStatic
-    fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile = InternalFile
+    @Binds
+    fun provideMediaStoreFile(mediaStoreFile: MediaStoreFileImpl): MediaStoreFile
 
-    @Provides
-    @JvmStatic
-    fun provideMediaStoreFile(mediaStoreFile: MediaStoreFileImpl): MediaStoreFile = mediaStoreFile
+    @Binds
+    fun provideClipboardProvider(clipboardProvider: ClipboardProviderImpl): ClipboardProvider
 
-    @Provides
-    @JvmStatic
-    fun provideClipboardProvider(clipboardProvider: ClipboardProviderImpl): ClipboardProvider = clipboardProvider
-
-    @Provides
-    @JvmStatic
-    @Reusable
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder()
-            .add(FileSourceJsonAdapterFactory.create())
-            .build()
+    companion object {
+        @Provides
+        @Reusable
+        fun provideMoshi(): Moshi {
+            return Moshi.Builder()
+                .add(FileSourceJsonAdapterFactory.create())
+                .build()
+        }
     }
 }

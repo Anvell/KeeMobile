@@ -2,6 +2,7 @@ package io.github.anvell.keemobile.common.mapper
 
 import android.content.Context
 import dagger.Reusable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import de.slackspace.openkeepass.exception.KeePassDatabaseUnreadableException
 import io.github.anvell.keemobile.BuildConfig
 import io.github.anvell.keemobile.R
@@ -9,7 +10,7 @@ import io.github.anvell.keemobile.domain.exceptions.DownloadsSaveException
 import javax.inject.Inject
 
 @Reusable
-class ErrorMapper @Inject constructor(private val context: Context) {
+class ErrorMapper @Inject constructor(@ApplicationContext private val context: Context) {
 
     fun map(error: Throwable): String? {
         return when (error) {

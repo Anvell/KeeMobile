@@ -2,13 +2,14 @@ package io.github.anvell.keemobile.common.io
 
 import android.content.Context
 import dagger.Reusable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
 @Reusable
-class InternalFileImpl @Inject constructor(private val context: Context) :
+class InternalFileImpl @Inject constructor(@ApplicationContext private val context: Context) :
     InternalFile {
 
     override fun openInputStream(fileName: String): InputStream? {

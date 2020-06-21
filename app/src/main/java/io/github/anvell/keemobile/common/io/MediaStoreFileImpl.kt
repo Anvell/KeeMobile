@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import dagger.Reusable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.anvell.keemobile.BuildConfig
 import io.github.anvell.keemobile.common.constants.AppConstants
 import java.io.File
@@ -16,7 +17,7 @@ import java.io.OutputStream
 import javax.inject.Inject
 
 @Reusable
-class MediaStoreFileImpl @Inject constructor(private val context: Context) :
+class MediaStoreFileImpl @Inject constructor(@ApplicationContext private val context: Context) :
     MediaStoreFile {
 
     override fun openOutputStream(

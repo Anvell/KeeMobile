@@ -2,7 +2,6 @@ package io.github.anvell.keemobile.presentation.entry
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.ColorStateList
@@ -25,6 +24,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.*
 import io.github.anvell.keemobile.common.authentication.OneTimePassword
 import io.github.anvell.keemobile.common.extensions.*
@@ -42,6 +42,7 @@ import java.net.URISyntaxException
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 @SuppressLint("ClickableViewAccessibility")
 class EntryDetailsFragment :
     BaseFragment<FragmentEntryDetailsBinding>(FragmentEntryDetailsBinding::inflate) {
@@ -62,11 +63,6 @@ class EntryDetailsFragment :
     private lateinit var pagesAdapter: BaseEpoxyAdapter
 
     private var currentPage: Int by stateProperty(PAGES_FIRST)
-
-    override fun onAttach(context: Context) {
-        requireActivity().injector.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

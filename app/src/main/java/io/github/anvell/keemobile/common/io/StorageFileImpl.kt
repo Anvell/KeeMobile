@@ -3,13 +3,14 @@ package io.github.anvell.keemobile.common.io
 import android.content.Context
 import android.net.Uri
 import dagger.Reusable
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.anvell.keemobile.common.extensions.fileExists
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
 @Reusable
-class StorageFileImpl @Inject constructor(private val context: Context) :
+class StorageFileImpl @Inject constructor(@ApplicationContext private val context: Context) :
     StorageFile {
 
     override fun openInputStream(sourceUri: String): InputStream? {
