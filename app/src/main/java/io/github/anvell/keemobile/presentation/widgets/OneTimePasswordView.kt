@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import dagger.hilt.android.internal.managers.ViewComponentManager
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.authentication.OneTimePassword
 import kotlinx.coroutines.*
@@ -34,7 +35,11 @@ class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
             attributes.recycle()
         }
 
-        (context as LifecycleOwner).lifecycle.addObserver(this)
+        when (context) {
+            is LifecycleOwner -> context
+            is ViewComponentManager.FragmentContextWrapper -> context.fragment
+            else -> error("Context does not implement LifecycleOwner.")
+        }.lifecycle.addObserver(this)
     }
 
     override fun onAttachedToWindow() {
