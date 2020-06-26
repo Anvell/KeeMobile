@@ -3,11 +3,11 @@ package io.github.anvell.keemobile.common.authentication
 import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.domain.exceptions.OneTimePasswordException
 import org.apache.commons.codec.binary.Base32
-import org.threeten.bp.Instant
 import java.net.URI
 import java.net.URISyntaxException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
+import java.time.Instant
 import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec

@@ -13,7 +13,7 @@ import dagger.hilt.android.internal.managers.ViewComponentManager
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.authentication.OneTimePassword
 import kotlinx.coroutines.*
-import org.threeten.bp.Instant
+import java.time.Instant
 import kotlin.math.ceil
 
 class OneTimePasswordView(context: Context, attrs: AttributeSet?) :
