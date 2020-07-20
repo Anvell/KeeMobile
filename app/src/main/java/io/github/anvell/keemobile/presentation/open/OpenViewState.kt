@@ -1,11 +1,9 @@
 package io.github.anvell.keemobile.presentation.open
 
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
-import com.airbnb.mvrx.Uninitialized
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.Async
 import io.github.anvell.keemobile.domain.entity.FileSource
-import java.util.*
+import io.github.anvell.keemobile.domain.entity.Uninitialized
 
 data class OpenViewState(
     val initialSetup: Boolean = true,
@@ -13,4 +11,4 @@ data class OpenViewState(
     val recentFilesStash: List<FileSource>? = null,
     val selectedFile: FileSource? = null,
     val openFile: Async<VaultId> = Uninitialized
-) : MvRxState
+)

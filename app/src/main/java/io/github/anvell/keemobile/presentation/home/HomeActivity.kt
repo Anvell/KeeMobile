@@ -16,10 +16,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity(), DrawerHolder, NavControllerHolder, PermissionsProxy {
-
-    @Inject
-    lateinit var viewModelFactory: HomeViewModel.Factory
-
     private lateinit var binding: ActivityHomeBinding
 
     @Inject

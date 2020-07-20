@@ -2,59 +2,64 @@ package io.github.anvell.keemobile.presentation.open
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isGone
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.mvrx.*
 import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
+import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.FileSecrets
-import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemRecentFile
-import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.base.MviView
+import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::inflate) {
-
-    @Inject
-    lateinit var viewModelFactory: OpenViewModel.Factory
-
-    private val viewModel: OpenViewModel by fragmentViewModel()
-    private val homeViewModel: HomeViewModel by activityViewModel()
+class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(R.layout.fragment_open),
+    MviView<OpenViewModel, OpenViewState> {
+    override val viewModel: OpenViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
-        binding.dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
-        binding.recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
-        binding.recentFiles.addItemDecoration(
-            DividerDecoration(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
-        )
+        with(requireBinding()) {
+            dock.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
+            recentFiles.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
+            recentFiles.addItemDecoration(
+                DividerDecoration(requireContext(), R.drawable.list_divider, LinearLayoutManager.VERTICAL)
+            )
 
-        binding.fileCreate.setOnClickListener { requestCreateFile(getString(R.string.default_file_name)) }
-        binding.fileOpen.setOnClickListener { requestOpenFile() }
-        binding.unlock.setOnClickListener { unlockSelected() }
-        binding.clearAll.setOnClickListener { viewModel.pushRecentFiles() }
-        binding.password.setOnEditorActionListener { _, action, _ ->
-            if (action == EditorInfo.IME_ACTION_GO) {
-                unlockSelected()
-            } else {
-                false
+            fileCreate.setOnClickListener {
+                requestCreateFile(getString(R.string.default_file_name), RequestCodes.FILE_CREATE)
+            }
+            fileOpen.setOnClickListener { requestOpenFile(RequestCodes.FILE_OPEN) }
+            unlock.setOnClickListener { unlockSelected() }
+            clearAll.setOnClickListener { viewModel.pushRecentFiles() }
+            password.setOnEditorActionListener { _, action, _ ->
+                if (action == EditorInfo.IME_ACTION_GO) {
+                    unlockSelected()
+                } else {
+                    false
+                }
             }
         }
-
         initObservers()
+        stateSubscribe(viewLifecycleOwner)
     }
 
     override fun onDetach() {
@@ -80,23 +85,25 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         }
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
+    override fun render(state: OpenViewState) {
         if (switchToOpenFile(state.openFile)) {
-            return@withState
+            return
         }
 
         val fileIsLoading = state.openFile is Loading
-        binding.title.text = state.selectedFile?.nameWithoutExtension
-        binding.unlock.isEnabled = state.selectedFile != null && !fileIsLoading
-        binding.password.isEnabled = !fileIsLoading
-        binding.clearAll.isEnabled = !fileIsLoading
         setDockVisibility(!fileIsLoading)
+        with(requireBinding()) {
+            title.text = state.selectedFile?.nameWithoutExtension
+            unlock.isEnabled = state.selectedFile != null && !fileIsLoading
+            password.isEnabled = !fileIsLoading
+            clearAll.isEnabled = !fileIsLoading
+        }
 
-        val openIds = withState(homeViewModel) { homeState ->
+        val openIds = homeViewModel.withState { homeState ->
             homeState.openDatabases.map { it.source.id }
         }
         if (state.recentFiles is Success) {
-            binding.recentFiles.withModels {
+            requireBinding().recentFiles.withModels {
                 state.recentFiles()!!
                     .reversed()
                     .forEach { entry ->
@@ -114,72 +121,82 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
         }
 
         if (state.recentFiles is Success || state.recentFiles is Fail) {
-            switchPage(state.recentFiles()?.isEmpty() ?: true, state.initialSetup)
+            // Use handler to ensure that view was laid out and width returns proper value
+            Handler(Looper.getMainLooper()).post {
+                switchPage(
+                    state.recentFiles()?.isEmpty() ?: true, state.initialSetup
+                )
+            }
         }
     }
 
     private fun initObservers() {
-        viewModel.selectSubscribe(viewLifecycleOwner,
-            OpenViewState::recentFilesStash,
-            deliveryMode = uniqueOnly()) {
-            it?.let {
-                snackbar(
-                    getString(R.string.landing_popup_clear_all_info),
-                    getString(R.string.button_undo),
-                    action = {
-                        viewModel.popRecentFiles()
-                    },
-                    onDismissed = { event ->
-                        if (event != DISMISS_EVENT_ACTION) {
-                            viewModel.clearRecentFiles()
-                        }
-                    })
+        viewModel.selectSubscribe(OpenViewState::recentFilesStash)
+            .observe(viewLifecycleOwner) { item ->
+                item?.let {
+                    snackbar(
+                        getString(R.string.landing_popup_clear_all_info),
+                        getString(R.string.button_undo),
+                        action = {
+                            viewModel.popRecentFiles()
+                        },
+                        onDismissed = { event ->
+                            if (event != DISMISS_EVENT_ACTION) {
+                                viewModel.clearRecentFiles()
+                            }
+                        })
+                }
             }
-        }
-        snackbarOnFailedState(viewModel, OpenViewState::openFile)
+        viewModel.selectSubscribe(OpenViewState::openFile)
+            .observe(viewLifecycleOwner) { item ->
+                if (item is Fail && !item.isConsumed) {
+                    errorMapper.map(item.error)?.let { snackbar(it) }
+                }
+            }
     }
 
-    private fun setDockVisibility(visible: Boolean) {
+    private fun setDockVisibility(visible: Boolean) = with(requireBinding()) {
         val shiftY = if (visible) 0f else 100f.toPx()
 
-        if (binding.dock.translationY != shiftY) {
-            binding.dock.springAnimation(SpringAnimation.TRANSLATION_Y)
+        if (dock.translationY != shiftY) {
+            dock.springAnimation(SpringAnimation.TRANSLATION_Y)
                 .animateToFinalPosition(shiftY)
         }
     }
 
-    private fun switchPage(isLanding: Boolean, performInitialSetup: Boolean = false) {
-        val landingShiftX = if (isLanding) 0f else -binding.openRoot.measuredWidth.toFloat()
-        val recentFilesShiftX = if (isLanding) binding.openRoot.measuredWidth.toFloat() else 0f
+    private fun switchPage(isLanding: Boolean, performInitialSetup: Boolean = false) =
+        with(requireBinding()) {
+            val landingShiftX = if (isLanding) 0f else -openRoot.measuredWidth.toFloat()
+            val recentFilesShiftX = if (isLanding) openRoot.measuredWidth.toFloat() else 0f
 
-        if (performInitialSetup) {
-            binding.landingLayout.translationX = landingShiftX
-            binding.recentFilesLayout.translationX = recentFilesShiftX
+            if (performInitialSetup) {
+                landingLayout.translationX = landingShiftX
+                recentFilesLayout.translationX = recentFilesShiftX
 
-            if (binding.landingLayout.isGone) binding.landingLayout.isGone = false
-            if (binding.recentFilesLayout.isGone) binding.recentFilesLayout.isGone = false
+                if (landingLayout.isGone) landingLayout.isGone = false
+                if (recentFilesLayout.isGone) recentFilesLayout.isGone = false
 
-            viewModel.setInitialSetup(false)
-        } else {
-            if (binding.landingLayout.isGone) binding.landingLayout.isGone = false
-            if (binding.recentFilesLayout.isGone) binding.recentFilesLayout.isGone = false
+                viewModel.setInitialSetup(false)
+            } else {
+                if (landingLayout.isGone) landingLayout.isGone = false
+                if (recentFilesLayout.isGone) recentFilesLayout.isGone = false
 
-            if (binding.landingLayout.translationX != landingShiftX) {
-                binding.landingLayout.springAnimation(SpringAnimation.TRANSLATION_X)
-                    .animateToFinalPosition(landingShiftX)
-            }
+                if (landingLayout.translationX != landingShiftX) {
+                    landingLayout.springAnimation(SpringAnimation.TRANSLATION_X)
+                        .animateToFinalPosition(landingShiftX)
+                }
 
-            if (binding.recentFilesLayout.translationX != recentFilesShiftX) {
-                binding.recentFilesLayout.springAnimation(SpringAnimation.TRANSLATION_X)
-                    .animateToFinalPosition(recentFilesShiftX)
+                if (recentFilesLayout.translationX != recentFilesShiftX) {
+                    recentFilesLayout.springAnimation(SpringAnimation.TRANSLATION_X)
+                        .animateToFinalPosition(recentFilesShiftX)
+                }
             }
         }
-    }
 
-    private fun unlockSelected(): Boolean = withState(viewModel) { state ->
+    private fun unlockSelected(): Boolean = viewModel.withState { state ->
         val selected = state.selectedFile
-        return@withState if (binding.password.text.isNotEmpty() && selected != null) {
-            viewModel.openFromSource(selected, FileSecrets(binding.password.text.toString()))
+        return@withState if (requireBinding().password.text.isNotEmpty() && selected != null) {
+            viewModel.openFromSource(selected, FileSecrets(requireBinding().password.text.toString()))
             true
         } else {
             false
@@ -195,5 +212,4 @@ class OpenFragment : BaseFragment<FragmentOpenBinding>(FragmentOpenBinding::infl
             else -> false
         }
     }
-
 }

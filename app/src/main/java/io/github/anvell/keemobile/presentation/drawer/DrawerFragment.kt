@@ -4,41 +4,43 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
 import androidx.navigation.NavOptions
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.activityViewModel
-import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
+import io.github.anvell.keemobile.common.constants.Args
 import io.github.anvell.keemobile.databinding.FragmentDrawerBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.Success
 import io.github.anvell.keemobile.itemDrawer
 import io.github.anvell.keemobile.itemHeader
-import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.base.MviView
+import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.explore.ExploreArgs
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.home.HomeViewState
 import io.github.anvell.keemobile.presentation.home.NavControllerHolder
-import timber.log.Timber
 
 @AndroidEntryPoint
-class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding::inflate) {
-
-    private val viewModel: HomeViewModel by activityViewModel()
+class DrawerFragment : ViewBindingFragment<FragmentDrawerBinding>(R.layout.fragment_drawer),
+    MviView<HomeViewModel, HomeViewState> {
+    override val viewModel: HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.asyncSubscribe(HomeViewState::activeDatabaseId,
-            onSuccess = ::navigateOnDatabaseSwitch,
-            onFail = Timber::d,
-            deliveryMode = uniqueOnly()
-        )
+        viewModel.selectSubscribe(HomeViewState::activeDatabaseId)
+            .observe(viewLifecycleOwner) {
+                if (it is Success && !it.isConsumed) {
+                    navigateOnDatabaseSwitch(it())
+                }
+            }
+        stateSubscribe(viewLifecycleOwner)
     }
 
-    override fun invalidate(): Unit = withState(viewModel) { state ->
-        binding.drawerMenu.withModels {
-
+    override fun render(state: HomeViewState) {
+        requireBinding().drawerMenu.withModels {
             itemHeader {
                 val title = getString(R.string.drawer_file_list_header)
                 id(TAG + title)
@@ -103,7 +105,7 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding
         if (activeDatabaseId.isNotBlank()) {
             (activity as? NavControllerHolder)
                 ?.getNavController()
-                ?.navigate(R.id.exploreFragment, bundleOf(MvRx.KEY_ARG to ExploreArgs(activeDatabaseId)),
+                ?.navigate(R.id.exploreFragment, bundleOf(Args.KEY to ExploreArgs(activeDatabaseId)),
                     NavOptions.Builder().setPopUpTo(R.id.app_navigation, false).build()
                 )
         } else {
@@ -118,5 +120,4 @@ class DrawerFragment : BaseFragment<FragmentDrawerBinding>(FragmentDrawerBinding
     companion object {
         private val TAG = this::class.simpleName
     }
-
 }

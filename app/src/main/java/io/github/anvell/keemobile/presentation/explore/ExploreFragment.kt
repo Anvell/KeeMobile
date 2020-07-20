@@ -12,11 +12,14 @@ import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.airbnb.mvrx.*
 import com.jakewharton.rxbinding3.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
+import io.github.anvell.keemobile.common.constants.Args
+import io.github.anvell.keemobile.common.extensions.hideSoftKeyboard
 import io.github.anvell.keemobile.common.extensions.toast
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
@@ -25,7 +28,8 @@ import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
-import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.base.MviView
+import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import java.util.*
@@ -34,18 +38,14 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 @SuppressLint("ClickableViewAccessibility")
-class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
-
-    @Inject
-    lateinit var viewModelFactory: ExploreViewModel.Factory
-
-    private val viewModel: ExploreViewModel by fragmentViewModel()
-    private val homeViewModel: HomeViewModel by activityViewModel()
+class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(R.layout.fragment_explore),
+    MviView<ExploreViewModel, ExploreViewState> {
+    override val viewModel: ExploreViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var filterColorMapper: FilterColorMapper
 
     @Inject
     lateinit var iconMapper: IconMapper
-
-    private lateinit var filterColorMapper: FilterColorMapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,17 +64,17 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
 
         initSearch()
 
-        binding.exploreRoot.setOnTouchListener { _, _ ->
+        requireBinding().exploreRoot.setOnTouchListener { _, _ ->
             hideSoftKeyboard()
-            binding.search.clearFocus()
+            requireBinding().search.clearFocus()
             false
         }
 
-        binding.navigateButton.setOnClickListener {
+        requireBinding().navigateButton.setOnClickListener {
             updateUiOnNavigation(false)
-            withState(viewModel) { state ->
+            viewModel.withState() { state ->
                 when {
-                    state.searchResults !is Uninitialized -> binding.search.text.clear()
+                    state.searchResults !is Uninitialized -> requireBinding().search.text.clear()
                     state.rootStack.isEmpty() -> {
                         getDrawer()?.openDrawer(GravityCompat.START)
                     }
@@ -82,34 +82,34 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 }
             }
         }
+        stateSubscribe(viewLifecycleOwner)
     }
 
-    private fun initSearch() {
-        binding.search.setOnFocusChangeListener { _, hasFocus ->
+    private fun initSearch() = with(requireBinding()) {
+        search.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 hideSoftKeyboard()
             }
         }
 
-        binding.search.setOnEditorActionListener { textView, actionId, _ ->
+        search.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 textView.clearFocus()
                 true
             } else false
         }
 
-        binding.searchExtraButton.setOnClickListener {
-            if (!binding.search.text.isNullOrEmpty()) {
-                binding.search.text.clear()
+        searchExtraButton.setOnClickListener {
+            if (!search.text.isNullOrEmpty()) {
+                search.text.clear()
             } else {
                 showExplorePopupMenu(it)
             }
         }
     }
 
-    private fun showExplorePopupMenu(view: View) = withState(viewModel) { state ->
+    private fun showExplorePopupMenu(view: View) = viewModel.withState() { state ->
         with(PopupMenu(requireActivity(), view, GravityCompat.END)) {
-
             if (state.appSettings is Success) {
                 addViewModeMenuItem(menu, state.appSettings()!!)
             }
@@ -117,16 +117,16 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         }
     }
 
-    private fun addViewModeMenuItem(menu: Menu, settings: AppSettings) = withState(viewModel) { state ->
+    private fun addViewModeMenuItem(menu: Menu, settings: AppSettings) = viewModel.withState() { state ->
         when (settings.exploreViewMode) {
             ViewMode.TREE -> {
                 menu.add(getString(R.string.explore_menu_show_list))
                     .setOnMenuItemClickListener {
-                        binding.exploreView.clear()
+                        requireBinding().exploreView.clear()
 
                         if (state.rootStack.isNotEmpty()) {
                             viewModel.resetRoot()
-                            binding.navigateButton.playReverse()
+                            requireBinding().navigateButton.playReverse()
                         }
                         viewModel.updateAppSettings(settings.copy(exploreViewMode = ViewMode.LIST))
                         true
@@ -145,11 +145,11 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     override fun onStart() {
         super.onStart()
 
-        if(binding.search.text.toString().isNotEmpty()) {
-            binding.searchExtraButton.rewindToEnd()
+        if (requireBinding().search.text.toString().isNotEmpty()) {
+            requireBinding().searchExtraButton.rewindToEnd()
         }
 
-        binding.search
+        requireBinding().search
             .textChanges()
             .debounce(300, TimeUnit.MILLISECONDS)
             .onErrorReturn { "" }
@@ -159,11 +159,13 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
             .disposeOnStop()
     }
 
-    private fun onBackPressed() = withState(viewModel) { state ->
+    private fun onBackPressed() = viewModel.withState() { state ->
         updateUiOnNavigation(false)
         when {
-            getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(GravityCompat.START)
-            state.searchResults !is Uninitialized -> binding.search.text.clear()
+            getDrawer()?.isDrawerOpen(GravityCompat.START) ?: false -> getDrawer()?.closeDrawer(
+                GravityCompat.START
+            )
+            state.searchResults !is Uninitialized -> requireBinding().search.text.clear()
             state.rootStack.isEmpty() -> {
                 homeViewModel.closeAllDatabases()
                 toast(getString(R.string.explore_all_files_closed))
@@ -173,18 +175,15 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         }
     }
 
-    override fun invalidate(): Unit = withState(viewModel) { state ->
-
+    override fun render(state: ExploreViewState) {
         when {
             state.searchResults is Success -> state.searchResults()?.also {
                 renderFilteredEntries(it.filteredEntries)
-
-                binding.navigateButton.isVisible = false
-                binding.searchSeparator.isVisible = true
+                requireBinding().navigateButton.isVisible = false
+                requireBinding().searchSeparator.isVisible = true
             }
             state.searchResults is Uninitialized && state.activeDatabase is Success -> {
                 state.activeDatabase()?.database?.let { db ->
-
                     when (state.appSettings()?.exploreViewMode) {
                         ViewMode.TREE -> {
                             val group = if (state.rootStack.isEmpty()) db.root else {
@@ -198,8 +197,8 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     }
 
                 }
-                binding.navigateButton.isVisible = true
-                binding.searchSeparator.isVisible = false
+                requireBinding().navigateButton.isVisible = true
+                requireBinding().searchSeparator.isVisible = false
             }
         }
     }
@@ -209,8 +208,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     }
 
     private fun renderGroupContents(group: KeyGroup) {
-        binding.exploreView.withModels {
-
+        requireBinding().exploreView.withModels {
             group.groups.forEach { entry ->
                 itemEntry {
                     id(entry.uuid.toString())
@@ -238,8 +236,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
     }
 
     private fun renderFilteredEntries(results: List<SearchResult>) {
-        binding.exploreView.withModels {
-
+        requireBinding().exploreView.withModels {
             if (results.isEmpty()) {
                 itemInfo {
                     id(0)
@@ -249,7 +246,6 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 results
                     .sortedBy { it.group.name.toLowerCase(Locale.getDefault()) }
                     .forEach { item ->
-
                         itemHeader {
                             id(item.group.uuid.toString())
                             title(item.group.name)
@@ -278,46 +274,39 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         viewModel.activateGroup(id)
     }
 
-    private fun onEntryClicked(id: UUID) {
-        withState(viewModel) { state ->
-            findNavController().navigate(
-                R.id.action_entry_details,
-                bundleOf(MvRx.KEY_ARG to EntryDetailsArgs(state.activeDatabaseId, id))
-            )
-        }
+    private fun onEntryClicked(id: UUID) = viewModel.withState() { state ->
+        findNavController().navigate(
+            R.id.action_entry_details,
+            bundleOf(Args.KEY to EntryDetailsArgs(state.activeDatabaseId, id))
+        )
     }
 
-    private fun updateUiOnNavigation(isForward: Boolean) {
-        withState(viewModel) { state ->
-            if (isForward) {
-                if (state.rootStack.isEmpty()) {
-                    binding.navigateButton.play()
-                }
-            } else {
-                if (state.rootStack.size == 1) {
-                    binding.navigateButton.playReverse()
-                }
+    private fun updateUiOnNavigation(isForward: Boolean) = viewModel.withState() { state ->
+        if (isForward) {
+            if (state.rootStack.isEmpty()) {
+                requireBinding().navigateButton.play()
+            }
+        } else {
+            if (state.rootStack.size == 1) {
+                requireBinding().navigateButton.playReverse()
             }
         }
     }
 
-    private fun onFilterChanged(filter: String) {
-        withState(viewModel) { state ->
-            when {
-                state.searchResults is Uninitialized && filter.isNotEmpty() -> {
-                    binding.searchExtraButton.play()
-                    binding.exploreView.clear()
-                }
-                state.searchResults !is Uninitialized && filter.isEmpty() -> {
-                    binding.searchExtraButton.playReverse()
-                }
+    private fun onFilterChanged(filter: String) = viewModel.withState() { state ->
+        when {
+            state.searchResults is Uninitialized && filter.isNotEmpty() -> {
+                requireBinding().searchExtraButton.play()
+                requireBinding().exploreView.clear()
             }
-
-            when {
-                filter.isEmpty() -> viewModel.clearFilter()
-                filter.isNotBlank() -> viewModel.filterEntries(filter)
+            state.searchResults !is Uninitialized && filter.isEmpty() -> {
+                requireBinding().searchExtraButton.playReverse()
             }
         }
-    }
 
+        when {
+            filter.isEmpty() -> viewModel.clearFilter()
+            filter.isNotBlank() -> viewModel.filterEntries(filter)
+        }
+    }
 }

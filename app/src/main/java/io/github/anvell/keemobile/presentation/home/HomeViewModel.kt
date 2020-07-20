@@ -1,22 +1,20 @@
 package io.github.anvell.keemobile.presentation.home
 
-import com.airbnb.mvrx.*
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import androidx.hilt.lifecycle.ViewModelInject
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.CloseAllDatabases
 import io.github.anvell.keemobile.domain.usecase.CloseDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabases
-import io.github.anvell.keemobile.presentation.base.BaseViewModel
+import io.github.anvell.keemobile.presentation.base.MviViewModel
 
-class HomeViewModel @AssistedInject constructor(
-    @Assisted initialState: HomeViewState,
+class HomeViewModel @ViewModelInject constructor(
     private val getOpenDatabase: GetOpenDatabase,
     private val getOpenDatabases: GetOpenDatabases,
     private val closeAllDatabases: CloseAllDatabases,
     private val closeDatabase: CloseDatabase
-) : BaseViewModel<HomeViewState>(initialState) {
+) : MviViewModel<HomeViewState>(HomeViewState()) {
 
     init {
         getOpenDatabases
@@ -38,7 +36,7 @@ class HomeViewModel @AssistedInject constructor(
             }
     }
 
-    fun closeDatabase(id: VaultId) {
+    fun closeDatabase(id: VaultId) = withState { state ->
         closeDatabase
             .use(id)
             .map { if (it.isNotEmpty()) it.first().id else "" }
@@ -53,18 +51,5 @@ class HomeViewModel @AssistedInject constructor(
             .execute {
                 copy(activeDatabaseId = Uninitialized)
             }
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: HomeViewState): HomeViewModel
-    }
-
-    companion object : MvRxViewModelFactory<HomeViewModel, HomeViewState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: HomeViewState): HomeViewModel? {
-            val activity = (viewModelContext as ActivityViewModelContext).activity<HomeActivity>()
-            return activity.viewModelFactory.create(state)
-        }
     }
 }

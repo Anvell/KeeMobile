@@ -1,25 +1,24 @@
 package io.github.anvell.keemobile.presentation.open
 
-import com.airbnb.mvrx.*
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import androidx.hilt.lifecycle.ViewModelInject
 import io.github.anvell.keemobile.common.constants.AppConstants
 import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.Success
+import io.github.anvell.keemobile.domain.entity.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.*
-import io.github.anvell.keemobile.presentation.base.BaseViewModel
+import io.github.anvell.keemobile.presentation.base.MviViewModel
 import timber.log.Timber
 
-class OpenViewModel @AssistedInject constructor(
-    @Assisted initialState: OpenViewState,
+class OpenViewModel @ViewModelInject constructor(
     private val createNewFile: CreateNewFile,
     private val openFileSource: OpenFileSource,
     private val getRecentFiles: GetRecentFiles,
     private val saveRecentFiles: SaveRecentFiles,
     private val clearRecentFiles: ClearRecentFiles,
     private val getOpenDatabase: GetOpenDatabase
-) : BaseViewModel<OpenViewState>(initialState) {
+) : MviViewModel<OpenViewState>(OpenViewState()) {
 
     init {
         withState { state ->
@@ -49,10 +48,12 @@ class OpenViewModel @AssistedInject constructor(
             when (recentFiles) {
                 is Success -> {
                     val entry = recentFiles()?.find { it.id == source.id }
-                    if(entry == null) {
+                    if (entry == null) {
                         recentFiles()!!.append(source, AppConstants.MAX_RECENT_FILES).let {
                             saveRecentFiles(it)
-                            copy(recentFiles = Success(it), selectedFile = source)
+                            copy(recentFiles = Success(
+                                it
+                            ), selectedFile = source)
                         }
 
                     } else {
@@ -62,7 +63,9 @@ class OpenViewModel @AssistedInject constructor(
                 else -> {
                     listOf(source).let {
                         saveRecentFiles(it)
-                        copy(recentFiles = Success(it), selectedFile = source)
+                        copy(recentFiles = Success(
+                            it
+                        ), selectedFile = source)
                     }
                 }
             }
@@ -87,7 +90,9 @@ class OpenViewModel @AssistedInject constructor(
                         if (list.last().id != source.id) {
                             val items = (list - source) + source
                             saveRecentFiles(items)
-                            Success(items)
+                            Success(
+                                items
+                            )
                         } else {
                             recentFiles
                         }
@@ -105,7 +110,9 @@ class OpenViewModel @AssistedInject constructor(
     fun pushRecentFiles() = withState { state ->
         setState {
             copy(
-                recentFiles = Success(listOf()),
+                recentFiles = Success(
+                    listOf()
+                ),
                 recentFilesStash = state.recentFiles()
             )
         }
@@ -115,7 +122,9 @@ class OpenViewModel @AssistedInject constructor(
         state.recentFilesStash?.let {
             setState {
                 copy(
-                    recentFiles = Success(it),
+                    recentFiles = Success(
+                        it
+                    ),
                     recentFilesStash = null
                 )
             }
@@ -127,27 +136,17 @@ class OpenViewModel @AssistedInject constructor(
             .use()
             .doOnError(Timber::d)
             .execute {
-                copy(recentFiles = Success(listOf()), selectedFile = null)
+                copy(recentFiles = Success(
+                    listOf()
+                ), selectedFile = null)
             }
     }
 
     private fun saveRecentFiles(recentFiles: List<FileSource>) {
-        disposables.add(saveRecentFiles
+        saveRecentFiles
             .use(recentFiles)
             .onErrorReturn { Timber.d(it) }
             .subscribe()
-        )
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: OpenViewState): OpenViewModel
-    }
-
-    companion object : MvRxViewModelFactory<OpenViewModel, OpenViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: OpenViewState): OpenViewModel? {
-            val fragment: OpenFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
+            .disposeOnClear()
     }
 }

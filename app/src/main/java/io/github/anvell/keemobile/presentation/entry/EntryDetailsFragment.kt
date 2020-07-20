@@ -15,27 +15,29 @@ import androidx.core.os.bundleOf
 import androidx.core.view.forEach
 import androidx.core.widget.ImageViewCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.*
 import io.github.anvell.keemobile.common.authentication.OneTimePassword
+import io.github.anvell.keemobile.common.constants.Args
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.common.permissions.PermissionsProvider
 import io.github.anvell.keemobile.databinding.FragmentEntryDetailsBinding
+import io.github.anvell.keemobile.domain.entity.Fail
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.entity.KeyEntry
+import io.github.anvell.keemobile.domain.entity.Success
 import io.github.anvell.keemobile.presentation.base.BaseEpoxyAdapter
-import io.github.anvell.keemobile.presentation.base.BaseFragment
+import io.github.anvell.keemobile.presentation.base.MviView
+import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 import timber.log.Timber
 import java.net.URISyntaxException
@@ -44,25 +46,19 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 @SuppressLint("ClickableViewAccessibility")
-class EntryDetailsFragment :
-    BaseFragment<FragmentEntryDetailsBinding>(FragmentEntryDetailsBinding::inflate) {
+class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(R.layout.fragment_entry_details),
+    MviView<EntryDetailsViewModel, EntryDetailsViewState> {
+    override val viewModel: EntryDetailsViewModel by viewModels()
+    private lateinit var filterColorMapper: FilterColorMapper
+    private lateinit var pagesAdapter: BaseEpoxyAdapter
 
-    @Inject
-    lateinit var viewModelFactory: EntryDetailsViewModel.Factory
-
-    private val viewModel: EntryDetailsViewModel by fragmentViewModel()
+    private var currentPage: Int by stateProperty(PAGES_FIRST)
 
     @Inject
     lateinit var iconMapper: IconMapper
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
-
-    private lateinit var filterColorMapper: FilterColorMapper
-
-    private lateinit var pagesAdapter: BaseEpoxyAdapter
-
-    private var currentPage: Int by stateProperty(PAGES_FIRST)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,35 +67,36 @@ class EntryDetailsFragment :
             ContextCompat.getColor(requireContext(), R.color.onSurface),
             resources.getIntArray(R.array.filterColors)
         )
-        binding.navigateButton.setOnClickListener { findNavController().navigateUp() }
+        requireBinding().navigateButton.setOnClickListener { findNavController().navigateUp() }
 
         initTabs()
         initErrorObservers()
+        stateSubscribe(viewLifecycleOwner)
     }
 
-    private fun initTabs() {
-        binding.tabs.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
+    private fun initTabs() = with(requireBinding()) {
+        tabs.clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
         pagesAdapter = BaseEpoxyAdapter(R.layout.item_details_page, R.id.details_page) {
             clipToCornerRadius(resources.getDimension(R.dimen.surface_corner_radius))
             addItemDecoration(
                 DividerDecoration(context, R.drawable.list_divider, RecyclerView.VERTICAL)
             )
         }
-        binding.pager.adapter = pagesAdapter
+        pager.adapter = pagesAdapter
 
-        TabLayoutMediator(binding.tabs, binding.pager,
+        TabLayoutMediator(tabs, pager,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
                 tab.setCustomView(R.layout.item_details_tab)
                 tab.text = resources.getStringArray(R.array.details_tabs)[position]
             }).attach()
 
-        binding.pager.forEach {
+        pager.forEach {
             (it as? RecyclerView)?.apply {
                 overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             }
         }
 
-        binding.pager.registerOnPageChangeCallback(
+        pager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     currentPage = position
@@ -109,30 +106,34 @@ class EntryDetailsFragment :
     }
 
     private fun initErrorObservers() {
-        viewModel.selectSubscribe(
-            viewLifecycleOwner,
-            EntryDetailsViewState::errorSink,
-            deliveryMode = uniqueOnly()
-        ) { error ->
-            if (error != null) {
-                errorMapper.map(error)?.let { snackbar(it) }
+        viewModel.selectSubscribe(EntryDetailsViewState::errorSink)
+            .observe(viewLifecycleOwner) { error ->
+                if (error != null) {
+                    errorMapper.map(error)?.let { snackbar(it) }
+                }
             }
-        }
-
-        snackbarOnFailedState(viewModel,
-            EntryDetailsViewState::entry,
-            EntryDetailsViewState::activeDatabase
-        )
+        viewModel.selectSubscribe(EntryDetailsViewState::entry)
+            .observe(viewLifecycleOwner) { item ->
+                if (item is Fail) {
+                    errorMapper.map(item.error)?.let { snackbar(it) }
+                }
+            }
+        viewModel.selectSubscribe(EntryDetailsViewState::activeDatabase)
+            .observe(viewLifecycleOwner) { item ->
+                if (item is Fail) {
+                    errorMapper.map(item.error)?.let { snackbar(it) }
+                }
+            }
     }
 
-    override fun invalidate(): Unit = withState(viewModel) { state ->
+    override fun render(state: EntryDetailsViewState) {
         if (state.entry is Success) {
             state.entry()?.also {
-                binding.entryTitle.text = it.title
-                binding.entryIcon.setImageResource(iconMapper.map(it.iconId))
+                requireBinding().entryTitle.text = it.title
+                requireBinding().entryIcon.setImageResource(iconMapper.map(it.iconId))
 
                 ImageViewCompat.setImageTintList(
-                    binding.entryIcon,
+                    requireBinding().entryIcon,
                     ColorStateList.valueOf(
                         filterColorMapper.map(it.backgroundColor)
                     )
@@ -152,8 +153,8 @@ class EntryDetailsFragment :
                 }
                 pagesAdapter.updateModels(tabs)
 
-                if (binding.pager.currentItem != currentPage) {
-                    binding.pager.setCurrentItem(currentPage, false)
+                if (requireBinding().pager.currentItem != currentPage) {
+                    requireBinding().pager.setCurrentItem(currentPage, false)
                 }
             }
         }
@@ -311,7 +312,7 @@ class EntryDetailsFragment :
         return copied
     }
 
-    private fun onAttachmentClicked(attachment: KeyAttachment) = withState(viewModel) { state ->
+    private fun onAttachmentClicked(attachment: KeyAttachment) = viewModel.withState() { state ->
         val savedFileUri = state.savedAttachments[attachment.ref]
 
         if (savedFileUri != null) {
@@ -345,10 +346,10 @@ class EntryDetailsFragment :
         }
     }
 
-    private fun onHistoricEntryClicked(id: UUID, parentId: UUID) = withState(viewModel) { state ->
+    private fun onHistoricEntryClicked(id: UUID, parentId: UUID) = viewModel.withState() { state ->
         findNavController().navigate(
             R.id.action_historic_entry_details,
-            bundleOf(MvRx.KEY_ARG to EntryDetailsArgs(state.activeDatabaseId, id, parentId))
+            bundleOf(Args.KEY to EntryDetailsArgs(state.activeDatabaseId, id, parentId))
         )
     }
 

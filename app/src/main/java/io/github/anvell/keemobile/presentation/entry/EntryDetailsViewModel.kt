@@ -1,25 +1,29 @@
 package io.github.anvell.keemobile.presentation.entry
 
-import com.airbnb.mvrx.*
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.SavedStateHandle
+import io.github.anvell.keemobile.common.extensions.getArguments
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
+import io.github.anvell.keemobile.domain.entity.Uninitialized
 import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAttachment
-import io.github.anvell.keemobile.presentation.base.BaseViewModel
+import io.github.anvell.keemobile.presentation.base.MviViewModel
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class EntryDetailsViewModel @AssistedInject constructor(
-    @Assisted initialState: EntryDetailsViewState,
+class EntryDetailsViewModel @ViewModelInject constructor(
+    @Assisted savedStateHandle: SavedStateHandle,
     private val getOpenDatabase: GetOpenDatabase,
     private val getAppSettings: GetAppSettings,
     private val saveAttachment: SaveAttachment
-) : BaseViewModel<EntryDetailsViewState>(initialState) {
+) : MviViewModel<EntryDetailsViewState>(
+    EntryDetailsViewState(args = savedStateHandle.getArguments())
+) {
 
     init {
         withState { state ->
@@ -91,18 +95,6 @@ class EntryDetailsViewModel @AssistedInject constructor(
                         copy(saveAttachmentQueue = saveAttachmentQueue - ref, errorSink = error)
                     }
                 })
-        }
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(initialState: EntryDetailsViewState): EntryDetailsViewModel
-    }
-
-    companion object : MvRxViewModelFactory<EntryDetailsViewModel, EntryDetailsViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: EntryDetailsViewState): EntryDetailsViewModel? {
-            val fragment: EntryDetailsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
         }
     }
 }
