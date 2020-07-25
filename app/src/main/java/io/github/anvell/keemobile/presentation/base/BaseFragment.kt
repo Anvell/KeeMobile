@@ -12,15 +12,15 @@ import io.github.anvell.keemobile.common.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.common.io.ClipboardProvider
 import io.github.anvell.keemobile.common.mapper.ErrorMapper
 import io.github.anvell.keemobile.common.rx.RxSchedulers
-import io.github.anvell.keemobile.common.state.NullableStateProperty
-import io.github.anvell.keemobile.common.state.StateHandler
-import io.github.anvell.keemobile.common.state.StateProperty
+import io.github.anvell.keemobile.common.state.InstanceStateHandler
 import io.github.anvell.keemobile.presentation.home.DrawerHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId), StateHandler {
+abstract class BaseFragment(
+    @LayoutRes contentLayoutId: Int
+) : Fragment(contentLayoutId), InstanceStateHandler {
     @Inject
     lateinit var rxSchedulers: RxSchedulers
 
@@ -81,9 +81,4 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
     protected open fun onFileOpened(uri: Uri) = Unit
 
     protected open fun getDrawer() = (activity as? DrawerHolder)?.getDrawer()
-
-    protected fun <T> stateProperty() = NullableStateProperty<T>()
-
-    protected fun <T> stateProperty(defaultValue: T) = StateProperty(defaultValue)
-
 }

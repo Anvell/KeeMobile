@@ -2,7 +2,7 @@ package io.github.anvell.keemobile.common.state
 
 import android.os.Bundle
 
-interface StateHandler : StateStore {
+interface InstanceStateHandler : InstanceStateStore {
 
     fun saveState(outState: Bundle) {
         outState.putBundle(BUNDLE_TAG, stateBundle)

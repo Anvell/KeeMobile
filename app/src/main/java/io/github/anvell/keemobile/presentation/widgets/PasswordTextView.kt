@@ -10,11 +10,10 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.extensions.toPxScaled
-import io.github.anvell.keemobile.common.state.StateHandlerView
-import io.github.anvell.keemobile.common.state.StateProperty
+import io.github.anvell.keemobile.common.state.ViewInstanceStateHandler
 
 class PasswordTextView(context: Context, attrs: AttributeSet?)
-    : AppCompatTextView(context, attrs), StateHandlerView {
+    : AppCompatTextView(context, attrs), ViewInstanceStateHandler {
 
     override val stateBundle = Bundle()
 
@@ -26,8 +25,8 @@ class PasswordTextView(context: Context, attrs: AttributeSet?)
         style = Paint.Style.FILL
     }
 
-    private var maskedText: Boolean by StateProperty(true)
-    private var hideLength: Boolean by StateProperty(true)
+    private var maskedText: Boolean by stateProperty(true)
+    private var hideLength: Boolean by stateProperty(true)
 
     init {
         val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.PasswordTextView, 0, 0)

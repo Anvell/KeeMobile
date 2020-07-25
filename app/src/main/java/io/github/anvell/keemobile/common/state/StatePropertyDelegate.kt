@@ -6,7 +6,7 @@ import kotlin.reflect.KProperty
 
 abstract class StatePropertyDelegate<T> {
 
-    operator fun setValue(thisRef: StateStore, property: KProperty<*>, value: T) {
+    operator fun setValue(thisRef: InstanceStateStore, property: KProperty<*>, value: T) {
         thisRef.stateBundle.put(property.name, value)
     }
 
@@ -14,11 +14,11 @@ abstract class StatePropertyDelegate<T> {
 }
 
 class NullableStateProperty<T> : StatePropertyDelegate<T>() {
-    operator fun getValue(thisRef: StateStore, property: KProperty<*>): T? =
+    operator fun getValue(thisRef: InstanceStateStore, property: KProperty<*>): T? =
         retrieveValue(thisRef.stateBundle, property.name)
 }
 
 class StateProperty<T>(private val defaultValue: T) : StatePropertyDelegate<T>() {
-    operator fun getValue(thisRef: StateStore, property: KProperty<*>): T =
+    operator fun getValue(thisRef: InstanceStateStore, property: KProperty<*>): T =
         retrieveValue(thisRef.stateBundle, property.name) ?: defaultValue
 }

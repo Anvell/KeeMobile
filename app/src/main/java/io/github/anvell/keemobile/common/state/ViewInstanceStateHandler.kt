@@ -3,7 +3,7 @@ package io.github.anvell.keemobile.common.state
 import android.os.Bundle
 import android.os.Parcelable
 
-interface StateHandlerView : StateStore {
+interface ViewInstanceStateHandler : InstanceStateStore {
 
     fun saveState(superState: Parcelable?): Parcelable {
         return Bundle().apply {

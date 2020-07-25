@@ -8,15 +8,14 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.state.StateHandlerView
-import io.github.anvell.keemobile.common.state.StateProperty
+import io.github.anvell.keemobile.common.state.ViewInstanceStateHandler
 
 class AnimatedImageView(context: Context, attrs: AttributeSet?) :
-    AppCompatImageView(context, attrs), StateHandlerView {
+    AppCompatImageView(context, attrs), ViewInstanceStateHandler {
 
     override val stateBundle = Bundle()
 
-    private var isAtStart by StateProperty(true)
+    private var isAtStart by stateProperty(true)
 
     private val animDrawable: Drawable?
     private val animReversedDrawable: Drawable?
