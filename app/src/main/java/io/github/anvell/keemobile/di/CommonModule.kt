@@ -7,10 +7,12 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import io.github.anvell.keemobile.common.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.common.io.*
 import io.github.anvell.keemobile.common.rx.RxSchedulers
 import io.github.anvell.keemobile.common.rx.RxSchedulersImpl
 import io.github.anvell.keemobile.data.serialization.FileSourceJsonAdapterFactory
+import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -38,5 +40,13 @@ interface CommonModule {
                 .add(FileSourceJsonAdapterFactory.create())
                 .build()
         }
+
+        @Provides
+        @Reusable
+        fun provideCoroutineDispatchers() = CoroutineDispatchers(
+            main = Dispatchers.Main,
+            io = Dispatchers.IO,
+            computation = Dispatchers.Default
+        )
     }
 }
