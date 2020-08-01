@@ -1,12 +1,15 @@
 package io.github.anvell.keemobile.domain.repository
 
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.*
-import io.reactivex.Observable
+import io.github.anvell.keemobile.domain.entity.FileSecrets
+import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.OpenDatabase
+import io.github.anvell.keemobile.domain.entity.SearchResult
+import kotlinx.coroutines.flow.StateFlow
 
 interface DatabaseRepository {
 
-    fun getOpenDatabases(): Observable<List<OpenDatabase>>
+    fun getOpenDatabases(): StateFlow<List<OpenDatabase>>
 
     fun getOpenDatabaseById(id: VaultId) : OpenDatabase
 

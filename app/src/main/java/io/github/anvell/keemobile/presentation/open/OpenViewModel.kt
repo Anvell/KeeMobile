@@ -1,6 +1,7 @@
 package io.github.anvell.keemobile.presentation.open
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.viewModelScope
 import io.github.anvell.keemobile.common.constants.AppConstants
 import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.entity.FileSecrets
@@ -9,7 +10,7 @@ import io.github.anvell.keemobile.domain.entity.Success
 import io.github.anvell.keemobile.domain.entity.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.*
 import io.github.anvell.keemobile.presentation.base.MviViewModel
-import timber.log.Timber
+import kotlinx.coroutines.launch
 
 class OpenViewModel @ViewModelInject constructor(
     private val createNewFile: CreateNewFile,
@@ -23,52 +24,36 @@ class OpenViewModel @ViewModelInject constructor(
     init {
         withState { state ->
             if (state.recentFiles is Uninitialized) {
-                getRecentFiles
-                    .use()
-                    .doOnError(Timber::d)
-                    .execute {
-                        copy(recentFiles = it, selectedFile = it()?.let { items ->
-                            if (items.isEmpty()) null else items.last()
-                        })
-                    }
+                execute(getRecentFiles::invoke) {
+                    copy(recentFiles = it, selectedFile = it()?.let { items ->
+                        if (items.isEmpty()) null else items.last()
+                    })
+                }
             }
         }
     }
 
     fun createFile(source: FileSource, secrets: FileSecrets) {
-        createNewFile
-            .use(source, secrets)
-            .execute {
-                copy(openFile = it)
-            }
+        execute({ createNewFile(source, secrets) }) {
+            copy(openFile = it)
+        }
     }
 
     fun addFileSource(source: FileSource) {
         setState {
-            when (recentFiles) {
+            val (recent, selected) = when (recentFiles) {
                 is Success -> {
                     val entry = recentFiles()?.find { it.id == source.id }
                     if (entry == null) {
-                        recentFiles()!!.append(source, AppConstants.MAX_RECENT_FILES).let {
-                            saveRecentFiles(it)
-                            copy(recentFiles = Success(
-                                it
-                            ), selectedFile = source)
-                        }
-
+                        recentFiles()!!.append(source, AppConstants.MAX_RECENT_FILES) to source
                     } else {
-                        copy(selectedFile = entry)
+                        recentFiles()!! to entry
                     }
                 }
-                else -> {
-                    listOf(source).let {
-                        saveRecentFiles(it)
-                        copy(recentFiles = Success(
-                            it
-                        ), selectedFile = source)
-                    }
-                }
+                else -> listOf(source) to source
             }
+            persistRecentFiles(recent)
+            copy(recentFiles = Success(recent), selectedFile = selected)
         }
     }
 
@@ -79,26 +64,26 @@ class OpenViewModel @ViewModelInject constructor(
     }
 
     fun openFromSource(source: FileSource, secrets: FileSecrets) {
-        getOpenDatabase
-            .use(source.id)
-            .map { it.id }
-            .onErrorResumeNext(openFileSource.use(source, secrets))
-            .execute {
-                copy(
-                    openFile = it,
-                    recentFiles = recentFiles()?.let { list ->
-                        if (list.last().id != source.id) {
-                            val items = (list - source) + source
-                            saveRecentFiles(items)
-                            Success(
-                                items
-                            )
-                        } else {
-                            recentFiles
-                        }
-                    } ?: recentFiles
-                )
+        execute({
+            runCatching {
+                getOpenDatabase(source.id).id
+            }.getOrElse {
+                openFileSource(source, secrets)
             }
+        }) {
+            copy(
+                openFile = it,
+                recentFiles = recentFiles()?.let { list ->
+                    if (list.last().id != source.id) {
+                        val items = (list - source) + source
+                        persistRecentFiles(items)
+                        Success(items)
+                    } else {
+                        recentFiles
+                    }
+                } ?: recentFiles
+            )
+        }
     }
 
     fun setInitialSetup(initialSetup: Boolean) {
@@ -110,9 +95,7 @@ class OpenViewModel @ViewModelInject constructor(
     fun pushRecentFiles() = withState { state ->
         setState {
             copy(
-                recentFiles = Success(
-                    listOf()
-                ),
+                recentFiles = Success(listOf()),
                 recentFilesStash = state.recentFiles()
             )
         }
@@ -122,9 +105,7 @@ class OpenViewModel @ViewModelInject constructor(
         state.recentFilesStash?.let {
             setState {
                 copy(
-                    recentFiles = Success(
-                        it
-                    ),
+                    recentFiles = Success(it),
                     recentFilesStash = null
                 )
             }
@@ -132,21 +113,14 @@ class OpenViewModel @ViewModelInject constructor(
     }
 
     fun clearRecentFiles() {
-        clearRecentFiles
-            .use()
-            .doOnError(Timber::d)
-            .execute {
-                copy(recentFiles = Success(
-                    listOf()
-                ), selectedFile = null)
-            }
+        execute(clearRecentFiles::invoke) {
+            copy(recentFiles = Success(listOf()), selectedFile = null)
+        }
     }
 
-    private fun saveRecentFiles(recentFiles: List<FileSource>) {
-        saveRecentFiles
-            .use(recentFiles)
-            .onErrorReturn { Timber.d(it) }
-            .subscribe()
-            .disposeOnClear()
+    private fun persistRecentFiles(recentFiles: List<FileSource>) {
+        viewModelScope.launch {
+            saveRecentFiles(recentFiles)
+        }
     }
 }

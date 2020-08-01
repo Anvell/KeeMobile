@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.data.repository
 
-import com.jakewharton.rxrelay2.BehaviorRelay
 import de.slackspace.openkeepass.KeePassDatabase
 import io.github.anvell.keemobile.common.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
@@ -9,28 +8,30 @@ import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.exceptions.DatabaseAlreadyOpenException
 import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DatabaseRepositoryImpl @Inject constructor(private val storageFile: StorageFile) : DatabaseRepository {
-
-    private val openDatabasesRelay = BehaviorRelay.create<List<OpenDatabase>>()
+class DatabaseRepositoryImpl @Inject constructor(
+    private val storageFile: StorageFile
+) : DatabaseRepository {
+    private val openDatabasesRelay = MutableStateFlow(listOf<OpenDatabase>())
     private var openDatabases = listOf<OpenDatabase>()
         private set(value) {
             field = value
-            openDatabasesRelay.accept(value)
+            openDatabasesRelay.value = value
         }
 
-    override fun getOpenDatabases(): Observable<List<OpenDatabase>> {
-       return openDatabasesRelay
+    override fun getOpenDatabases(): StateFlow<List<OpenDatabase>> {
+        return openDatabasesRelay
     }
 
     override fun getOpenDatabaseById(id: VaultId): OpenDatabase {
         val database = openDatabases.find { it.id == id }
 
-        if(database != null) {
+        if (database != null) {
             return database
         } else {
             throw DatabaseNotOpenException()
@@ -40,7 +41,7 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
     override fun getFilteredEntries(id: VaultId, filter: String): List<SearchResult> {
         val database = openDatabases.find { it.id == id }
 
-        if(database != null) {
+        if (database != null) {
             return database.database.filterEntries(filter)
         } else {
             throw DatabaseNotOpenException()
@@ -50,7 +51,7 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
     override fun close(id: VaultId): List<OpenDatabase> {
         val database = openDatabases.find { it.id == id }
 
-        if(database != null) {
+        if (database != null) {
             openDatabases = openDatabases.filter { it.id != id }
             return openDatabases
         } else {
@@ -120,5 +121,4 @@ class DatabaseRepositoryImpl @Inject constructor(private val storageFile: Storag
         openDatabases = openDatabases + OpenDatabase(database, source, secrets)
         return source.id
     }
-
 }

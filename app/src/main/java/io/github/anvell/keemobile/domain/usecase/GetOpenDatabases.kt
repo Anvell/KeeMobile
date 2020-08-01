@@ -9,5 +9,5 @@ class GetOpenDatabases @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) {
 
-    fun use() = databaseRepository.getOpenDatabases()
+    operator fun invoke() = databaseRepository.getOpenDatabases()
 }

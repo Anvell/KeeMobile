@@ -13,7 +13,6 @@ import io.github.anvell.keemobile.domain.usecase.GetFilteredEntries
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAppSettings
 import io.github.anvell.keemobile.presentation.base.MviViewModel
-import timber.log.Timber
 import java.util.*
 
 class ExploreViewModel @ViewModelInject constructor(
@@ -37,31 +36,27 @@ class ExploreViewModel @ViewModelInject constructor(
     }
 
     private fun loadAppSettings() {
-        getAppSettings
-            .use()
-            .onErrorReturnItem(AppSettings())
-            .doOnError(Timber::d)
-            .execute {
-                copy(appSettings = it)
+        execute({
+            runCatching {
+                getAppSettings()
+            }.getOrElse {
+                AppSettings()
             }
+        }) {
+            copy(appSettings = it)
+        }
     }
 
     fun updateAppSettings(settings: AppSettings) {
-        saveAppSettings
-            .use(settings)
-            .doOnError(Timber::d)
-            .execute {
-                copy(appSettings = it)
-            }
+        execute({ saveAppSettings(settings) }) {
+            copy(appSettings = it)
+        }
     }
 
     fun activateDatabase(id: VaultId) {
-        getOpenDatabase
-            .use(id)
-            .doOnError(Timber::d)
-            .execute {
-                copy(activeDatabase = it)
-            }
+        execute({ getOpenDatabase(id) }) {
+            copy(activeDatabase = it)
+        }
     }
 
     fun activateGroup(id: UUID) {
@@ -72,12 +67,10 @@ class ExploreViewModel @ViewModelInject constructor(
 
     fun filterEntries(filter: String) {
         withState { state ->
-            if(state.searchResults is Uninitialized || state.searchResults()?.filter != filter) {
-                getFilteredEntries
-                    .use(state.activeDatabaseId, filter)
-                    .execute {
-                        copy(searchResults = it)
-                    }
+            if (state.searchResults is Uninitialized || state.searchResults()?.filter != filter) {
+                execute({ getFilteredEntries(state.activeDatabaseId, filter) }) {
+                    copy(searchResults = it)
+                }
             }
         }
     }

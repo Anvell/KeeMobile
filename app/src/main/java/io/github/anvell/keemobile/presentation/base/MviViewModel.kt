@@ -50,6 +50,28 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
         return state.map { property.get(it) }.distinctUntilChanged()
     }
 
+    protected fun <V> executeSync(block: () -> V, reducer: S.(Async<V>) -> S) {
+        try {
+            val result = block()
+            setState { reducer(Success(result)) }
+        } catch (error: Throwable) {
+            setState { reducer(Fail(error)) }
+        }
+    }
+
+    protected fun <V> execute(block: suspend () -> V, reducer: S.(Async<V>) -> S) {
+        viewModelScope.launch {
+            setState { reducer(Loading) }
+
+            try {
+                val result = block()
+                setState { reducer(Success(result)) }
+            } catch (error: Throwable) {
+                setState { reducer(Fail(error)) }
+            }
+        }
+    }
+
     protected suspend fun <T> Flow<T>.execute(reducer: S.(T) -> S) = collect { setState { reducer(it) } }
 
     protected fun Completable.execute(reducer: S.(Async<Unit>) -> S) = toSingle { Unit }.execute(reducer)

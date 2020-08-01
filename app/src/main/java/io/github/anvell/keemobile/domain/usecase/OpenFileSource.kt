@@ -1,22 +1,21 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
-import io.github.anvell.keemobile.common.extensions.scheduleOn
-import io.github.anvell.keemobile.common.rx.RxSchedulers
+import io.github.anvell.keemobile.common.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
-import io.reactivex.Single
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 
 @Reusable
 class OpenFileSource @Inject constructor(
-    private val rxSchedulers: RxSchedulers,
+    private val dispatchers: CoroutineDispatchers,
     private val databaseRepository: DatabaseRepository
 ) {
 
-    fun use(source: FileSource, secrets: FileSecrets) =
-        Single.fromCallable { databaseRepository.readFromSource(source, secrets) }
-            .scheduleOn(rxSchedulers.io())
+    suspend operator fun invoke(source: FileSource, secrets: FileSecrets) =
+        withContext(dispatchers.io) {
+            databaseRepository.readFromSource(source, secrets)
+        }
 }
