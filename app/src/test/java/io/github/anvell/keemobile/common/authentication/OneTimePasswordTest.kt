@@ -1,9 +1,9 @@
 package io.github.anvell.keemobile.common.authentication
 
 import org.junit.Test
-import org.threeten.bp.Instant
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
+import java.time.Instant
 
 class OneTimePasswordTest {
 
