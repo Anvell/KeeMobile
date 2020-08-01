@@ -8,7 +8,7 @@ import io.github.anvell.keemobile.common.extensions.getArguments
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
-import io.github.anvell.keemobile.domain.entity.Uninitialized
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
@@ -16,10 +16,6 @@ import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import io.github.anvell.keemobile.presentation.base.MviViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration
-import kotlin.time.milliseconds
 
 class EntryDetailsViewModel @ViewModelInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,

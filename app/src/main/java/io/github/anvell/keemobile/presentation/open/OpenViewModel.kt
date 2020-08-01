@@ -6,8 +6,8 @@ import io.github.anvell.keemobile.common.constants.AppConstants
 import io.github.anvell.keemobile.common.extensions.append
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
-import io.github.anvell.keemobile.domain.entity.Success
-import io.github.anvell.keemobile.domain.entity.Uninitialized
+import io.github.anvell.keemobile.domain.datatypes.Success
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.*
 import io.github.anvell.keemobile.presentation.base.MviViewModel
 import kotlinx.coroutines.launch
@@ -53,7 +53,9 @@ class OpenViewModel @ViewModelInject constructor(
                 else -> listOf(source) to source
             }
             persistRecentFiles(recent)
-            copy(recentFiles = Success(recent), selectedFile = selected)
+            copy(recentFiles = Success(
+                recent
+            ), selectedFile = selected)
         }
     }
 
@@ -95,7 +97,9 @@ class OpenViewModel @ViewModelInject constructor(
     fun pushRecentFiles() = withState { state ->
         setState {
             copy(
-                recentFiles = Success(listOf()),
+                recentFiles = Success(
+                    listOf()
+                ),
                 recentFilesStash = state.recentFiles()
             )
         }
@@ -105,7 +109,9 @@ class OpenViewModel @ViewModelInject constructor(
         state.recentFilesStash?.let {
             setState {
                 copy(
-                    recentFiles = Success(it),
+                    recentFiles = Success(
+                        it
+                    ),
                     recentFilesStash = null
                 )
             }
@@ -114,7 +120,9 @@ class OpenViewModel @ViewModelInject constructor(
 
     fun clearRecentFiles() {
         execute(clearRecentFiles::invoke) {
-            copy(recentFiles = Success(listOf()), selectedFile = null)
+            copy(recentFiles = Success(
+                listOf()
+            ), selectedFile = null)
         }
     }
 

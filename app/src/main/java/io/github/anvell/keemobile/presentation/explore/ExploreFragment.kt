@@ -24,6 +24,8 @@ import io.github.anvell.keemobile.common.extensions.toast
 import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
+import io.github.anvell.keemobile.domain.datatypes.Success
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader

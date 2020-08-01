@@ -31,10 +31,10 @@ import io.github.anvell.keemobile.common.mapper.FilterColorMapper
 import io.github.anvell.keemobile.common.mapper.IconMapper
 import io.github.anvell.keemobile.common.permissions.PermissionsProvider
 import io.github.anvell.keemobile.databinding.FragmentEntryDetailsBinding
-import io.github.anvell.keemobile.domain.entity.Fail
+import io.github.anvell.keemobile.domain.datatypes.Fail
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.entity.KeyEntry
-import io.github.anvell.keemobile.domain.entity.Success
+import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.presentation.base.BaseEpoxyAdapter
 import io.github.anvell.keemobile.presentation.base.MviView
 import io.github.anvell.keemobile.presentation.base.ViewBindingFragment

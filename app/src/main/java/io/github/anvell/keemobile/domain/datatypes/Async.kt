@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.domain.entity
+package io.github.anvell.keemobile.domain.datatypes
 
 import java.util.concurrent.atomic.AtomicBoolean
 

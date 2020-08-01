@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import io.github.anvell.keemobile.domain.entity.Async
-import io.github.anvell.keemobile.domain.entity.Fail
-import io.github.anvell.keemobile.domain.entity.Loading
-import io.github.anvell.keemobile.domain.entity.Success
+import io.github.anvell.keemobile.domain.datatypes.Async
+import io.github.anvell.keemobile.domain.datatypes.Fail
+import io.github.anvell.keemobile.domain.datatypes.Loading
+import io.github.anvell.keemobile.domain.datatypes.Success
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -53,9 +53,17 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     protected fun <V> executeSync(block: () -> V, reducer: S.(Async<V>) -> S) {
         try {
             val result = block()
-            setState { reducer(Success(result)) }
+            setState { reducer(
+                Success(
+                    result
+                )
+            ) }
         } catch (error: Throwable) {
-            setState { reducer(Fail(error)) }
+            setState { reducer(
+                Fail(
+                    error
+                )
+            ) }
         }
     }
 
@@ -65,9 +73,17 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
 
             try {
                 val result = block()
-                setState { reducer(Success(result)) }
+                setState { reducer(
+                    Success(
+                        result
+                    )
+                ) }
             } catch (error: Throwable) {
-                setState { reducer(Fail(error)) }
+                setState { reducer(
+                    Fail(
+                        error
+                    )
+                ) }
             }
         }
     }
@@ -86,7 +102,11 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     ): Disposable {
         setState { reducer(Loading) }
 
-        return map<Async<V>> { Success(mapper(it)) }
+        return map<Async<V>> {
+            Success(
+                mapper(it)
+            )
+        }
             .onErrorReturn { Fail(it) }
             .subscribe { setState { reducer(it) } }
             .disposeOnClear()

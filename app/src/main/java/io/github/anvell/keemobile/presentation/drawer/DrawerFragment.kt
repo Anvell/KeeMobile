@@ -12,7 +12,7 @@ import io.github.anvell.keemobile.R
 import io.github.anvell.keemobile.common.constants.Args
 import io.github.anvell.keemobile.databinding.FragmentDrawerBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.Success
+import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.itemDrawer
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.presentation.base.MviView

@@ -20,6 +20,10 @@ import io.github.anvell.keemobile.common.constants.RequestCodes
 import io.github.anvell.keemobile.common.extensions.*
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.datatypes.Async
+import io.github.anvell.keemobile.domain.datatypes.Fail
+import io.github.anvell.keemobile.domain.datatypes.Loading
+import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemRecentFile
 import io.github.anvell.keemobile.presentation.base.MviView

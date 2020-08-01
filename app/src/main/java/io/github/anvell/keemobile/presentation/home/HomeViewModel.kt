@@ -3,7 +3,7 @@ package io.github.anvell.keemobile.presentation.home
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.Uninitialized
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.CloseAllDatabases
 import io.github.anvell.keemobile.domain.usecase.CloseDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase

@@ -1,9 +1,9 @@
 package io.github.anvell.keemobile.presentation.open
 
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.Async
+import io.github.anvell.keemobile.domain.datatypes.Async
 import io.github.anvell.keemobile.domain.entity.FileSource
-import io.github.anvell.keemobile.domain.entity.Uninitialized
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 
 data class OpenViewState(
     val initialSetup: Boolean = true,
