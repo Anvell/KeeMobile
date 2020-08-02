@@ -7,11 +7,11 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import io.github.anvell.keemobile.common.dispatchers.CoroutineDispatchers
-import io.github.anvell.keemobile.common.io.*
-import io.github.anvell.keemobile.common.rx.RxSchedulers
-import io.github.anvell.keemobile.common.rx.RxSchedulersImpl
-import io.github.anvell.keemobile.data.serialization.FileSourceJsonAdapterFactory
+import io.github.anvell.keemobile.core.io.*
+import io.github.anvell.keemobile.core.rx.RxSchedulers
+import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
+import io.github.anvell.keemobile.core.serialization.FileSourceJsonAdapterFactory
+import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 
 @Module

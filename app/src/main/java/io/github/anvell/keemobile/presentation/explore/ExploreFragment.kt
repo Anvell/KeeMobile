@@ -18,11 +18,11 @@ import androidx.navigation.fragment.findNavController
 import com.jakewharton.rxbinding3.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.constants.Args
-import io.github.anvell.keemobile.common.extensions.hideSoftKeyboard
-import io.github.anvell.keemobile.common.extensions.toast
-import io.github.anvell.keemobile.common.mapper.FilterColorMapper
-import io.github.anvell.keemobile.common.mapper.IconMapper
+import io.github.anvell.keemobile.core.constants.Args
+import io.github.anvell.keemobile.presentation.extensions.hideSoftKeyboard
+import io.github.anvell.keemobile.presentation.extensions.toast
+import io.github.anvell.keemobile.presentation.mappers.FilterColorMapper
+import io.github.anvell.keemobile.presentation.mappers.IconMapper
 import io.github.anvell.keemobile.databinding.FragmentExploreBinding
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
@@ -30,8 +30,8 @@ import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemEntry
 import io.github.anvell.keemobile.itemHeader
 import io.github.anvell.keemobile.itemInfo
-import io.github.anvell.keemobile.presentation.base.MviView
-import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.mvi.MviView
+import io.github.anvell.keemobile.presentation.fragments.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import java.util.*

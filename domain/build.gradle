@@ -1,0 +1,27 @@
+import constants.Dependencies
+
+plugins {
+    id 'java-library'
+    id 'kotlin'
+    id 'kotlin-kapt'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs += [
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-Xopt-in=kotlin.Experimental"
+        ]
+    }
+}
+
+dependencies {
+    implementation Dependencies.Kotlin.stdlib
+    implementation Dependencies.Coroutines.core
+
+    implementation Dependencies.Dagger.dagger
+    implementation Dependencies.Moshi.adapters
+    kapt Dependencies.Moshi.codegen
+}

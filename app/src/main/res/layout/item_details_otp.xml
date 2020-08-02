@@ -6,7 +6,7 @@
         <import type="android.view.View.OnLongClickListener" />
 
         <variable name="title" type="String" />
-        <variable name="otp" type="io.github.anvell.keemobile.common.authentication.OneTimePassword" />
+        <variable name="otp" type="io.github.anvell.keemobile.core.authentication.OneTimePassword" />
         <variable name="isSurface" type="Boolean" />
         <variable name="longClickListener" type="OnLongClickListener" />
     </data>

@@ -24,20 +24,24 @@ import com.airbnb.epoxy.EpoxyController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.*
-import io.github.anvell.keemobile.common.authentication.OneTimePassword
-import io.github.anvell.keemobile.common.constants.Args
-import io.github.anvell.keemobile.common.extensions.*
-import io.github.anvell.keemobile.common.mapper.FilterColorMapper
-import io.github.anvell.keemobile.common.mapper.IconMapper
-import io.github.anvell.keemobile.common.permissions.PermissionsProvider
+import io.github.anvell.keemobile.core.authentication.OneTimePassword
+import io.github.anvell.keemobile.core.constants.Args
+import io.github.anvell.keemobile.core.extensions.formatAsDateTime
+import io.github.anvell.keemobile.core.extensions.getMimeTypeFromFileName
+import io.github.anvell.keemobile.presentation.mappers.FilterColorMapper
+import io.github.anvell.keemobile.presentation.mappers.IconMapper
+import io.github.anvell.keemobile.core.permissions.PermissionsProvider
 import io.github.anvell.keemobile.databinding.FragmentEntryDetailsBinding
 import io.github.anvell.keemobile.domain.datatypes.Fail
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.domain.datatypes.Success
-import io.github.anvell.keemobile.presentation.base.BaseEpoxyAdapter
-import io.github.anvell.keemobile.presentation.base.MviView
-import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.adapters.BaseEpoxyAdapter
+import io.github.anvell.keemobile.presentation.mvi.MviView
+import io.github.anvell.keemobile.presentation.fragments.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.extensions.clipToCornerRadius
+import io.github.anvell.keemobile.presentation.extensions.snackbar
+import io.github.anvell.keemobile.presentation.extensions.toast
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 import timber.log.Timber
 import java.net.URISyntaxException
@@ -109,19 +113,19 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(R.
         viewModel.selectSubscribe(EntryDetailsViewState::errorSink)
             .observe(viewLifecycleOwner) { error ->
                 if (error != null) {
-                    errorMapper.map(error)?.let { snackbar(it) }
+                    errorMapper.map(error) { snackbar(it) }
                 }
             }
         viewModel.selectSubscribe(EntryDetailsViewState::entry)
             .observe(viewLifecycleOwner) { item ->
                 if (item is Fail) {
-                    errorMapper.map(item.error)?.let { snackbar(it) }
+                    errorMapper.map(item.error) { snackbar(it) }
                 }
             }
         viewModel.selectSubscribe(EntryDetailsViewState::activeDatabase)
             .observe(viewLifecycleOwner) { item ->
                 if (item is Fail) {
-                    errorMapper.map(item.error)?.let { snackbar(it) }
+                    errorMapper.map(item.error) { snackbar(it) }
                 }
             }
     }
@@ -188,7 +192,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(R.
 
         entry.times?.apply {
             if (expires && expiryTime != null) {
-                buildProperty(R.string.details_expires, expiryTime.time.formatAsDateTime())
+                buildProperty(R.string.details_expires, expiryTime!!.time.formatAsDateTime())
             }
         }
 

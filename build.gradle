@@ -46,10 +46,11 @@ subprojects {
                 if (android.hasProperty('kotlinOptions')) {
                     kotlinOptions {
                         jvmTarget = "1.8"
-
-                        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
-                        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.FlowPreview"
-                        freeCompilerArgs += "-Xopt-in=kotlin.Experimental"
+                        freeCompilerArgs += [
+                                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                                "-Xopt-in=kotlin.Experimental"
+                        ]
                     }
                 }
             }

@@ -16,8 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.constants.RequestCodes
-import io.github.anvell.keemobile.common.extensions.*
+import io.github.anvell.keemobile.core.constants.RequestCodes
+import io.github.anvell.keemobile.core.extensions.getName
+import io.github.anvell.keemobile.core.extensions.toSha256
 import io.github.anvell.keemobile.databinding.FragmentOpenBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Async
@@ -26,8 +27,9 @@ import io.github.anvell.keemobile.domain.datatypes.Loading
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.itemRecentFile
-import io.github.anvell.keemobile.presentation.base.MviView
-import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.mvi.MviView
+import io.github.anvell.keemobile.presentation.fragments.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.extensions.*
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.widgets.DividerDecoration
 
@@ -154,7 +156,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(R.layout.fragment_
         viewModel.selectSubscribe(OpenViewState::openFile)
             .observe(viewLifecycleOwner) { item ->
                 if (item is Fail && !item.isConsumed) {
-                    errorMapper.map(item.error)?.let { snackbar(it) }
+                    errorMapper.map(item.error) { snackbar(it) }
                 }
             }
     }

@@ -2,14 +2,14 @@ package io.github.anvell.keemobile.presentation.open
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import io.github.anvell.keemobile.common.constants.AppConstants
-import io.github.anvell.keemobile.common.extensions.append
+import io.github.anvell.keemobile.core.constants.AppConstants
+import io.github.anvell.keemobile.presentation.extensions.append
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.*
-import io.github.anvell.keemobile.presentation.base.MviViewModel
+import io.github.anvell.keemobile.presentation.mvi.MviViewModel
 import kotlinx.coroutines.launch
 
 class OpenViewModel @ViewModelInject constructor(

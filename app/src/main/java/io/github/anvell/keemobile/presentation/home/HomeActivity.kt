@@ -8,10 +8,12 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.permissions.PermissionsProvider
-import io.github.anvell.keemobile.common.permissions.PermissionsProxy
+import io.github.anvell.keemobile.core.permissions.PermissionsProvider
+import io.github.anvell.keemobile.core.permissions.PermissionsProxy
 import io.github.anvell.keemobile.databinding.ActivityHomeBinding
-import io.github.anvell.keemobile.presentation.base.BaseActivity
+import io.github.anvell.keemobile.presentation.ativities.BaseActivity
+import io.github.anvell.keemobile.presentation.ativities.DrawerHolder
+import io.github.anvell.keemobile.presentation.ativities.NavControllerHolder
 import javax.inject.Inject
 
 @AndroidEntryPoint

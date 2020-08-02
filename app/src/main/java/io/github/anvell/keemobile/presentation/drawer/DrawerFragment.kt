@@ -9,18 +9,18 @@ import androidx.lifecycle.observe
 import androidx.navigation.NavOptions
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.R
-import io.github.anvell.keemobile.common.constants.Args
+import io.github.anvell.keemobile.core.constants.Args
 import io.github.anvell.keemobile.databinding.FragmentDrawerBinding
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.itemDrawer
 import io.github.anvell.keemobile.itemHeader
-import io.github.anvell.keemobile.presentation.base.MviView
-import io.github.anvell.keemobile.presentation.base.ViewBindingFragment
+import io.github.anvell.keemobile.presentation.mvi.MviView
+import io.github.anvell.keemobile.presentation.fragments.ViewBindingFragment
 import io.github.anvell.keemobile.presentation.explore.ExploreArgs
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.home.HomeViewState
-import io.github.anvell.keemobile.presentation.home.NavControllerHolder
+import io.github.anvell.keemobile.presentation.ativities.NavControllerHolder
 
 @AndroidEntryPoint
 class DrawerFragment : ViewBindingFragment<FragmentDrawerBinding>(R.layout.fragment_drawer),

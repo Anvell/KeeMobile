@@ -1,0 +1,56 @@
+import constants.Dependencies
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':domain')
+
+    coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
+
+    implementation Dependencies.Kotlin.stdlib
+    implementation Dependencies.Coroutines.core
+    implementation Dependencies.Coroutines.android
+
+    implementation Dependencies.AndroidCore.appcompat
+    implementation Dependencies.AndroidCore.coreKtx
+    implementation Dependencies.AndroidCore.Widgets.material
+    implementation Dependencies.AndroidCore.dynamicAnimation
+
+    implementation Dependencies.Dagger.dagger
+    implementation Dependencies.Hilt.library
+    implementation Dependencies.AndroidCore.Hilt.viewmodel
+    kapt Dependencies.Dagger.compiler
+    kapt Dependencies.Hilt.compiler
+    kapt Dependencies.AndroidCore.Hilt.compiler
+
+    implementation Dependencies.AndroidCore.Navigation.ui
+    implementation Dependencies.AndroidCore.Navigation.fragment
+
+    implementation Dependencies.AndroidCore.Lifecycle.runtime
+    implementation Dependencies.AndroidCore.Lifecycle.livedata
+    implementation Dependencies.AndroidCore.Lifecycle.extensions
+    implementation Dependencies.AndroidCore.Lifecycle.viewmodel
+
+    implementation Dependencies.RxJava.rxJava
+    implementation Dependencies.RxJava.rxAndroid
+    implementation Dependencies.RxJava.rxBindings
+
+    implementation Dependencies.Epoxy.epoxy
+    implementation Dependencies.Epoxy.dataBinding
+    kapt Dependencies.Epoxy.processor
+
+    implementation Dependencies.Keepass.openkeepass
+}

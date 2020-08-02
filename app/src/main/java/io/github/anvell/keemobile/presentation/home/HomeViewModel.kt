@@ -8,7 +8,7 @@ import io.github.anvell.keemobile.domain.usecase.CloseAllDatabases
 import io.github.anvell.keemobile.domain.usecase.CloseDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabases
-import io.github.anvell.keemobile.presentation.base.MviViewModel
+import io.github.anvell.keemobile.presentation.mvi.MviViewModel
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
