@@ -35,10 +35,10 @@ android {
 
 dependencies {
     implementation project(':core')
+    implementation project(':core-ui')
     implementation project(':domain')
     implementation project(':data')
     implementation project(':presentation')
-    implementation project(':presentation-base')
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
 
@@ -58,13 +58,6 @@ dependencies {
     kapt Dependencies.AndroidCore.Hilt.compiler
 
     implementation Dependencies.AndroidCore.appcompat
-    implementation Dependencies.AndroidCore.coreKtx
-    implementation Dependencies.AndroidCore.documentfile
-    implementation Dependencies.AndroidCore.Widgets.material
-    implementation Dependencies.AndroidCore.Widgets.constraintlayout
-    implementation Dependencies.AndroidCore.Widgets.recyclerview
-    implementation Dependencies.AndroidCore.Widgets.viewpager
-    implementation Dependencies.AndroidCore.dynamicAnimation
 
     implementation Dependencies.AndroidCore.Fragment.fragment
     implementation Dependencies.AndroidCore.Fragment.fragmentKtx
@@ -82,8 +75,6 @@ dependencies {
     implementation Dependencies.RxJava.rxBindings
 
     implementation Dependencies.Epoxy.epoxy
-    implementation Dependencies.Epoxy.dataBinding
-    kapt Dependencies.Epoxy.processor
 
     implementation Dependencies.Keepass.openkeepass
 

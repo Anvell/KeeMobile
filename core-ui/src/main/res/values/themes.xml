@@ -1,0 +1,36 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:colorEdgeEffect">@color/onBackground</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorSurfaceSelected">@color/surfaceSelected</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/onBackground</item>
+        <item name="colorDivider">@color/listItemDivider</item>
+
+        <item name="android:fontFamily">@font/firasans_regular</item>
+        <item name="android:textColor">@color/onBackground</item>
+        <item name="android:statusBarColor">@color/statusBarBackground</item>
+        <item name="android:navigationBarColor">@color/navigationBarBackground</item>
+
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="dockImageButtonStyle">@style/DockImageButton</item>
+
+        <!-- Typography -->
+        <item name="textDisplay1">@style/Typography.Display1</item>
+        <item name="textDisplay2">@style/Typography.Display2</item>
+        <item name="textTitle">@style/Typography.Title</item>
+        <item name="textBody">@style/Typography.Body</item>
+        <item name="textBodyUppercase">@style/Typography.Body.Uppercase</item>
+        <item name="textCaption">@style/Typography.Caption</item>
+    </style>
+</resources>

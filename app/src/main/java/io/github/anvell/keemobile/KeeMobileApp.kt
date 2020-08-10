@@ -2,7 +2,7 @@ package io.github.anvell.keemobile
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import io.github.anvell.keemobile.presentation.theme.DayNightSwitcher
+import io.github.anvell.keemobile.core.ui.theme.DayNightSwitcher
 import timber.log.Timber
 
 @HiltAndroidApp

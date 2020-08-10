@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/open_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:colorBackground"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/landing_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/dock"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/crystal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/landing_title"
+                android:textSize="36sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/content_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/content_margin"
+                android:gravity="center"
+                android:text="@string/landing_body_text"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/recent_files_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:paddingStart="@dimen/layout_horizontal_margin"
+            android:paddingTop="@dimen/layout_vertical_margin"
+            android:paddingEnd="@dimen/layout_horizontal_margin"
+            android:paddingBottom="@dimen/layout_vertical_margin"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/dock"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title"
+                    style="?attr/textDisplay2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="MyVault" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/content_margin_medium"
+                    android:background="@drawable/card_background"
+                    android:orientation="horizontal"
+                    android:animateLayoutChanges="true"
+                    app:clipToCornerRadius="@{@dimen/surface_corner_radius}">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/content_margin"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="@dimen/content_margin"
+                        android:layout_marginBottom="12dp"
+                        android:layout_weight="0.5"
+                        android:autofillHints="password"
+                        android:background="@null"
+                        android:hint="@string/text_hint_password"
+                        android:imeOptions="actionGo|flagNoPersonalizedLearning"
+                        android:inputType="textPassword"
+                        android:text="1" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="?android:colorBackground" />
+
+                    <ImageView
+                        android:id="@+id/unlock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end|center_vertical"
+                        android:alpha="0.8"
+                        android:background="@drawable/unlock_button_background"
+                        android:contentDescription="@string/button_unlock"
+                        android:padding="@dimen/content_margin"
+                        android:src="@drawable/ic_unlock"
+                        android:tint="?attr/colorOnBackground" />
+                </LinearLayout>
+
+                <com.airbnb.epoxy.EpoxyRecyclerView
+                    android:id="@+id/recent_files"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:background="@drawable/card_background"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="6"
+                    android:overScrollMode="never"
+                    tools:listitem="@layout/item_recent_file" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clear_all"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="@dimen/content_margin"
+                    android:text="@string/button_clear_all"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="12sp"
+                    app:cornerRadius="@dimen/surface_corner_radius" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/dock"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dock_height"
+            android:layout_marginStart="@dimen/layout_horizontal_margin"
+            android:layout_marginEnd="@dimen/layout_horizontal_margin"
+            android:layout_marginBottom="@dimen/layout_vertical_margin"
+            android:background="@drawable/card_background"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/file_create"
+                style="?attr/dockImageButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_plus_square" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/file_open"
+                style="?attr/dockImageButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toStartOf="@+id/file_import"
+                app:srcCompat="@drawable/ic_folder" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/file_import"
+                style="?attr/dockImageButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_code" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/file_more"
+                style="?attr/dockImageButtonStyle"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_more_vertical" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
