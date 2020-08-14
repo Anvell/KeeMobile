@@ -14,6 +14,6 @@ class KeeMobileApp : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-        DayNightSwitcher.apply(DayNightSwitcher.NIGHT)
+        DayNightSwitcher.apply(DayNightSwitcher.SYSTEM)
     }
 }
