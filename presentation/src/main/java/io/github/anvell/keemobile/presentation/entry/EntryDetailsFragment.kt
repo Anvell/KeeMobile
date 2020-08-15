@@ -336,8 +336,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
     }
 
     private fun saveAttachment(attachment: KeyAttachment) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             viewModel.saveAttachmentFile(attachment)
         } else {
             permissionsProvider
