@@ -19,9 +19,7 @@ class OpenViewModel @ViewModelInject constructor(
     private val saveRecentFiles: SaveRecentFiles,
     private val clearRecentFiles: ClearRecentFiles,
     private val getOpenDatabase: GetOpenDatabase
-) : MviViewModel<OpenViewState>(
-    OpenViewState()
-) {
+) : MviViewModel<OpenViewState>(OpenViewState()) {
 
     init {
         withState { state ->
@@ -55,9 +53,7 @@ class OpenViewModel @ViewModelInject constructor(
                 else -> listOf(source) to source
             }
             persistRecentFiles(recent)
-            copy(recentFiles = Success(
-                recent
-            ), selectedFile = selected)
+            copy(recentFiles = Success(recent), selectedFile = selected)
         }
     }
 
@@ -98,33 +94,21 @@ class OpenViewModel @ViewModelInject constructor(
 
     fun pushRecentFiles() = withState { state ->
         setState {
-            copy(
-                recentFiles = Success(
-                    listOf()
-                ),
-                recentFilesStash = state.recentFiles()
-            )
+            copy(recentFiles = Success(listOf()), recentFilesStash = state.recentFiles())
         }
     }
 
     fun popRecentFiles() = withState { state ->
         state.recentFilesStash?.let {
             setState {
-                copy(
-                    recentFiles = Success(
-                        it
-                    ),
-                    recentFilesStash = null
-                )
+                copy(recentFiles = Success(it), recentFilesStash = null)
             }
         }
     }
 
     fun clearRecentFiles() {
         execute(clearRecentFiles::invoke) {
-            copy(recentFiles = Success(
-                listOf()
-            ), selectedFile = null)
+            copy(recentFiles = Success(listOf()), selectedFile = null)
         }
     }
 

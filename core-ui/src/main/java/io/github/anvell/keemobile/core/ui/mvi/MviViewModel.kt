@@ -53,17 +53,9 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     protected fun <V> executeSync(block: () -> V, reducer: S.(Async<V>) -> S) {
         try {
             val result = block()
-            setState { reducer(
-                Success(
-                    result
-                )
-            ) }
+            setState { reducer(Success(result)) }
         } catch (error: Throwable) {
-            setState { reducer(
-                Fail(
-                    error
-                )
-            ) }
+            setState { reducer(Fail(error)) }
         }
     }
 
@@ -73,17 +65,9 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
 
             try {
                 val result = block()
-                setState { reducer(
-                    Success(
-                        result
-                    )
-                ) }
+                setState { reducer(Success(result)) }
             } catch (error: Throwable) {
-                setState { reducer(
-                    Fail(
-                        error
-                    )
-                ) }
+                setState { reducer(Fail(error)) }
             }
         }
     }
@@ -102,11 +86,7 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     ): Disposable {
         setState { reducer(Loading) }
 
-        return map<Async<V>> {
-            Success(
-                mapper(it)
-            )
-        }
+        return map<Async<V>> { Success(mapper(it)) }
             .onErrorReturn { Fail(it) }
             .subscribe { setState { reducer(it) } }
             .disposeOnClear()
