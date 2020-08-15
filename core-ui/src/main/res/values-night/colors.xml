@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="error">#D35761</color>
-
-    <color name="background">#333E57</color>
-    <color name="surface">#3D4865</color>
-    <color name="surfaceTranslucent">#F53D4866</color>
-    <color name="surfaceSelected">#505873</color>
-
-    <color name="onPrimary">#E7E7E7</color>
-    <color name="onBackground">#E6E6E6</color>
-    <color name="onSurface">#A1A5B3</color>
-
-    <color name="listItemDivider">#37415C</color>
-
-    <color name="launcherBackground">#59A674</color>
-    <color name="navigationBarBackground">@color/background</color>
-    <color name="statusBarBackground">@color/background</color>
-
     <array name="filterColors">
         <item>#FFF176</item>
         <item>#81C784</item>

@@ -1,1 +1,5 @@
-<manifest package="io.github.anvell.keemobile.presentation" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.anvell.keemobile.presentation">
+
+    <application android:theme="@style/Theme.App" />
+</manifest>

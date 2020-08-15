@@ -1,0 +1,21 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme.App" parent="Theme.Base">
+        <item name="colorPrimary">@color/teal_600</item>
+        <item name="colorPrimaryDark">@color/teal_900</item>
+        <item name="colorAccent">@color/pink_600</item>
+        <item name="colorError">@color/pink_400</item>
+        <item name="colorSurface">@color/blue_grey_700</item>
+        <item name="colorSurfaceSelected">@color/blue_grey_600</item>
+        <item name="colorOnSurface">@color/blue_grey_300</item>
+        <item name="colorOnPrimary">@color/grey_200</item>
+        <item name="android:colorBackground">@color/blue_grey_800</item>
+        <item name="colorOnBackground">@color/grey_300</item>
+
+        <item name="android:textColor">@color/grey_300</item>
+        <item name="android:statusBarColor">@color/blue_grey_800</item>
+        <item name="android:navigationBarColor">@color/blue_grey_800</item>
+        <item name="android:windowBackground">@color/blue_grey_800</item>
+        <item name="android:colorEdgeEffect">@color/grey_300</item>
+    </style>
+</resources>

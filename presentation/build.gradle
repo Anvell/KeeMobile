@@ -23,6 +23,7 @@ dependencies {
     implementation project(':core')
     implementation project(':domain')
     implementation project(':core-ui')
+    implementation project(':icons')
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
 

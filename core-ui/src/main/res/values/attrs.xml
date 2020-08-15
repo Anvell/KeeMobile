@@ -15,7 +15,6 @@
     </declare-styleable>
 
     <attr name="colorSurfaceSelected" format="color" />
-    <attr name="colorDivider" format="color" />
 
     <attr name="textDisplay1" format="reference" />
     <attr name="textDisplay2" format="reference" />

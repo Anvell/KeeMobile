@@ -4,5 +4,5 @@
     <size
             android:width="1.5dp"
             android:height="1.5dp"/>
-    <solid android:color="?attr/colorDivider"/>
+    <solid android:color="@color/surface_semi_translucent"/>
 </shape>

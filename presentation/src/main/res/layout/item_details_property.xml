@@ -16,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{isSurface? @color/surface : @android:color/transparent}"
+        android:background="@{isSurface? @drawable/color_surface : @drawable/color_transparent}"
         android:focusable="true"
         android:gravity="center_vertical"
         android:longClickable="true"

@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="error">#D35761</color>
+    <color name="green_400">#59A674</color>
 
-    <color name="background">#FFFFFF</color>
-    <color name="surface">#E7E7E7</color>
-    <color name="surfaceTranslucent">#F5F5F5F5</color>
-    <color name="surfaceSelected">#CCCCCC</color>
+    <color name="teal_600">#008577</color>
+    <color name="teal_900">#00574B</color>
 
-    <color name="onPrimary">#E7E7E7</color>
-    <color name="onBackground">#333333</color>
-    <color name="onSurface">#333333</color>
+    <color name="pink_400">#D35761</color>
+    <color name="pink_600">#D81B60</color>
 
-    <color name="listItemDivider">#CCCCCC</color>
+    <color name="grey_200">#E7E7E7</color>
+    <color name="grey_300">#E6E6E6</color>
+    <color name="grey_400">#CCCCCC</color>
+    <color name="grey_800">#333333</color>
+    <color name="grey_900">#242424</color>
 
-    <color name="launcherBackground">#59A674</color>
-    <color name="navigationBarBackground">#242424</color>
-    <color name="statusBarBackground">#242424</color>
+    <color name="blue_grey_300">#A1A5B3</color>
+    <color name="blue_grey_600">#505873</color>
+    <color name="blue_grey_700">#3D4865</color>
+    <color name="blue_grey_750">#37415C</color>
+    <color name="blue_grey_800">#333E57</color>
 
     <array name="filterColors">
         <item>#FFCA28</item>
