@@ -1,0 +1,29 @@
+import constants.Dependencies
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
+}
+
+dependencies {
+    implementation Dependencies.Kotlin.stdlib
+    implementation Dependencies.Coroutines.core
+
+    implementation Dependencies.Dagger.dagger
+    implementation Dependencies.Hilt.library
+    implementation Dependencies.AndroidCore.Hilt.viewmodel
+    kapt Dependencies.Dagger.compiler
+    kapt Dependencies.Hilt.compiler
+    kapt Dependencies.AndroidCore.Hilt.compiler
+
+    implementation Dependencies.Moshi.adapters
+    kapt Dependencies.Moshi.codegen
+}

@@ -1,0 +1,96 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View.OnClickListener" />
+        <import type="android.view.View.OnLongClickListener" />
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils" />
+
+        <variable name="title" type="String" />
+        <variable name="subtitle" type="String" />
+        <variable name="iconId" type="Integer" />
+        <variable name="isProcessing" type="Boolean" />
+        <variable name="isClickable" type="Boolean" />
+        <variable name="isSurface" type="Boolean" />
+        <variable name="clickListener" type="OnClickListener" />
+        <variable name="longClickListener" type="OnLongClickListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{isSurface? @drawable/color_surface : @drawable/color_transparent}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="@{isClickable}"
+            android:focusable="@{isClickable}"
+            android:gravity="center_vertical"
+            android:longClickable="@{isClickable &amp;&amp; longClickListener != null}"
+            android:onClick="@{clickListener}"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:onLongClick="@{longClickListener}">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title_text"
+                style="?attr/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{title}"
+                app:layout_constraintBottom_toTopOf="@+id/subtitle_text"
+                app:layout_constraintEnd_toStartOf="@+id/asset_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="@tools:sample/lorem" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/subtitle_text"
+                style="?attr/textCaption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{subtitle}"
+                android:visibility="@{TextUtils.isEmpty(subtitle)? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/asset_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_text"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="@tools:sample/lorem" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/asset_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.75"
+                android:background="@null"
+                android:tint="?attr/colorOnSurface"
+                android:visibility="@{isProcessing? View.INVISIBLE : View.VISIBLE}"
+                app:customSrc="@{iconId}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_download" />
+
+            <ProgressBar
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:indeterminateTint="?attr/colorPrimary"
+                android:visibility="@{isProcessing? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

@@ -1,0 +1,51 @@
+import constants.Dependencies
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+kapt {
+    correctErrorTypes = true
+    useBuildCache = true
+}
+
+android {
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+
+    coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
+
+    implementation Dependencies.Kotlin.stdlib
+
+    testImplementation Dependencies.Testing.junit
+    testImplementation Dependencies.Testing.mockk
+    testImplementation Dependencies.Testing.strikt
+
+    implementation Dependencies.AndroidCore.appcompat
+    implementation Dependencies.AndroidCore.coreKtx
+    implementation Dependencies.AndroidCore.documentfile
+
+    implementation Dependencies.Dagger.dagger
+    implementation Dependencies.Hilt.library
+    implementation Dependencies.AndroidCore.Hilt.viewmodel
+    kapt Dependencies.Dagger.compiler
+    kapt Dependencies.Hilt.compiler
+    kapt Dependencies.AndroidCore.Hilt.compiler
+
+    implementation Dependencies.RxJava.rxJava
+    implementation Dependencies.RxJava.rxAndroid
+
+    kapt Dependencies.Moshi.codegen
+    implementation Dependencies.Moshi.adapters
+
+    implementation Dependencies.Codecs.commonsCodec
+}

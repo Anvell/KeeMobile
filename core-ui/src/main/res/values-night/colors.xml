@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="filterColors">
+        <item>#FFF176</item>
+        <item>#81C784</item>
+        <item>#E57373</item>
+        <item>#FF8A65</item>
+        <item>#7986CB</item>
+        <item>#9575CD</item>
+    </array>
+</resources>

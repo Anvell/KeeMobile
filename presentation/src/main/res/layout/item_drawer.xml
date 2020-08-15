@@ -1,0 +1,57 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.view.View.OnClickListener"/>
+        <import type="androidx.core.content.ContextCompat"/>
+
+        <variable name="title" type="String"/>
+        <variable name="isSelected" type="Boolean"/>
+        <variable name="showIcon" type="Boolean"/>
+        <variable name="icon" type="Integer"/>
+        <variable name="iconContentDescription" type="String"/>
+        <variable name="clickListener" type="OnClickListener"/>
+        <variable name="iconClickListener" type="OnClickListener"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="?attr/textBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_surface_background"
+            android:drawSelectorOnTop="true"
+            android:clickable="@{clickListener != null}"
+            android:focusable="@{clickListener != null}"
+            android:gravity="start|center_vertical"
+            android:onClick="@{clickListener}"
+            android:paddingStart="16dp"
+            android:paddingEnd="56dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:selected="@{isSelected}"
+            android:text="@{title}"
+            tools:text="@tools:sample/lorem" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@drawable/selectable_surface_background"
+            android:clickable="@{iconClickListener != null}"
+            android:focusable="@{iconClickListener != null}"
+            android:onClick="@{iconClickListener}"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:tint="?attr/colorOnSurface"
+            android:contentDescription="@{iconContentDescription}"
+            android:visibility="@{icon != null? View.VISIBLE : View.GONE}"
+            app:customSrc="@{icon}" />
+    </FrameLayout>
+</layout>
