@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="@string/landing_title"
+                android:text="@string/open_landing_title"
                 android:textSize="36sp" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/content_margin"
                 android:gravity="center"
-                android:text="@string/landing_body_text"
+                android:text="@string/open_landing_body_text"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -100,7 +100,7 @@
                         android:layout_weight="0.5"
                         android:autofillHints="password"
                         android:background="@null"
-                        android:hint="@string/text_hint_password"
+                        android:hint="@string/open_text_hint_password"
                         android:imeOptions="actionGo|flagNoPersonalizedLearning"
                         android:inputType="textPassword"
                         android:text="1" />
@@ -117,7 +117,7 @@
                         android:layout_gravity="end|center_vertical"
                         android:alpha="0.8"
                         android:background="@drawable/unlock_button_background"
-                        android:contentDescription="@string/button_unlock"
+                        android:contentDescription="@string/open_button_unlock"
                         android:padding="@dimen/content_margin"
                         android:src="@drawable/ic_unlock"
                         android:tint="?attr/colorOnBackground" />
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/content_margin"
-                    android:text="@string/button_clear_all"
+                    android:text="@string/open_button_clear_all"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="12sp"
                     app:cornerRadius="@dimen/surface_corner_radius" />

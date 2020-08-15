@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:hint="@string/text_hint_search"
+                android:hint="@string/explore_text_hint_search"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:imeOptions="flagNoExtractUi|flagNoPersonalizedLearning"

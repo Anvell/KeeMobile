@@ -328,7 +328,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(intent, getString(R.string.dialogs_open_with)))
+            startActivity(Intent.createChooser(intent, getString(R.string.open_dialogs_open_with)))
 
         } else {
             saveAttachment(attachment)

@@ -52,7 +52,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
             )
 
             fileCreate.setOnClickListener {
-                requestCreateFile(getString(R.string.default_file_name), RequestCodes.FILE_CREATE)
+                requestCreateFile(getString(R.string.open_default_file_name), RequestCodes.FILE_CREATE)
             }
             fileOpen.setOnClickListener { requestOpenFile(RequestCodes.FILE_OPEN) }
             unlock.setOnClickListener { unlockSelected() }
@@ -142,8 +142,8 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
             .observe(viewLifecycleOwner) { item ->
                 item?.let {
                     snackbar(
-                        getString(R.string.landing_popup_clear_all_info),
-                        getString(R.string.button_undo),
+                        getString(R.string.open_landing_popup_clear_all_info),
+                        getString(R.string.open_button_undo),
                         action = {
                             viewModel.popRecentFiles()
                         },
