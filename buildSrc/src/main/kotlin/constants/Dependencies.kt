@@ -117,6 +117,11 @@ object Dependencies {
         const val openkeepass = "com.github.anvell:openkeepass:v0.8.3-SNAPSHOT"
     }
 
+    object Security {
+        const val tink = "com.google.crypto.tink:tink-android:1.4.0"
+        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0-rc03"
+    }
+
     object Codecs {
         const val commonsCodec = "commons-codec:commons-codec:1.13"
     }

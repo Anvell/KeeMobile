@@ -10,6 +10,8 @@ import dagger.hilt.android.components.ApplicationComponent
 import io.github.anvell.keemobile.core.io.*
 import io.github.anvell.keemobile.core.rx.RxSchedulers
 import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
+import io.github.anvell.keemobile.core.security.AndroidKeystoreEncryptionAes
+import io.github.anvell.keemobile.core.security.KeystoreEncryption
 import io.github.anvell.keemobile.core.serialization.FileSecretsJsonAdapterFactory
 import io.github.anvell.keemobile.core.serialization.FileSourceJsonAdapterFactory
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
@@ -17,21 +19,24 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(ApplicationComponent::class)
-interface CommonModule {
+interface CoreModule {
     @Binds
-    fun provideRxSchedulers(rxSchedulers: RxSchedulersImpl): RxSchedulers
+    fun provideRxSchedulers(implementation: RxSchedulersImpl): RxSchedulers
 
     @Binds
-    fun provideStorageFile(storageFile: StorageFileImpl): StorageFile
+    fun provideStorageFile(implementation: StorageFileImpl): StorageFile
 
     @Binds
-    fun provideInternalFile(InternalFile: InternalFileImpl): InternalFile
+    fun provideInternalFile(implementation: InternalFileImpl): InternalFile
 
     @Binds
-    fun provideMediaStoreFile(mediaStoreFile: MediaStoreFileImpl): MediaStoreFile
+    fun provideMediaStoreFile(implementation: MediaStoreFileImpl): MediaStoreFile
 
     @Binds
-    fun provideClipboardProvider(clipboardProvider: ClipboardProviderImpl): ClipboardProvider
+    fun provideClipboardProvider(implementation: ClipboardProviderImpl): ClipboardProvider
+
+    @Binds
+    fun provideKeystoreEncryption(implementation: AndroidKeystoreEncryptionAes): KeystoreEncryption
 
     companion object {
         @Provides
