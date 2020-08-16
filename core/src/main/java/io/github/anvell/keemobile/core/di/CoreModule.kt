@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.di
+package io.github.anvell.keemobile.core.di
 
 import com.squareup.moshi.Moshi
 import dagger.Binds
