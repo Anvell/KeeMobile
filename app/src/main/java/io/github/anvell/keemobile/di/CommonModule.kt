@@ -10,6 +10,7 @@ import dagger.hilt.android.components.ApplicationComponent
 import io.github.anvell.keemobile.core.io.*
 import io.github.anvell.keemobile.core.rx.RxSchedulers
 import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
+import io.github.anvell.keemobile.core.serialization.FileSecretsJsonAdapterFactory
 import io.github.anvell.keemobile.core.serialization.FileSourceJsonAdapterFactory
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ interface CommonModule {
         fun provideMoshi(): Moshi {
             return Moshi.Builder()
                 .add(FileSourceJsonAdapterFactory.create())
+                .add(FileSecretsJsonAdapterFactory.create())
                 .build()
         }
 

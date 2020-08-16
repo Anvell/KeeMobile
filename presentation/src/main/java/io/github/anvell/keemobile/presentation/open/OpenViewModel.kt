@@ -9,6 +9,7 @@ import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
+import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.launch
 
@@ -43,21 +44,21 @@ class OpenViewModel @ViewModelInject constructor(
         setState {
             val (recent, selected) = when (recentFiles) {
                 is Success -> {
-                    val entry = recentFiles()?.find { it.id == source.id }
+                    val entry = recentFiles()?.find { it.fileSource.id == source.id }
                     if (entry == null) {
-                        recentFiles()!!.append(source, AppConstants.MAX_RECENT_FILES) to source
+                        recentFiles()!!.append(FileListEntry(source), AppConstants.MAX_RECENT_FILES) to FileListEntry(source)
                     } else {
                         recentFiles()!! to entry
                     }
                 }
-                else -> listOf(source) to source
+                else -> listOf(FileListEntry(source)) to FileListEntry(source)
             }
             persistRecentFiles(recent)
             copy(recentFiles = Success(recent), selectedFile = selected)
         }
     }
 
-    fun selectFileSource(source: FileSource) {
+    fun selectFileSource(source: FileListEntry) {
         setState {
             copy(selectedFile = source)
         }
@@ -74,8 +75,9 @@ class OpenViewModel @ViewModelInject constructor(
             copy(
                 openFile = it,
                 recentFiles = recentFiles()?.let { list ->
-                    if (list.last().id != source.id) {
-                        val items = (list - source) + source
+                    if (list.last().fileSource.id != source.id) {
+                        val listEntry = FileListEntry(source)
+                        val items = (list - listEntry) + listEntry
                         persistRecentFiles(items)
                         Success(items)
                     } else {
@@ -112,7 +114,7 @@ class OpenViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun persistRecentFiles(recentFiles: List<FileSource>) {
+    private fun persistRecentFiles(recentFiles: List<FileListEntry>) {
         viewModelScope.launch {
             saveRecentFiles(recentFiles)
         }

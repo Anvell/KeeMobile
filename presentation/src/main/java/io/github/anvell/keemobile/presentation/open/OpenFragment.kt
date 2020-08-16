@@ -80,7 +80,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
         uri.getName(requireContext())?.let {
             viewModel.createFile(
                 FileSource.Storage(uriText.toSha256(), it, uriText),
-                FileSecrets("123")
+                KeyOnly("123")
             )
         }
     }
@@ -100,7 +100,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
         val fileIsLoading = state.openFile is Loading
         setDockVisibility(!fileIsLoading)
         with(requireBinding()) {
-            title.text = state.selectedFile?.nameWithoutExtension
+            title.text = state.selectedFile?.fileSource?.nameWithoutExtension
             unlock.isEnabled = state.selectedFile != null && !fileIsLoading
             password.isEnabled = !fileIsLoading
             clearAll.isEnabled = !fileIsLoading
@@ -113,15 +113,16 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
             requireBinding().recentFiles.withModels {
                 state.recentFiles()!!
                     .reversed()
-                    .forEach { entry ->
+                    .forEach { listEntry ->
+                        val fileSource = listEntry.fileSource
                         recentFile {
-                            id(entry.id)
-                            title(entry.name)
-                            isSelected(entry == state.selectedFile)
+                            id(fileSource.id)
+                            title(fileSource.name)
+                            isSelected(fileSource == state.selectedFile?.fileSource)
                             isClickable(!fileIsLoading)
-                            isOpen(openIds.find { it == entry.id } != null)
-                            isProcessing(fileIsLoading && entry == state.selectedFile)
-                            clickListener(View.OnClickListener { viewModel.selectFileSource(entry) })
+                            isOpen(openIds.find { it == fileSource.id } != null)
+                            isProcessing(fileIsLoading && fileSource == state.selectedFile?.fileSource)
+                            clickListener(View.OnClickListener { viewModel.selectFileSource(listEntry) })
                         }
                     }
             }
@@ -203,7 +204,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
     private fun unlockSelected(): Boolean = viewModel.withState { state ->
         val selected = state.selectedFile
         return@withState if (requireBinding().password.text.isNotEmpty() && selected != null) {
-            viewModel.openFromSource(selected, FileSecrets(requireBinding().password.text.toString()))
+            viewModel.openFromSource(selected.fileSource, KeyOnly(requireBinding().password.text.toString()))
             true
         } else {
             false
