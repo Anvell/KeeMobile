@@ -25,6 +25,7 @@
         <item name="android:popupMenuStyle">@style/PopupMenu</item>
         <item name="popupMenuStyle">@style/PopupMenu</item>
         <item name="dockImageButtonStyle">@style/DockImageButton</item>
+        <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
 
         <!-- Typography -->
         <item name="textDisplay1">@style/Typography.Display1</item>
@@ -33,5 +34,9 @@
         <item name="textBody">@style/Typography.Body</item>
         <item name="textBodyUppercase">@style/Typography.Body.Uppercase</item>
         <item name="textCaption">@style/Typography.Caption</item>
+    </style>
+
+    <style name="ThemeOverlay.App.ModalBottomSheet" parent="">
+        <item name="android:colorBackground">@android:color/white</item>
     </style>
 </resources>

@@ -19,4 +19,8 @@
         <item name="android:colorEdgeEffect">@color/grey_300</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="ThemeOverlay.App.ModalBottomSheet" parent="">
+        <item name="android:colorBackground">@color/blue_grey_800</item>
+    </style>
 </resources>
