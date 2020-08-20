@@ -9,6 +9,10 @@
     <string name="open_button_undo">Undo</string>
     <string name="open_text_hint_password">Password</string>
     <string name="open_dialogs_open_with">Open with</string>
+    <string name="open_dialogs_use_fingerprint_prompt">Would you like to unlock this file using biometric authentication?</string>
+    <string name="open_dialogs_use_fingerprint_ok">Sure</string>
+    <string name="open_dialogs_use_fingerprint_skip">Not now</string>
+    <string name="open_dialogs_use_fingerprint_never">Don\'t ask for this file</string>
     <string name="open_landing_popup_clear_all_info">All data related to recent files is cleared</string>
 
     <string name="explore_text_hint_search">Search</string>
