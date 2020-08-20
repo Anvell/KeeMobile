@@ -39,7 +39,7 @@ object Dependencies {
         const val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
         object Widgets {
-            const val material = "com.google.android.material:material:1.1.0"
+            const val material = "com.google.android.material:material:1.2.0"
             const val recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
             const val swiperefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
             const val viewpager = "androidx.viewpager2:viewpager2:1.0.0"
@@ -54,7 +54,7 @@ object Dependencies {
         }
 
         object Fragment {
-            private const val version = "1.2.5"
+            private const val version = "1.3.0-alpha08"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }
