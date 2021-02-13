@@ -31,7 +31,7 @@ object Dependencies {
     }
 
     object AndroidCore {
-        const val appcompat = "androidx.appcompat:appcompat:1.1.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
         const val palette = "androidx.palette:palette:1.0.0"
         const val collection = "androidx.collection:collection-ktx:1.1.0"
@@ -39,7 +39,7 @@ object Dependencies {
         const val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
         object Widgets {
-            const val material = "com.google.android.material:material:1.1.0"
+            const val material = "com.google.android.material:material:1.2.0"
             const val recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
             const val swiperefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
             const val viewpager = "androidx.viewpager2:viewpager2:1.0.0"
@@ -54,7 +54,7 @@ object Dependencies {
         }
 
         object Fragment {
-            private const val version = "1.2.5"
+            private const val version = "1.3.0"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }
@@ -115,6 +115,12 @@ object Dependencies {
 
     object Keepass {
         const val openkeepass = "com.github.anvell:openkeepass:v0.8.3-SNAPSHOT"
+    }
+
+    object Security {
+        const val biometric = "androidx.biometric:biometric:1.1.0"
+        const val tink = "com.google.crypto.tink:tink-android:1.5.0"
+        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0-rc04"
     }
 
     object Codecs {

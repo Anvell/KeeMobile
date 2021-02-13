@@ -28,4 +28,15 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="ModalBottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ModalBottomSheet</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

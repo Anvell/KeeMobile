@@ -18,7 +18,6 @@ android {
         applicationId "io.github.anvell.keemobile"
         versionCode 1
         versionName "1.0.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     
     buildTypes {
@@ -26,10 +25,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    compileOptions {
-        coreLibraryDesugaringEnabled true
     }
 }
 
@@ -40,15 +35,7 @@ dependencies {
     implementation project(':data')
     implementation project(':presentation')
 
-    coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
-
     implementation Dependencies.Kotlin.stdlib
-    implementation Dependencies.Coroutines.core
-    implementation Dependencies.Coroutines.android
-
-    testImplementation Dependencies.Testing.junit
-    testImplementation Dependencies.Testing.mockk
-    testImplementation Dependencies.Testing.strikt
 
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
@@ -59,16 +46,8 @@ dependencies {
 
     implementation Dependencies.AndroidCore.appcompat
 
-    implementation Dependencies.AndroidCore.Fragment.fragment
-    implementation Dependencies.AndroidCore.Fragment.fragmentKtx
-
     implementation Dependencies.AndroidCore.Navigation.ui
     implementation Dependencies.AndroidCore.Navigation.fragment
-
-    implementation Dependencies.AndroidCore.Lifecycle.runtime
-    implementation Dependencies.AndroidCore.Lifecycle.livedata
-    implementation Dependencies.AndroidCore.Lifecycle.extensions
-    implementation Dependencies.AndroidCore.Lifecycle.viewmodel
 
     implementation Dependencies.RxJava.rxJava
     implementation Dependencies.RxJava.rxAndroid
@@ -76,12 +55,8 @@ dependencies {
 
     implementation Dependencies.Epoxy.epoxy
 
-    implementation Dependencies.Keepass.openkeepass
-
-    implementation Dependencies.Codecs.commonsCodec
-
-    kapt Dependencies.Moshi.codegen
     implementation Dependencies.Moshi.adapters
+    kapt Dependencies.Moshi.codegen
 
     implementation Dependencies.Logging.timber
 }

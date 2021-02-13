@@ -66,5 +66,7 @@ dependencies {
     implementation Dependencies.Epoxy.dataBinding
     kapt Dependencies.Epoxy.processor
 
+    implementation Dependencies.Security.biometric
+
     implementation Dependencies.Logging.timber
 }

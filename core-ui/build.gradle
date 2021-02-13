@@ -34,6 +34,8 @@ dependencies {
     implementation Dependencies.AndroidCore.coreKtx
     implementation Dependencies.AndroidCore.Widgets.material
     implementation Dependencies.AndroidCore.dynamicAnimation
+    implementation Dependencies.AndroidCore.Fragment.fragment
+    implementation Dependencies.AndroidCore.Fragment.fragmentKtx
 
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
@@ -55,6 +57,8 @@ dependencies {
     implementation Dependencies.RxJava.rxBindings
 
     implementation Dependencies.Epoxy.epoxy
+    implementation Dependencies.Epoxy.dataBinding
+    kapt Dependencies.Epoxy.processor
 
     implementation Dependencies.Keepass.openkeepass
 }

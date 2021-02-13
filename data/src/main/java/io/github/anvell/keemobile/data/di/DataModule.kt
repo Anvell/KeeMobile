@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.di
+package io.github.anvell.keemobile.data.di
 
 import dagger.Binds
 import dagger.Module
@@ -17,14 +17,14 @@ import io.github.anvell.keemobile.domain.repository.RecentFilesRepository
 @InstallIn(ApplicationComponent::class)
 interface DataModule {
     @Binds
-    fun provideDatabaseRepository(databaseRepository: DatabaseRepositoryImpl): DatabaseRepository
+    fun provideDatabaseRepository(implementation: DatabaseRepositoryImpl): DatabaseRepository
 
     @Binds
-    fun provideRecentFilesRepository(recentFilesRepository: RecentFilesRepositoryImpl): RecentFilesRepository
+    fun provideRecentFilesRepository(implementation: RecentFilesRepositoryImpl): RecentFilesRepository
 
     @Binds
-    fun provideAppSettingsRepository(appSettingsRepository: AppSettingsRepositoryImpl): AppSettingsRepository
+    fun provideAppSettingsRepository(implementation: AppSettingsRepositoryImpl): AppSettingsRepository
 
     @Binds
-    fun provideDownloadsRepository(downloadsRepository: DownloadsRepositoryImpl): DownloadsRepository
+    fun provideDownloadsRepository(implementation: DownloadsRepositoryImpl): DownloadsRepository
 }

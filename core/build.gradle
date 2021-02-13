@@ -25,6 +25,8 @@ dependencies {
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
 
     implementation Dependencies.Kotlin.stdlib
+    implementation Dependencies.Coroutines.core
+    implementation Dependencies.Coroutines.android
 
     testImplementation Dependencies.Testing.junit
     testImplementation Dependencies.Testing.mockk
@@ -47,5 +49,11 @@ dependencies {
     kapt Dependencies.Moshi.codegen
     implementation Dependencies.Moshi.adapters
 
+    implementation Dependencies.Security.tink
+    implementation Dependencies.Security.jetpackSecurity
+    implementation Dependencies.Security.biometric
+
     implementation Dependencies.Codecs.commonsCodec
+
+    implementation Dependencies.Logging.timber
 }

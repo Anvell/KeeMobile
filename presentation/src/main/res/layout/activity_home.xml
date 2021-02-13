@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/nav_host_fragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/app_navigation" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/drawer_fragment"
                 android:layout_width="@dimen/drawer_width"
                 android:layout_height="match_parent"
