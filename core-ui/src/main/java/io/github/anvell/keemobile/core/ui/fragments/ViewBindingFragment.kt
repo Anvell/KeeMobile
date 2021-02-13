@@ -16,7 +16,7 @@ abstract class ViewBindingFragment<B>(
 ) : BaseFragment() where B : ViewDataBinding {
     private var binding: B? = null
 
-    protected fun requireBinding(): B = requireNotNull(binding)
+    fun requireBinding(): B = requireNotNull(binding)
 
     @CallSuper
     override fun onCreateView(

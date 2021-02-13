@@ -31,7 +31,7 @@ object Dependencies {
     }
 
     object AndroidCore {
-        const val appcompat = "androidx.appcompat:appcompat:1.1.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
         const val palette = "androidx.palette:palette:1.0.0"
         const val collection = "androidx.collection:collection-ktx:1.1.0"
@@ -54,7 +54,7 @@ object Dependencies {
         }
 
         object Fragment {
-            private const val version = "1.3.0-alpha08"
+            private const val version = "1.3.0"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }

@@ -6,7 +6,7 @@ interface RecentFilesRepository {
 
     fun readRecentFiles(): List<FileListEntry>
 
-    fun writeRecentFiles(recentFiles: List<FileListEntry>)
+    fun writeRecentFiles(recentFiles: List<FileListEntry>): List<FileListEntry>
 
     fun clearRecentFiles(): Boolean
 }

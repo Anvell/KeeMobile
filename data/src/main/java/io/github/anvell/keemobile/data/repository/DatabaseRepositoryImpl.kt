@@ -106,19 +106,21 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     private fun readFromStorage(source: FileSource.Storage, secrets: FileSecrets): KeyDatabase {
         require(secrets is KeyOnly) { "Only password protection is supported." }
+        require(secrets.masterKey is Secret.Unencrypted) { "Master key must be unencrypted at this point." }
 
         val database = KeePassDatabase
             .getInstance(storageFile.openInputStream(source.uri))
-            .openDatabase(secrets.masterKey)
+            .openDatabase((secrets.masterKey as Secret.Unencrypted).content)
 
         return KeePassTransformer.from(database)
     }
 
     private fun writeToStorage(database: KeyDatabase, source: FileSource.Storage, secrets: FileSecrets) {
         require(secrets is KeyOnly) { "Only password protection is supported." }
+        require(secrets.masterKey is Secret.Unencrypted) { "Master key must be unencrypted at this point." }
 
         val outputStream = storageFile.openOutputStream(source.uri)
-        KeePassDatabase.write(KeePassTransformer.to(database), secrets.masterKey, outputStream)
+        KeePassDatabase.write(KeePassTransformer.to(database), (secrets.masterKey as Secret.Unencrypted).content, outputStream)
     }
 
     private fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): VaultId {

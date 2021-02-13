@@ -50,7 +50,7 @@ class RecentFilesRepositoryImpl @Inject constructor(
         throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
     }
 
-    override fun writeRecentFiles(recentFiles: List<FileListEntry>) {
+    override fun writeRecentFiles(recentFiles: List<FileListEntry>): List<FileListEntry> {
         internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
             val type = Types.newParameterizedType(List::class.java, FileListEntry::class.java)
             val data = moshi.adapter<List<FileListEntry>>(type).toJson(recentFiles)
@@ -61,7 +61,7 @@ class RecentFilesRepositoryImpl @Inject constructor(
                 AppConstants.FILE_RECENT_FILES.toByteArray()
             )
             stream.write(encrypted)
-            return
+            return recentFiles
         }
 
         throw IOException("Cannot write ${AppConstants.FILE_RECENT_FILES}")

@@ -7,17 +7,21 @@ import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isGone
+import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_ACTION
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.anvell.keemobile.core.constants.Args
 import io.github.anvell.keemobile.core.constants.RequestCodes
 import io.github.anvell.keemobile.core.extensions.getName
 import io.github.anvell.keemobile.core.extensions.toSha256
+import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.extensions.*
 import io.github.anvell.keemobile.core.ui.fragments.ViewBindingFragment
 import io.github.anvell.keemobile.core.ui.mvi.MviView
@@ -27,11 +31,15 @@ import io.github.anvell.keemobile.domain.datatypes.Async
 import io.github.anvell.keemobile.domain.datatypes.Fail
 import io.github.anvell.keemobile.domain.datatypes.Loading
 import io.github.anvell.keemobile.domain.datatypes.Success
-import io.github.anvell.keemobile.domain.entity.*
+import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
+import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.KeyOnly
+import io.github.anvell.keemobile.domain.entity.Secret
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.databinding.FragmentOpenBinding
 import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.recentFile
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
@@ -39,6 +47,9 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
 ), MviView<OpenViewModel, OpenViewState> {
     override val viewModel: OpenViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
+
+    @Inject
+    lateinit var biometricHelper: BiometricHelper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,11 +66,18 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
                 requestCreateFile(getString(R.string.open_default_file_name), RequestCodes.FILE_CREATE)
             }
             fileOpen.setOnClickListener { requestOpenFile(RequestCodes.FILE_OPEN) }
-            unlock.setOnClickListener { unlockSelected() }
+            unlock.setOnClickListener { attemptUnlock() }
             clearAll.setOnClickListener { viewModel.pushRecentFiles() }
+            password.doAfterTextChanged {
+                viewModel.withState { state ->
+                    unlock.isEnabled = password.text.isNotEmpty()
+                            || state.selectedFile?.encryptedSecrets is FileListEntrySecrets.Some
+                }
+            }
             password.setOnEditorActionListener { _, action, _ ->
                 if (action == EditorInfo.IME_ACTION_GO) {
-                    unlockSelected()
+                    attemptUnlock()
+                    true
                 } else {
                     false
                 }
@@ -80,7 +98,7 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
         uri.getName(requireContext())?.let {
             viewModel.createFile(
                 FileSource.Storage(uriText.toSha256(), it, uriText),
-                KeyOnly("123")
+                KeyOnly(Secret.Unencrypted("123"))
             )
         }
     }
@@ -101,8 +119,15 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
         setDockVisibility(!fileIsLoading)
         with(requireBinding()) {
             title.text = state.selectedFile?.fileSource?.nameWithoutExtension
-            unlock.isEnabled = state.selectedFile != null && !fileIsLoading
             password.isEnabled = !fileIsLoading
+            password.hint = if (state.selectedFile?.encryptedSecrets is FileListEntrySecrets.Some) {
+                getString(R.string.open_text_hint_password_use_biometrics)
+            } else {
+                getString(R.string.open_text_hint_password)
+            }
+            unlock.isEnabled = state.selectedFile != null && !fileIsLoading
+                    && (password.text.isNotEmpty()
+                    || state.selectedFile.encryptedSecrets is FileListEntrySecrets.Some)
             clearAll.isEnabled = !fileIsLoading
         }
 
@@ -161,6 +186,11 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
                     errorMapper.map(item.error) { snackbar(it) }
                 }
             }
+        setFragmentResultListener(UseFingerprintSheet.KEY) { _, bundle ->
+            unlockSelected(
+                bundle.getParcelable(Args.KEY) ?: error("Invalid arguments.")
+            )
+        }
     }
 
     private fun setDockVisibility(visible: Boolean) = with(requireBinding()) {
@@ -200,16 +230,6 @@ class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
                 }
             }
         }
-
-    private fun unlockSelected(): Boolean = viewModel.withState { state ->
-        val selected = state.selectedFile
-        return@withState if (requireBinding().password.text.isNotEmpty() && selected != null) {
-            viewModel.openFromSource(selected.fileSource, KeyOnly(requireBinding().password.text.toString()))
-            true
-        } else {
-            false
-        }
-    }
 
     private fun switchToOpenFile(openFile: Async<VaultId>): Boolean {
         return when (openFile) {

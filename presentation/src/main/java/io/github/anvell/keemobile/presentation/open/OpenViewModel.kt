@@ -72,25 +72,22 @@ class OpenViewModel @ViewModelInject constructor(
                 openFileSource(source, secrets)
             }
         }) {
-            copy(
-                openFile = it,
-                recentFiles = recentFiles()?.let { list ->
-                    if (list.last().fileSource.id != source.id) {
-                        val listEntry = FileListEntry(source)
-                        val items = (list - listEntry) + listEntry
-                        persistRecentFiles(items)
-                        Success(items)
-                    } else {
-                        recentFiles
-                    }
-                } ?: recentFiles
-            )
+            copy(openFile = it)
         }
     }
 
     fun setInitialSetup(initialSetup: Boolean) {
         setState {
             copy(initialSetup = initialSetup)
+        }
+    }
+
+    fun updateFileEntry(item: FileListEntry) = withState { state ->
+        state.recentFiles()?.let { recent ->
+            val items = recent.filter { it.fileSource.id != item.fileSource.id } + item
+            execute({ saveRecentFiles(items) }) {
+                copy(recentFiles = it)
+            }
         }
     }
 

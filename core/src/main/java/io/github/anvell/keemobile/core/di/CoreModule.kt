@@ -44,6 +44,7 @@ interface CoreModule {
             return Moshi.Builder()
                 .add(FileSourceJsonAdapterFactory.create())
                 .add(FileSecretsJsonAdapterFactory.create())
+                .add(EncryptedFileSecretsJsonAdapterFactory.create())
                 .add(SecretJsonAdapterFactory.create())
                 .add(ByteArray::class.java, Base64ByteArrayAdapter())
                 .build()
