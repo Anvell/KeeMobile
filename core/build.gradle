@@ -51,6 +51,9 @@ dependencies {
 
     implementation Dependencies.Security.tink
     implementation Dependencies.Security.jetpackSecurity
+    implementation Dependencies.Security.biometric
 
     implementation Dependencies.Codecs.commonsCodec
+
+    implementation Dependencies.Logging.timber
 }

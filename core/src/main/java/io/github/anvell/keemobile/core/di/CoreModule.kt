@@ -12,8 +12,7 @@ import io.github.anvell.keemobile.core.rx.RxSchedulers
 import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
 import io.github.anvell.keemobile.core.security.AndroidKeystoreEncryptionAes
 import io.github.anvell.keemobile.core.security.KeystoreEncryption
-import io.github.anvell.keemobile.core.serialization.FileSecretsJsonAdapterFactory
-import io.github.anvell.keemobile.core.serialization.FileSourceJsonAdapterFactory
+import io.github.anvell.keemobile.core.serialization.*
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 
@@ -45,6 +44,8 @@ interface CoreModule {
             return Moshi.Builder()
                 .add(FileSourceJsonAdapterFactory.create())
                 .add(FileSecretsJsonAdapterFactory.create())
+                .add(SecretJsonAdapterFactory.create())
+                .add(ByteArray::class.java, Base64ByteArrayAdapter())
                 .build()
         }
 

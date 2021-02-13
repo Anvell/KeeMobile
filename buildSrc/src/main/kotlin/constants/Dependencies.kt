@@ -118,8 +118,9 @@ object Dependencies {
     }
 
     object Security {
-        const val tink = "com.google.crypto.tink:tink-android:1.4.0"
-        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0-rc03"
+        const val biometric = "androidx.biometric:biometric:1.1.0"
+        const val tink = "com.google.crypto.tink:tink-android:1.5.0"
+        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0-rc04"
     }
 
     object Codecs {
