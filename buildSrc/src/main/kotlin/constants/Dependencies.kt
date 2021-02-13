@@ -3,8 +3,8 @@ package constants
 object Dependencies {
 
     object Core {
-        const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.0.10"
-        const val androidGradlePlugin = "com.android.tools.build:gradle:4.0.1"
+        const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.1"
+        const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0"
     }
 
     object Kotlin {
