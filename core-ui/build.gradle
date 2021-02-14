@@ -8,11 +8,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-kapt {
-    correctErrorTypes = true
-    useBuildCache = true
-}
-
 android {
     compileOptions {
         coreLibraryDesugaringEnabled true
