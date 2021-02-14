@@ -1,19 +1,20 @@
 package io.github.anvell.keemobile.domain.entity
 
 import android.os.Parcelable
-import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class FileListEntrySecrets : Parcelable {
-    @JsonClass(generateAdapter = true)
     @Parcelize
-    class Unspecified : FileListEntrySecrets()
+    @Serializable
+    object Unspecified : FileListEntrySecrets()
 
-    @JsonClass(generateAdapter = true)
     @Parcelize
-    class Never : FileListEntrySecrets()
+    @Serializable
+    object Never : FileListEntrySecrets()
 
-    @JsonClass(generateAdapter = true)
     @Parcelize
+    @Serializable
     class Some(val fileSecrets: FileSecrets) : FileListEntrySecrets()
 }

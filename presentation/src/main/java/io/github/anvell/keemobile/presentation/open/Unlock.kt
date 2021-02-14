@@ -91,7 +91,7 @@ internal fun OpenFragment.unlockSelected(options: UseFingerprintSheet.Options) {
                         viewModel.updateFileEntry(
                             FileListEntry(
                                 fileSource = selectedFileSource,
-                                encryptedSecrets = FileListEntrySecrets.Unspecified()
+                                encryptedSecrets = FileListEntrySecrets.Unspecified
                             )
                         )
                         viewModel.openFromSource(
@@ -103,7 +103,7 @@ internal fun OpenFragment.unlockSelected(options: UseFingerprintSheet.Options) {
                         viewModel.updateFileEntry(
                             FileListEntry(
                                 fileSource = selectedFileSource,
-                                encryptedSecrets = FileListEntrySecrets.Never()
+                                encryptedSecrets = FileListEntrySecrets.Never
                             )
                         )
                         viewModel.openFromSource(

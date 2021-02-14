@@ -11,7 +11,7 @@ object Dependencies {
         private const val version = "1.4.21-2"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
-        const val serializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+        const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
         const val androidExtensions = "org.jetbrains.kotlin:kotlin-android-extensions:$version"
     }
 
@@ -99,12 +99,6 @@ object Dependencies {
         const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.19"
         const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
         const val rxBindings = "com.jakewharton.rxbinding3:rxbinding:3.1.0"
-    }
-
-    object Moshi {
-        private const val version = "1.9.2"
-        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:$version"
-        const val adapters = "com.squareup.moshi:moshi-adapters:$version"
     }
 
     object Epoxy {

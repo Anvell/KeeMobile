@@ -5,16 +5,14 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
-}
-
-kapt {
-    correctErrorTypes = true
-    useBuildCache = true
 }
 
 dependencies {
     implementation Dependencies.Coroutines.core
+
+    implementation Dependencies.Kotlin.serializationJson
 
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
@@ -22,7 +20,4 @@ dependencies {
     kapt Dependencies.Dagger.compiler
     kapt Dependencies.Hilt.compiler
     kapt Dependencies.AndroidCore.Hilt.compiler
-
-    implementation Dependencies.Moshi.adapters
-    kapt Dependencies.Moshi.codegen
 }

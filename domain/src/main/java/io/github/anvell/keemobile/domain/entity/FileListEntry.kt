@@ -1,12 +1,12 @@
 package io.github.anvell.keemobile.domain.entity
 
 import android.os.Parcelable
-import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
 @Parcelize
+@Serializable
 data class FileListEntry(
     val fileSource: FileSource,
-    val encryptedSecrets: FileListEntrySecrets = FileListEntrySecrets.Unspecified()
+    val encryptedSecrets: FileListEntrySecrets = FileListEntrySecrets.Unspecified
 ) : Parcelable

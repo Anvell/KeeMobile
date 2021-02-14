@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.core.di
 
-import com.squareup.moshi.Moshi
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,7 +11,6 @@ import io.github.anvell.keemobile.core.rx.RxSchedulers
 import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
 import io.github.anvell.keemobile.core.security.AndroidKeystoreEncryptionAes
 import io.github.anvell.keemobile.core.security.KeystoreEncryption
-import io.github.anvell.keemobile.core.serialization.*
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 
@@ -38,18 +36,6 @@ interface CoreModule {
     fun provideKeystoreEncryption(implementation: AndroidKeystoreEncryptionAes): KeystoreEncryption
 
     companion object {
-        @Provides
-        @Reusable
-        fun provideMoshi(): Moshi {
-            return Moshi.Builder()
-                .add(FileSourceJsonAdapterFactory.create())
-                .add(FileSecretsJsonAdapterFactory.create())
-                .add(EncryptedFileSecretsJsonAdapterFactory.create())
-                .add(SecretJsonAdapterFactory.create())
-                .add(ByteArray::class.java, Base64ByteArrayAdapter())
-                .build()
-        }
-
         @Provides
         @Reusable
         fun provideCoroutineDispatchers() = CoroutineDispatchers(

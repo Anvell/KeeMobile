@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -26,6 +27,8 @@ dependencies {
     implementation project(':icons')
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
+
+    implementation Dependencies.Kotlin.serializationJson
 
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android

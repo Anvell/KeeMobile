@@ -8,11 +8,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-kapt {
-    correctErrorTypes = true
-    useBuildCache = true
-}
-
 android {
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -23,6 +18,8 @@ dependencies {
     implementation project(':domain')
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
+
+    implementation Dependencies.Kotlin.serializationJson
 
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android
@@ -44,9 +41,6 @@ dependencies {
 
     implementation Dependencies.RxJava.rxJava
     implementation Dependencies.RxJava.rxAndroid
-
-    kapt Dependencies.Moshi.codegen
-    implementation Dependencies.Moshi.adapters
 
     implementation Dependencies.Security.tink
     implementation Dependencies.Security.jetpackSecurity

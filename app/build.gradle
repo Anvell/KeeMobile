@@ -53,8 +53,5 @@ dependencies {
 
     implementation Dependencies.Epoxy.epoxy
 
-    implementation Dependencies.Moshi.adapters
-    kapt Dependencies.Moshi.codegen
-
     implementation Dependencies.Logging.timber
 }

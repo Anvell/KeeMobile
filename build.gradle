@@ -9,6 +9,7 @@ buildscript {
     dependencies {
         classpath Dependencies.Core.androidGradlePlugin
         classpath Dependencies.Kotlin.gradlePlugin
+        classpath Dependencies.Kotlin.serialization
         classpath Dependencies.Kotlin.androidExtensions
         classpath Dependencies.Hilt.gradlePlugin
     }

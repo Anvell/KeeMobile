@@ -1,13 +1,13 @@
 package io.github.anvell.keemobile.domain.entity
 
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
 
 enum class ViewMode {
     TREE,
     LIST
 }
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class AppSettings(
     val exploreViewMode: ViewMode = ViewMode.TREE
 )

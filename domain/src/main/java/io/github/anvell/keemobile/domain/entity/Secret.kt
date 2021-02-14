@@ -1,18 +1,19 @@
 package io.github.anvell.keemobile.domain.entity
 
 import android.os.Parcelable
-import com.squareup.moshi.JsonClass
 import kotlinx.android.parcel.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class Secret : Parcelable {
-    @JsonClass(generateAdapter = true)
     @Parcelize
+    @Serializable
     class Encrypted(
         val iv: ByteArray,
         val content: ByteArray
     ) : Secret()
 
-    @JsonClass(generateAdapter = true)
     @Parcelize
+    @Serializable
     data class Unencrypted(val content: String) : Secret()
 }
