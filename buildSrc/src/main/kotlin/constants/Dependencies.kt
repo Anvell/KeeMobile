@@ -1,5 +1,6 @@
 package constants
 
+@Suppress("unused")
 object Dependencies {
 
     object Core {
@@ -74,7 +75,7 @@ object Dependencies {
         }
 
         object Hilt {
-            private const val version = "1.0.0-alpha02"
+            private const val version = "1.0.0-alpha03"
             const val work = "androidx.hilt:hilt-work:$version"
             const val viewmodel = "androidx.hilt:hilt-lifecycle-viewmodel:$version"
             const val compiler = "androidx.hilt:hilt-compiler:$version"
@@ -82,13 +83,13 @@ object Dependencies {
     }
 
     object Dagger {
-        private const val version = "2.28.3"
+        private const val version = "2.31.2"
         const val dagger = "com.google.dagger:dagger:$version"
         const val compiler = "com.google.dagger:dagger-compiler:$version"
     }
 
     object Hilt {
-        private const val version = "2.28-alpha"
+        private const val version = "2.31.2-alpha"
         const val library = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val testing = "com.google.dagger:hilt-android-testing:$version"

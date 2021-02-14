@@ -1,7 +1,7 @@
 package io.github.anvell.keemobile.presentation.home
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
@@ -10,8 +10,10 @@ import io.github.anvell.keemobile.domain.usecase.CloseDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabases
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val getOpenDatabase: GetOpenDatabase,
     private val getOpenDatabases: GetOpenDatabases,
     private val closeAllDatabases: CloseAllDatabases,

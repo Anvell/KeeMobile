@@ -1,8 +1,7 @@
 package io.github.anvell.keemobile.presentation.explore
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.extensions.append
 import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
@@ -14,9 +13,11 @@ import io.github.anvell.keemobile.domain.usecase.GetFilteredEntries
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAppSettings
 import java.util.*
+import javax.inject.Inject
 
-class ExploreViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class ExploreViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getOpenDatabase: GetOpenDatabase,
     private val getFilteredEntries: GetFilteredEntries,
     private val getAppSettings: GetAppSettings,

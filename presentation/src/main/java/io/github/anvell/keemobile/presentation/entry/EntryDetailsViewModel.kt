@@ -1,24 +1,25 @@
 package io.github.anvell.keemobile.presentation.entry
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
-import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EntryDetailsViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class EntryDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getOpenDatabase: GetOpenDatabase,
     private val getAppSettings: GetAppSettings,
     private val saveAttachment: SaveAttachment

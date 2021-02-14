@@ -1,19 +1,21 @@
 package io.github.anvell.keemobile.presentation.open
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.constants.AppConstants
 import io.github.anvell.keemobile.core.ui.extensions.append
 import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
-import io.github.anvell.keemobile.domain.entity.FileSecrets
-import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.FileListEntry
+import io.github.anvell.keemobile.domain.entity.FileSecrets
+import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OpenViewModel @ViewModelInject constructor(
+@HiltViewModel
+class OpenViewModel @Inject constructor(
     private val createNewFile: CreateNewFile,
     private val openFileSource: OpenFileSource,
     private val getRecentFiles: GetRecentFiles,
