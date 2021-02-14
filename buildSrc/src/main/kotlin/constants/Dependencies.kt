@@ -8,14 +8,15 @@ object Dependencies {
     }
 
     object Kotlin {
-        private const val version = "1.3.72"
-        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
+        private const val version = "1.4.21-2"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
+        const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
+        const val serializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
         const val androidExtensions = "org.jetbrains.kotlin:kotlin-android-extensions:$version"
     }
 
     object Coroutines {
-        private const val version = "1.3.7"
+        private const val version = "1.4.2"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"

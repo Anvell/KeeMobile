@@ -14,7 +14,6 @@ kapt {
 }
 
 dependencies {
-    implementation Dependencies.Kotlin.stdlib
     implementation Dependencies.Coroutines.core
 
     implementation Dependencies.Dagger.dagger

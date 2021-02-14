@@ -35,8 +35,6 @@ dependencies {
     implementation project(':data')
     implementation project(':presentation')
 
-    implementation Dependencies.Kotlin.stdlib
-
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
     implementation Dependencies.AndroidCore.Hilt.viewmodel

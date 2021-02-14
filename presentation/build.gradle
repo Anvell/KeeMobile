@@ -27,7 +27,6 @@ dependencies {
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
 
-    implementation Dependencies.Kotlin.stdlib
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android
 
