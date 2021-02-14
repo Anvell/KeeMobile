@@ -1,7 +1,6 @@
 package io.github.anvell.keemobile.core.ui.mvi
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.observe
 
 interface MviView<V, S> : LifecycleOwner where V : MviViewModel<S> {
     val viewModel: V

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.observe
 import androidx.navigation.NavOptions
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.core.constants.Args
