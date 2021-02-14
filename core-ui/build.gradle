@@ -43,7 +43,6 @@ dependencies {
 
     implementation Dependencies.AndroidCore.Lifecycle.runtime
     implementation Dependencies.AndroidCore.Lifecycle.livedata
-    implementation Dependencies.AndroidCore.Lifecycle.extensions
     implementation Dependencies.AndroidCore.Lifecycle.viewmodel
 
     implementation Dependencies.RxJava.rxJava

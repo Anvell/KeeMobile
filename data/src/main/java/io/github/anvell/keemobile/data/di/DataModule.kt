@@ -3,7 +3,7 @@ package io.github.anvell.keemobile.data.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import io.github.anvell.keemobile.data.repository.AppSettingsRepositoryImpl
 import io.github.anvell.keemobile.data.repository.DatabaseRepositoryImpl
 import io.github.anvell.keemobile.data.repository.DownloadsRepositoryImpl
@@ -14,7 +14,7 @@ import io.github.anvell.keemobile.domain.repository.DownloadsRepository
 import io.github.anvell.keemobile.domain.repository.RecentFilesRepository
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 interface DataModule {
     @Binds
     fun provideDatabaseRepository(implementation: DatabaseRepositoryImpl): DatabaseRepository

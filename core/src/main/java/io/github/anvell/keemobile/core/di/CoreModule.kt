@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import io.github.anvell.keemobile.core.io.*
 import io.github.anvell.keemobile.core.rx.RxSchedulers
 import io.github.anvell.keemobile.core.rx.RxSchedulersImpl
@@ -15,7 +15,7 @@ import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 interface CoreModule {
     @Binds
     fun provideRxSchedulers(implementation: RxSchedulersImpl): RxSchedulers

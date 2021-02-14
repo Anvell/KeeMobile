@@ -9,7 +9,7 @@ object Dependencies {
     }
 
     object Kotlin {
-        private const val version = "1.4.21-2"
+        private const val version = "1.4.30"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
         const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
@@ -24,35 +24,31 @@ object Dependencies {
     }
 
     object Testing {
-        const val junit = "junit:junit:4.13"
-        const val mockk = "io.mockk:mockk:1.10.0"
+        const val junit = "junit:junit:4.13.2"
+        const val mockk = "io.mockk:mockk:1.10.6"
         const val coreTesting = "androidx.arch.core:core-testing:2.1.0"
         const val rules = "androidx.test:rules:1.2.0"
-        const val strikt = "io.strikt:strikt-core:0.24.0"
+        const val strikt = "io.strikt:strikt-core:0.28.2"
         const val kotestAssertions = "io.kotest:kotest-assertions-core-jvm:4.0.7"
     }
 
     object AndroidCore {
         const val appcompat = "androidx.appcompat:appcompat:1.2.0"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
-        const val palette = "androidx.palette:palette:1.0.0"
-        const val collection = "androidx.collection:collection-ktx:1.1.0"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
 
         object Widgets {
-            const val material = "com.google.android.material:material:1.2.0"
+            const val material = "com.google.android.material:material:1.3.0"
             const val recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
-            const val swiperefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
             const val viewpager = "androidx.viewpager2:viewpager2:1.0.0"
-            const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
+            const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.4"
         }
 
         object Navigation {
-            private const val version = "2.3.0"
+            private const val version = "2.3.3"
             const val fragment = "androidx.navigation:navigation-fragment-ktx:$version"
             const val ui = "androidx.navigation:navigation-ui-ktx:$version"
-            const val safeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:$version"
         }
 
         object Fragment {
@@ -62,16 +58,11 @@ object Dependencies {
         }
 
         object Lifecycle {
-            private const val version = "2.2.0"
+            private const val version = "2.3.0"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
-        }
-
-        object Work {
-            private const val version = "2.3.4"
-            const val runtimeKtx = "androidx.work:work-runtime-ktx:$version"
         }
 
         object Hilt {
@@ -83,13 +74,13 @@ object Dependencies {
     }
 
     object Dagger {
-        private const val version = "2.31.2"
+        private const val version = "2.32"
         const val dagger = "com.google.dagger:dagger:$version"
         const val compiler = "com.google.dagger:dagger-compiler:$version"
     }
 
     object Hilt {
-        private const val version = "2.31.2-alpha"
+        private const val version = "2.32-alpha"
         const val library = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val testing = "com.google.dagger:hilt-android-testing:$version"
@@ -97,7 +88,7 @@ object Dependencies {
     }
 
     object RxJava {
-        const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.19"
+        const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.21"
         const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
         const val rxBindings = "com.jakewharton.rxbinding3:rxbinding:3.1.0"
     }
