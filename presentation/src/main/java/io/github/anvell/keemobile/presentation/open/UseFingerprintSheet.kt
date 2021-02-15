@@ -6,7 +6,7 @@ import io.github.anvell.keemobile.core.ui.modals.ModalBottomSheetContent
 import io.github.anvell.keemobile.core.ui.modals.ModalBottomSheetRow
 import io.github.anvell.keemobile.core.ui.modals.ModalBottomSheet
 import io.github.anvell.keemobile.presentation.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 internal object UseFingerprintSheet {
     const val KEY = "KEY_USE_FINGERPRINT"

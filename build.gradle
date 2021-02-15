@@ -10,7 +10,6 @@ buildscript {
         classpath Dependencies.Core.androidGradlePlugin
         classpath Dependencies.Kotlin.gradlePlugin
         classpath Dependencies.Kotlin.serialization
-        classpath Dependencies.Kotlin.androidExtensions
         classpath Dependencies.Hilt.gradlePlugin
     }
 }
@@ -54,13 +53,6 @@ subprojects {
                         ]
                     }
                 }
-            }
-        }
-
-        // Turn off kotlin synthetics for all submodules
-        if (project.hasProperty('androidExtensions')) {
-            androidExtensions {
-                features = ["parcelize"]
             }
         }
     }
