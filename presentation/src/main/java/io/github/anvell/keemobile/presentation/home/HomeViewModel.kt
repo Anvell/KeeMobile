@@ -2,7 +2,7 @@ package io.github.anvell.keemobile.presentation.home
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
+import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.usecase.CloseAllDatabases
@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val getOpenDatabases: GetOpenDatabases,
     private val closeAllDatabases: CloseAllDatabases,
     private val closeDatabaseById: CloseDatabase
-) : MviViewModel<HomeViewState>(HomeViewState()) {
+) : MviRxViewModel<HomeViewState>(HomeViewState()) {
 
     init {
         viewModelScope.launch {

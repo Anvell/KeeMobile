@@ -23,7 +23,7 @@ import io.github.anvell.keemobile.core.extensions.toSha256
 import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.extensions.*
 import io.github.anvell.keemobile.core.ui.fragments.ViewBindingFragment
-import io.github.anvell.keemobile.core.ui.mvi.MviView
+import io.github.anvell.keemobile.core.ui.mvi.MviRxView
 import io.github.anvell.keemobile.core.ui.widgets.DividerDecoration
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Async
@@ -43,7 +43,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class OpenFragment : ViewBindingFragment<FragmentOpenBinding>(
     FragmentOpenBinding::inflate
-), MviView<OpenViewModel, OpenViewState> {
+), MviRxView<OpenViewModel, OpenViewState> {
     override val viewModel: OpenViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
 

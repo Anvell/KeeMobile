@@ -23,7 +23,7 @@ import io.github.anvell.keemobile.core.ui.extensions.toast
 import io.github.anvell.keemobile.core.ui.fragments.ViewBindingFragment
 import io.github.anvell.keemobile.core.ui.mappers.FilterColorMapper
 import io.github.anvell.keemobile.core.ui.mappers.IconMapper
-import io.github.anvell.keemobile.core.ui.mvi.MviView
+import io.github.anvell.keemobile.core.ui.mvi.MviRxView
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.*
@@ -42,7 +42,7 @@ import javax.inject.Inject
 @SuppressLint("ClickableViewAccessibility")
 class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
     FragmentExploreBinding::inflate
-), MviView<ExploreViewModel, ExploreViewState> {
+), MviRxView<ExploreViewModel, ExploreViewState> {
     override val viewModel: ExploreViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var filterColorMapper: FilterColorMapper

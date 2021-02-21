@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.constants.AppConstants
 import io.github.anvell.keemobile.core.ui.extensions.append
-import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
+import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.FileListEntry
@@ -22,7 +22,7 @@ class OpenViewModel @Inject constructor(
     private val saveRecentFiles: SaveRecentFiles,
     private val clearRecentFiles: ClearRecentFiles,
     private val getOpenDatabase: GetOpenDatabase
-) : MviViewModel<OpenViewState>(OpenViewState()) {
+) : MviRxViewModel<OpenViewState>(OpenViewState()) {
 
     init {
         withState { state ->

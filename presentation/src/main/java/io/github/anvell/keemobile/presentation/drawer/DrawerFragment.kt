@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.anvell.keemobile.core.constants.Args
 import io.github.anvell.keemobile.core.ui.ativities.NavControllerHolder
 import io.github.anvell.keemobile.core.ui.fragments.ViewBindingFragment
-import io.github.anvell.keemobile.core.ui.mvi.MviView
+import io.github.anvell.keemobile.core.ui.mvi.MviRxView
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.presentation.R
@@ -23,7 +23,7 @@ import io.github.anvell.keemobile.presentation.home.HomeViewState
 
 @AndroidEntryPoint
 class DrawerFragment : ViewBindingFragment<FragmentDrawerBinding>(FragmentDrawerBinding::inflate),
-    MviView<HomeViewModel, HomeViewState> {
+    MviRxView<HomeViewModel, HomeViewState> {
     override val viewModel: HomeViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty1
 
-abstract class MviViewModel<S>(initialState: S) : ViewModel() {
+abstract class MviRxViewModel<S>(initialState: S) : ViewModel() {
     private val disposables = CompositeDisposable()
     private val state = MutableStateFlow(initialState)
 
