@@ -30,6 +30,8 @@ dependencies {
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
 
+    implementation Dependencies.Kotlin.serializationJson
+
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android
 
