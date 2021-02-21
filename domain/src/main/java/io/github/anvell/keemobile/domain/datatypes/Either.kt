@@ -14,7 +14,7 @@ class Left<out L>(val value: L) : Either<L, Nothing>() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
-        other as Right<*>
+        other as Left<*>
         if (value != other.value) return false
         return true
     }
@@ -75,6 +75,13 @@ inline fun <L, R, V> Either<L, R>.flatMap(transform: (R) -> Either<L, V>): Eithe
     return when (this) {
         is Left -> this
         is Right -> transform(value)
+    }
+}
+
+inline fun <L, R> Either<L, R>.or(block: (L) -> Either<L, R>): Either<L, R> {
+    return when (this) {
+        is Left -> block(value)
+        is Right -> this
     }
 }
 
