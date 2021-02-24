@@ -7,4 +7,6 @@ class AppColors(
     val filterColors: List<Color>
 )
 
-val LocalAppColors = staticCompositionLocalOf<AppColors>()
+val LocalAppColors = staticCompositionLocalOf<AppColors> {
+    error("AppColors provider is required.")
+}
