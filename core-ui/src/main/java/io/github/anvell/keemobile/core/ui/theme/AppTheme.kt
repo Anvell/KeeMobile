@@ -11,6 +11,9 @@ fun AppTheme(
     isLight: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val colors = remember {
+        if (isLight) ThemeElements.colorsLight else ThemeElements.colors
+    }
     val appColors = remember {
         AppColors(
             when {
@@ -22,8 +25,8 @@ fun AppTheme(
 
     CompositionLocalProvider(LocalAppColors provides appColors) {
         MaterialTheme(
-            colors = if (isLight) ThemeElements.colorsLight else ThemeElements.colors,
-            typography = ThemeElements.typography,
+            colors = colors,
+            typography = ThemeElements.typography(colors),
             shapes = ThemeElements.shapes,
             content = content
         )

@@ -20,7 +20,7 @@ private val DefaultFontFamily = FontFamily(
     Font(R.font.firasans_medium_italic, FontWeight.Medium, FontStyle.Italic),
 )
 
-internal fun typography(colors: Colors) = Typography(
+internal fun createTypography(colors: Colors) = Typography(
     defaultFontFamily = DefaultFontFamily,
     subtitle1 = TextStyle(
         color = colors.onSecondary,

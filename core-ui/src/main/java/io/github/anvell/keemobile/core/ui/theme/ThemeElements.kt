@@ -63,5 +63,5 @@ internal object ThemeElements {
         large = RoundedCornerShape(0.dp)
     )
 
-    val typography = typography(colors)
+    fun typography(colors: Colors) = createTypography(colors)
 }
