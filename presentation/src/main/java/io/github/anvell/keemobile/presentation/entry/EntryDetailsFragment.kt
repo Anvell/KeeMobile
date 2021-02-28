@@ -34,7 +34,7 @@ import io.github.anvell.keemobile.core.ui.extensions.toast
 import io.github.anvell.keemobile.core.ui.fragments.ViewBindingFragment
 import io.github.anvell.keemobile.core.ui.mappers.FilterColorMapper
 import io.github.anvell.keemobile.core.ui.mappers.IconMapper
-import io.github.anvell.keemobile.core.ui.mvi.MviView
+import io.github.anvell.keemobile.core.ui.mvi.MviRxView
 import io.github.anvell.keemobile.core.ui.widgets.DividerDecoration
 import io.github.anvell.keemobile.domain.datatypes.Fail
 import io.github.anvell.keemobile.domain.datatypes.Success
@@ -51,7 +51,7 @@ import javax.inject.Inject
 @SuppressLint("ClickableViewAccessibility")
 class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
     FragmentEntryDetailsBinding::inflate
-), MviView<EntryDetailsViewModel, EntryDetailsViewState> {
+), MviRxView<EntryDetailsViewModel, EntryDetailsViewState> {
     override val viewModel: EntryDetailsViewModel by viewModels()
     private lateinit var filterColorMapper: FilterColorMapper
     private lateinit var pagesAdapter: BaseEpoxyAdapter

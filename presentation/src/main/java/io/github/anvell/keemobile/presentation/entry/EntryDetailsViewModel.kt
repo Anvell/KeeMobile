@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
-import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
+import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.AppSettings
@@ -23,7 +23,7 @@ class EntryDetailsViewModel @Inject constructor(
     private val getOpenDatabase: GetOpenDatabase,
     private val getAppSettings: GetAppSettings,
     private val saveAttachment: SaveAttachment
-) : MviViewModel<EntryDetailsViewState>(
+) : MviRxViewModel<EntryDetailsViewState>(
     EntryDetailsViewState(args = savedStateHandle.getArguments())
 ) {
 

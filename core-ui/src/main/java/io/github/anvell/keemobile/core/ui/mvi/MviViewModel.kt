@@ -1,25 +1,15 @@
 package io.github.anvell.keemobile.core.ui.mvi
 
-import androidx.annotation.CallSuper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import io.github.anvell.keemobile.domain.datatypes.Async
-import io.github.anvell.keemobile.domain.datatypes.Fail
-import io.github.anvell.keemobile.domain.datatypes.Loading
-import io.github.anvell.keemobile.domain.datatypes.Success
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import androidx.lifecycle.*
+import io.github.anvell.keemobile.domain.datatypes.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import kotlin.reflect.KProperty1
 
 abstract class MviViewModel<S>(initialState: S) : ViewModel() {
-    private val disposables = CompositeDisposable()
     private val state = MutableStateFlow(initialState)
 
     fun observableState() = state.asLiveData()
@@ -50,21 +40,44 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
         return state.map { property.get(it) }.distinctUntilChanged()
     }
 
-    protected fun <V> executeSync(block: () -> V, reducer: S.(Async<V>) -> S) {
-        try {
-            val result = block()
-            setState { reducer(Success(result)) }
-        } catch (error: Throwable) {
-            setState { reducer(Fail(error)) }
+    protected suspend fun <V> Flow<Either<Throwable, V>>.execute(reducer: S.(Async<V>) -> S) {
+        catch { setState { reducer(Fail(it)) } }
+        collect {
+            it.fold(
+                left = { setState { reducer(Fail(it)) } },
+                right = { setState { reducer(Success(it)) } }
+            )
         }
     }
 
-    protected fun <V> execute(block: suspend () -> V, reducer: S.(Async<V>) -> S) {
+    protected suspend fun <V> Flow<V>.executeCatching(reducer: S.(Async<V>) -> S) {
+        catch { setState { reducer(Fail(it)) } }
+        collect { setState { reducer(Success(it)) } }
+    }
+
+    protected fun <V> execute(
+        block: suspend S.() -> Either<Throwable, V>,
+        reducer: S.(Async<V>) -> S
+    ) {
+        viewModelScope.launch {
+            setState { reducer(Loading) }
+
+            block(state.value).fold(
+                left = { setState { reducer(Fail(it)) } },
+                right = { setState { reducer(Success(it)) } }
+            )
+        }
+    }
+
+    protected fun <V> executeCatching(
+        block: suspend S.() -> V,
+        reducer: S.(Async<V>) -> S
+    ) {
         viewModelScope.launch {
             setState { reducer(Loading) }
 
             try {
-                val result = block()
+                val result = block(state.value)
                 setState { reducer(Success(result)) }
             } catch (error: Throwable) {
                 setState { reducer(Fail(error)) }
@@ -72,34 +85,15 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    protected suspend fun <T> Flow<T>.execute(reducer: S.(T) -> S) = collect { setState { reducer(it) } }
-
-    protected fun Completable.execute(reducer: S.(Async<Unit>) -> S) = toSingle { Unit }.execute(reducer)
-
-    protected fun <T> Single<T>.execute(reducer: S.(Async<T>) -> S) = toObservable().execute({ it }, reducer)
-
-    protected fun <T> Observable<T>.execute(reducer: S.(Async<T>) -> S) = execute({ it }, reducer)
-
-    protected fun <T, V> Observable<T>.execute(
-        mapper: (T) -> V,
-        reducer: S.(Async<V>) -> S
-    ): Disposable {
-        setState { reducer(Loading) }
-
-        return map<Async<V>> { Success(mapper(it)) }
-            .onErrorReturn { Fail(it) }
-            .subscribe { setState { reducer(it) } }
-            .disposeOnClear()
+    protected inline fun <reified P> SavedStateHandle.rememberAsJson(property: KProperty1<S, P>) {
+        selectSubscribe(property) { this[property.name] = Json.encodeToString(it) }
     }
 
-    protected fun Disposable.disposeOnClear(): Disposable {
-        disposables.add(this)
-        return this
-    }
-
-    @CallSuper
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
+    companion object {
+        inline fun <S, reified P> SavedStateHandle.retrieveFromJson(property: KProperty1<S, P>): P? {
+            return get<String>(property.name)?.let {
+                Json { coerceInputValues = true }.decodeFromString(it)
+            }
+        }
     }
 }

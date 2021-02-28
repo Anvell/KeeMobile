@@ -2,7 +2,7 @@ package io.github.anvell.keemobile.core.ui.mvi
 
 import androidx.lifecycle.LifecycleOwner
 
-interface MviView<V, S> : LifecycleOwner where V : MviViewModel<S> {
+interface MviRxView<V, S> : LifecycleOwner where V : MviRxViewModel<S> {
     val viewModel: V
 
     fun stateSubscribe(lifecycleOwner: LifecycleOwner) {

@@ -12,6 +12,15 @@ android {
     compileOptions {
         coreLibraryDesugaringEnabled true
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion Dependencies.Kotlin.version
+        kotlinCompilerExtensionVersion Dependencies.Compose.version
+    }
 }
 
 dependencies {
@@ -20,6 +29,8 @@ dependencies {
     implementation project(':icons')
 
     coreLibraryDesugaring Dependencies.Core.desugarJdkLibs
+
+    implementation Dependencies.Kotlin.serializationJson
 
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android
@@ -44,6 +55,15 @@ dependencies {
     implementation Dependencies.AndroidCore.Lifecycle.runtime
     implementation Dependencies.AndroidCore.Lifecycle.livedata
     implementation Dependencies.AndroidCore.Lifecycle.viewmodel
+
+    implementation Dependencies.Compose.runtime
+    implementation Dependencies.Compose.foundation
+    implementation Dependencies.Compose.layout
+    implementation Dependencies.Compose.ui
+    implementation Dependencies.Compose.animation
+    implementation Dependencies.Compose.material
+    implementation Dependencies.Compose.livedata
+    implementation Dependencies.Compose.Extra.activity
 
     implementation Dependencies.RxJava.rxJava
     implementation Dependencies.RxJava.rxAndroid

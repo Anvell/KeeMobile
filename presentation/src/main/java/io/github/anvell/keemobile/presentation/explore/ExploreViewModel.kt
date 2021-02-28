@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.extensions.append
-import io.github.anvell.keemobile.core.ui.mvi.MviViewModel
+import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.AppSettings
@@ -22,7 +22,7 @@ class ExploreViewModel @Inject constructor(
     private val getFilteredEntries: GetFilteredEntries,
     private val getAppSettings: GetAppSettings,
     private val saveAppSettings: SaveAppSettings
-) : MviViewModel<ExploreViewState>(
+) : MviRxViewModel<ExploreViewState>(
     ExploreViewState(args = savedStateHandle.getArguments())
 ) {
 
