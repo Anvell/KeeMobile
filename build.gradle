@@ -48,9 +48,7 @@ subprojects {
                         jvmTarget = "1.8"
                         useIR = true
 
-                        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn",
-                                             "-Xopt-in=kotlin.Experimental",
-                                             "-Xskip-prerelease-check"]
+                        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
                     }
                 }
             }
