@@ -9,7 +9,7 @@ object Dependencies {
     }
 
     object Kotlin {
-        private const val version = "1.4.30"
+        private const val version = "1.4.31"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
         const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
@@ -32,7 +32,7 @@ object Dependencies {
     }
 
     object Compose {
-        private const val version = "1.0.0-beta01"
+        private const val version = "1.0.0-beta02"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -51,7 +51,7 @@ object Dependencies {
     }
 
     object AndroidCore {
-        const val appcompat = "androidx.appcompat:appcompat:1.2.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
         const val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
@@ -64,13 +64,13 @@ object Dependencies {
         }
 
         object Navigation {
-            private const val version = "2.3.3"
+            private const val version = "2.3.4"
             const val fragment = "androidx.navigation:navigation-fragment-ktx:$version"
             const val ui = "androidx.navigation:navigation-ui-ktx:$version"
         }
 
         object Fragment {
-            private const val version = "1.3.0"
+            private const val version = "1.3.1"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }
