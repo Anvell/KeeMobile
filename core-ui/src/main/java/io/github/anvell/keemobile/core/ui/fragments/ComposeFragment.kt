@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.navigation.AppNavigatorImpl
 
 abstract class ComposeFragment : Fragment() {
 
@@ -16,7 +20,11 @@ abstract class ComposeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = ComposeView(requireContext()).apply {
         setContent {
-            Content()
+            CompositionLocalProvider(
+                LocalAppNavigator provides AppNavigatorImpl(findNavController()),
+            ) {
+                Content()
+            }
         }
     }
 
