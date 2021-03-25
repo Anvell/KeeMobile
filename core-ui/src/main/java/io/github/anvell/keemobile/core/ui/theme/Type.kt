@@ -22,6 +22,16 @@ private val DefaultFontFamily = FontFamily(
 
 internal fun createTypography(colors: Colors) = Typography(
     defaultFontFamily = DefaultFontFamily,
+    h3 = TextStyle(
+        fontWeight = FontWeight.Light,
+        fontSize = 48.sp,
+        letterSpacing = 0.sp
+    ),
+    h4 = TextStyle(
+        fontWeight = FontWeight.Light,
+        fontSize = 34.sp,
+        letterSpacing = 0.25.sp
+    ),
     subtitle1 = TextStyle(
         color = colors.onSecondary,
         fontWeight = FontWeight.Medium,
@@ -41,5 +51,11 @@ internal fun createTypography(colors: Colors) = Typography(
         fontSize = 14.sp,
         letterSpacing = 0.sp,
         lineHeight = 1.5.em
+    ),
+    button = TextStyle(
+        color = colors.onSurface,
+        fontWeight = FontWeight.Light,
+        fontSize = 14.sp,
+        letterSpacing = 0.sp
     ),
 )
