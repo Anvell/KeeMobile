@@ -16,7 +16,7 @@ class OpenFragment : MviComposeFragment<OpenViewModel, OpenViewState, OpenComman
     lateinit var biometricHelper: BiometricHelper
 
     @Composable
-    override fun Сontent(
+    override fun Content(
         state: OpenViewState,
         commands: (OpenCommand) -> Unit
     ) {

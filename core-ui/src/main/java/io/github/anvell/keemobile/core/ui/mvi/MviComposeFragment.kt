@@ -43,7 +43,7 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
                     CompositionLocalProvider(
                         LocalAppNavigator provides AppNavigatorImpl(findNavController())
                     ) {
-                        Сontent(
+                        Content(
                             state = state,
                             commands = {
                                 lifecycleScope.launch { pendingCommands.emit(it) }
@@ -57,5 +57,5 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
     protected open fun onCommand(command: C) = viewModel.emitCommand(command)
 
     @Composable
-    abstract fun Сontent(state: S, commands: (C) -> Unit)
+    abstract fun Content(state: S, commands: (C) -> Unit)
 }
