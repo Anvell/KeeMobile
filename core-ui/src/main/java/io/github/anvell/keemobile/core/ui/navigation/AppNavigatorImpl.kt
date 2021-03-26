@@ -5,7 +5,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import io.github.anvell.keemobile.core.constants.Args
-import io.github.anvell.keemobile.core.ui.navigation.*
 
 class AppNavigatorImpl(private val controller: NavController) : AppNavigator {
 
@@ -24,7 +23,7 @@ class AppNavigatorImpl(private val controller: NavController) : AppNavigator {
 
     override fun navigate(@IdRes id: Int, data: Any?) {
         if (data != null) {
-            controller.navigate(id, bundleOf(Args.KEY to data))
+            controller.navigate(id, bundleOf(Args.Key to data))
         } else {
             controller.navigate(id)
         }
@@ -48,18 +47,18 @@ class AppNavigatorImpl(private val controller: NavController) : AppNavigator {
     override fun <T> currentDestinationResult(): LiveData<T?> {
         return controller.currentBackStackEntry!!
             .savedStateHandle
-            .getLiveData(Args.RESULT)
+            .getLiveData(Args.Result)
     }
 
     override fun <T> currentDestinationResult(initialValue: T): LiveData<T> {
         return controller.currentBackStackEntry!!
             .savedStateHandle
-            .getLiveData(Args.RESULT, initialValue)
+            .getLiveData(Args.Result, initialValue)
     }
 
     override fun setDestinationResult(data: Any?) {
         controller.previousBackStackEntry
             ?.savedStateHandle
-            ?.set(Args.RESULT, data)
+            ?.set(Args.Result, data)
     }
 }

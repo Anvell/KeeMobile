@@ -352,7 +352,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
     private fun onHistoricEntryClicked(id: UUID, parentId: UUID) = viewModel.withState() { state ->
         findNavController().navigate(
             R.id.action_historic_entry_details,
-            bundleOf(Args.KEY to EntryDetailsArgs(state.activeDatabaseId, id, parentId))
+            bundleOf(Args.Key to EntryDetailsArgs(state.activeDatabaseId, id, parentId))
         )
     }
 

@@ -277,7 +277,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
     private fun onEntryClicked(id: UUID) = viewModel.withState() { state ->
         findNavController().navigate(
             R.id.action_entry_details,
-            bundleOf(Args.KEY to EntryDetailsArgs(state.activeDatabaseId, id))
+            bundleOf(Args.Key to EntryDetailsArgs(state.activeDatabaseId, id))
         )
     }
 
