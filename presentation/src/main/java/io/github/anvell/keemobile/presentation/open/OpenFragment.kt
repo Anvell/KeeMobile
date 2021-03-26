@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.presentation.open
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +20,7 @@ class OpenFragment : MviComposeFragment<OpenViewModel, OpenViewState, OpenComman
         state: OpenViewState,
         commands: (OpenCommand) -> Unit
     ) {
-        AppTheme(!isSystemInDarkTheme()) {
+        AppTheme {
             Open(state, commands, biometricHelper)
         }
     }

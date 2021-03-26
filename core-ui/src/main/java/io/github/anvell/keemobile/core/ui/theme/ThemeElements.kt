@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 internal object ThemeElements {
-    val colors = Colors(
+    val colorsDark = Colors(
         primary = ColorPalette.teal_600,
         primaryVariant = ColorPalette.teal_900,
         secondary = ColorPalette.pink_600,
@@ -39,7 +39,7 @@ internal object ThemeElements {
         isLight = true
     )
 
-    val filterColors = listOf(
+    val filterColorsDark = listOf(
         Color(0xFFFFF176),
         Color(0xFF81C784),
         Color(0xFFE57373),
