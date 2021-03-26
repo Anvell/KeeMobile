@@ -1,33 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.home.HomeActivity">
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/app_navigation" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/drawer_fragment"
-                android:layout_width="@dimen/drawer_width"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:name="io.github.anvell.keemobile.presentation.drawer.DrawerFragment" />
-
-        </androidx.drawerlayout.widget.DrawerLayout>
-    </FrameLayout>
-</layout>
+    android:id="@+id/nav_host_fragment"
+    android:name="androidx.navigation.fragment.NavHostFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:defaultNavHost="true"
+    app:navGraph="@navigation/app_navigation" />

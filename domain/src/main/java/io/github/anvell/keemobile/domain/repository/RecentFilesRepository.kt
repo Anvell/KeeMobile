@@ -1,12 +1,13 @@
 package io.github.anvell.keemobile.domain.repository
 
+import io.github.anvell.keemobile.domain.datatypes.Either
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 
 interface RecentFilesRepository {
 
-    fun readRecentFiles(): List<FileListEntry>
+    fun readRecentFiles(): Either<Exception, List<FileListEntry>>
 
-    fun writeRecentFiles(recentFiles: List<FileListEntry>): List<FileListEntry>
+    fun writeRecentFiles(recentFiles: List<FileListEntry>): Either<Exception, List<FileListEntry>>
 
-    fun clearRecentFiles(): Boolean
+    fun clearRecentFiles(): Either<Exception, Unit>
 }

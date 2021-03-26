@@ -1,6 +1,7 @@
 package io.github.anvell.keemobile.presentation.explore
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.extensions.append
@@ -8,10 +9,8 @@ import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.AppSettings
-import io.github.anvell.keemobile.domain.usecase.GetAppSettings
-import io.github.anvell.keemobile.domain.usecase.GetFilteredEntries
-import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
-import io.github.anvell.keemobile.domain.usecase.SaveAppSettings
+import io.github.anvell.keemobile.domain.usecase.*
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -19,6 +18,7 @@ import javax.inject.Inject
 class ExploreViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getOpenDatabase: GetOpenDatabase,
+    private val closeAllDatabases: CloseAllDatabases,
     private val getFilteredEntries: GetFilteredEntries,
     private val getAppSettings: GetAppSettings,
     private val saveAppSettings: SaveAppSettings
@@ -37,7 +37,7 @@ class ExploreViewModel @Inject constructor(
     }
 
     private fun loadAppSettings() {
-        execute({
+        executeCatching({
             runCatching {
                 getAppSettings()
             }.getOrElse {
@@ -49,7 +49,7 @@ class ExploreViewModel @Inject constructor(
     }
 
     fun updateAppSettings(settings: AppSettings) {
-        execute({ saveAppSettings(settings) }) {
+        executeCatching({ saveAppSettings(settings) }) {
             copy(appSettings = it)
         }
     }
@@ -92,5 +92,9 @@ class ExploreViewModel @Inject constructor(
         setState {
             copy(rootStack = rootStack.dropLast(1))
         }
+    }
+
+    fun closeAll() = viewModelScope.launch {
+        closeAllDatabases()
     }
 }

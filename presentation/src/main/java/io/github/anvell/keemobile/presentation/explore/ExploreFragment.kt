@@ -11,7 +11,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -32,7 +31,6 @@ import io.github.anvell.keemobile.presentation.databinding.FragmentExploreBindin
 import io.github.anvell.keemobile.presentation.entry
 import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
 import io.github.anvell.keemobile.presentation.header
-import io.github.anvell.keemobile.presentation.home.HomeViewModel
 import io.github.anvell.keemobile.presentation.info
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -44,7 +42,6 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
     FragmentExploreBinding::inflate
 ), MviRxView<ExploreViewModel, ExploreViewState> {
     override val viewModel: ExploreViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var filterColorMapper: FilterColorMapper
 
     @Inject
@@ -170,7 +167,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
             )
             state.searchResults !is Uninitialized -> requireBinding().search.text.clear()
             state.rootStack.isEmpty() -> {
-                homeViewModel.closeAllDatabases()
+                viewModel.closeAll()
                 toast(getString(R.string.explore_all_files_closed))
                 findNavController().navigateUp()
             }

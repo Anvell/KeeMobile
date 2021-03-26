@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.anvell.keemobile.core.security
 
 import android.content.Context
@@ -7,7 +9,7 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.anvell.keemobile.core.constants.AppConstants.KEYSTORE_ALIAS_BIOMETRIC
@@ -36,14 +38,14 @@ class BiometricHelper @Inject constructor(
     }
 
     suspend fun authenticateAndEncrypt(
-        fragment: Fragment,
+        activity: FragmentActivity,
         secret: Secret.Unencrypted,
         title: String,
         cancelLabel: String
     ): Either<BiometricAuthError, Secret.Encrypted?> {
         val cipher = CipherHelper.encrypt(createAes256CbcSpec())
 
-        return authenticate(fragment, cipher, title, cancelLabel).map { cryptoObject ->
+        return authenticate(activity, cipher, title, cancelLabel).map { cryptoObject ->
             cryptoObject?.cipher?.doFinal(secret.content.toByteArray(Charsets.UTF_8))?.let {
                 Secret.Encrypted(cipher.iv, it)
             }
@@ -51,14 +53,14 @@ class BiometricHelper @Inject constructor(
     }
 
     suspend fun authenticateAndDecrypt(
-        fragment: Fragment,
+        activity: FragmentActivity,
         secret: Secret.Encrypted,
         title: String,
         cancelLabel: String
     ): Either<BiometricAuthError, Secret.Unencrypted?> {
         val cipher = CipherHelper.decrypt(createAes256CbcSpec(), secret.iv)
 
-        return authenticate(fragment, cipher, title, cancelLabel).map { cryptoObject ->
+        return authenticate(activity, cipher, title, cancelLabel).map { cryptoObject ->
             cryptoObject?.cipher?.doFinal(secret.content)?.toString(Charsets.UTF_8)?.let {
                 Secret.Unencrypted(it)
             }
@@ -66,42 +68,44 @@ class BiometricHelper @Inject constructor(
     }
 
     private suspend fun authenticate(
-        fragment: Fragment,
+        activity: FragmentActivity,
         cipher: Cipher,
         title: String,
         cancelLabel: String
-    ) = suspendCancellableCoroutine<Either<BiometricAuthError, BiometricPrompt.CryptoObject?>> { coroutine ->
-        val biometricPrompt = BiometricPrompt(fragment, ContextCompat.getMainExecutor(context),
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
-                    if (coroutine.isActive) {
-                        coroutine.resume(Right(result.cryptoObject))
+    ): Either<BiometricAuthError, BiometricPrompt.CryptoObject?> {
+        return suspendCancellableCoroutine { coroutine ->
+            val biometricPrompt = BiometricPrompt(activity, ContextCompat.getMainExecutor(context),
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(
+                        result: BiometricPrompt.AuthenticationResult
+                    ) {
+                        if (coroutine.isActive) {
+                            coroutine.resume(Right(result.cryptoObject))
+                        }
                     }
-                }
 
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    if (coroutine.isActive) {
-                        coroutine.resume(Left(BiometricAuthError.from(errorCode)))
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence
+                    ) {
+                        if (coroutine.isActive) {
+                            coroutine.resume(Left(BiometricAuthError.from(errorCode)))
+                        }
                     }
-                }
 
-                override fun onAuthenticationFailed() {
-                    /* This is invoked every time fingerprint was not recognised */
-                }
-            })
+                    override fun onAuthenticationFailed() {
+                        /* This is invoked every time fingerprint was not recognised */
+                    }
+                })
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(title)
-            .setNegativeButtonText(cancelLabel)
-            .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
-            .build()
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(title)
+                .setNegativeButtonText(cancelLabel)
+                .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
+                .build()
 
-        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+            biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+        }
     }
 
     private fun createAes256CbcSpec() = KeyGenParameterSpec.Builder(

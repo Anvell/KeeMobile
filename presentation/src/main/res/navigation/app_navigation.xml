@@ -1,47 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/app_navigation"
-            app:startDestination="@id/openFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/openFragment">
 
-    <fragment android:id="@+id/openFragment" android:name="io.github.anvell.keemobile.presentation.open.OpenFragment"
-              android:label="OpenFragment">
+    <fragment
+        android:id="@+id/openFragment"
+        android:name="io.github.anvell.keemobile.presentation.open.OpenFragment"
+        android:label="OpenFragment">
         <action
-                android:id="@+id/action_explore_database"
-                app:destination="@id/exploreFragment"
-                app:enterAnim="@anim/slide_in_from_right"
-                app:exitAnim="@anim/slide_out_to_left"
-                app:popEnterAnim="@anim/slide_in_from_left"
-                app:popExitAnim="@anim/slide_out_to_right"
-                app:popUpTo="@+id/app_navigation"
-                app:popUpToInclusive="false" />
+            android:id="@+id/action_explore_database"
+            app:destination="@id/exploreFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right"
+            app:popUpTo="@+id/app_navigation"
+            app:popUpToInclusive="false" />
     </fragment>
-    <fragment android:id="@+id/exploreFragment"
-              android:name="io.github.anvell.keemobile.presentation.explore.ExploreFragment"
-              android:label="ExploreFragment">
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="io.github.anvell.keemobile.presentation.explore.ExploreFragment"
+        android:label="ExploreFragment">
         <action
-                android:id="@+id/action_open_database"
-                app:destination="@id/openFragment"
-                app:enterAnim="@anim/slide_in_from_left"
-                app:exitAnim="@anim/slide_out_to_right" />
+            android:id="@+id/action_open_database"
+            app:destination="@id/openFragment"
+            app:enterAnim="@anim/slide_in_from_left"
+            app:exitAnim="@anim/slide_out_to_right" />
         <action
-                android:id="@+id/action_entry_details"
-                app:destination="@id/entryDetailsFragment"
-                app:enterAnim="@anim/slide_in_from_right"
-                app:exitAnim="@anim/slide_out_to_left"
-                app:popEnterAnim="@anim/slide_in_from_left"
-                app:popExitAnim="@anim/slide_out_to_right" />
+            android:id="@+id/action_entry_details"
+            app:destination="@id/entryDetailsFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/entryDetailsFragment"
         android:name="io.github.anvell.keemobile.presentation.entry.EntryDetailsFragment"
-        android:label="EntryDetailsFragment" >
+        android:label="EntryDetailsFragment">
         <action
-                android:id="@+id/action_historic_entry_details"
-                app:destination="@id/entryDetailsFragment"
-                app:enterAnim="@anim/slide_in_from_right"
-                app:exitAnim="@anim/slide_out_to_left"
-                app:popEnterAnim="@anim/slide_in_from_left"
-                app:popExitAnim="@anim/slide_out_to_right" />
+            android:id="@+id/action_historic_entry_details"
+            app:destination="@id/entryDetailsFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
 </navigation>

@@ -70,6 +70,7 @@ dependencies {
     implementation Dependencies.Compose.animation
     implementation Dependencies.Compose.material
     implementation Dependencies.Compose.livedata
+    implementation Dependencies.Compose.icons
     implementation Dependencies.Compose.Extra.activity
 
     implementation Dependencies.RxJava.rxJava

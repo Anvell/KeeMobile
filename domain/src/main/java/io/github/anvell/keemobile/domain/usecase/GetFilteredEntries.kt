@@ -2,6 +2,7 @@ package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.datatypes.map
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.domain.entity.SearchResults
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
@@ -15,6 +16,8 @@ class GetFilteredEntries @Inject constructor(
 ) {
 
     suspend operator fun invoke(id: VaultId, filter: String) = withContext(dispatchers.io) {
-        SearchResults(filter, databaseRepository.getFilteredEntries(id, filter))
+        databaseRepository.getFilteredEntries(id, filter).map {
+            SearchResults(filter, it)
+        }
     }
 }

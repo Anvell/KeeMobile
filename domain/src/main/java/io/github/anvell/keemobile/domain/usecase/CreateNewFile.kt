@@ -14,8 +14,10 @@ class CreateNewFile @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ) {
 
-    suspend operator fun invoke(source: FileSource, secrets: FileSecrets) =
-        withContext(dispatchers.io) {
-            databaseRepository.createDatabase(source, secrets)
-        }
+    suspend operator fun invoke(
+        source: FileSource,
+        secrets: FileSecrets
+    ) = withContext(dispatchers.io) {
+        databaseRepository.createDatabase(source, secrets)
+    }
 }

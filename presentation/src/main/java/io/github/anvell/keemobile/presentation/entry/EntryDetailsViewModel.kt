@@ -9,8 +9,8 @@ import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
-import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
+import io.github.anvell.keemobile.domain.usecase.GetDatabaseEntry
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import kotlinx.coroutines.delay
@@ -21,6 +21,7 @@ import javax.inject.Inject
 class EntryDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getOpenDatabase: GetOpenDatabase,
+    private val getDatabaseEntry: GetDatabaseEntry,
     private val getAppSettings: GetAppSettings,
     private val saveAttachment: SaveAttachment
 ) : MviRxViewModel<EntryDetailsViewState>(
@@ -41,7 +42,7 @@ class EntryDetailsViewModel @Inject constructor(
         loadAppSettings()
     }
 
-    private fun loadAppSettings() = execute({
+    private fun loadAppSettings() = executeCatching({
         runCatching {
             getAppSettings()
         }.getOrElse {
@@ -51,19 +52,15 @@ class EntryDetailsViewModel @Inject constructor(
         copy(appSettings = it)
     }
 
-    fun fetchDatabase(id: VaultId) {
+    private fun fetchDatabase(id: VaultId) {
         execute({ getOpenDatabase(id) }) {
             copy(activeDatabase = it)
         }
     }
 
-    fun fetchEntry() = withState { state ->
+    private fun fetchEntry() = withState { state ->
         execute({
-            getOpenDatabase(state.activeDatabaseId).let {
-                it.database.findEntry { item ->
-                    item.uuid == state.entryId
-                }?.second ?: throw EntryNotFoundException()
-            }
+            getDatabaseEntry(state.activeDatabaseId, state.entryId)
         }) {
             copy(entry = it)
         }

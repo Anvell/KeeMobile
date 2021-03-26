@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import io.github.anvell.keemobile.domain.datatypes.Async
-import io.github.anvell.keemobile.domain.datatypes.Fail
-import io.github.anvell.keemobile.domain.datatypes.Loading
-import io.github.anvell.keemobile.domain.datatypes.Success
+import io.github.anvell.keemobile.domain.datatypes.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -59,7 +56,21 @@ abstract class MviRxViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    protected fun <V> execute(block: suspend () -> V, reducer: S.(Async<V>) -> S) {
+    protected fun <V> execute(
+        block: suspend S.() -> Either<Throwable, V>,
+        reducer: S.(Async<V>) -> S
+    ) {
+        viewModelScope.launch {
+            setState { reducer(Loading) }
+
+            block(state.value).fold(
+                left = { setState { reducer(Fail(it)) } },
+                right = { setState { reducer(Success(it)) } }
+            )
+        }
+    }
+
+    protected fun <V> executeCatching(block: suspend () -> V, reducer: S.(Async<V>) -> S) {
         viewModelScope.launch {
             setState { reducer(Loading) }
 
