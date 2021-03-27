@@ -5,6 +5,7 @@
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
     <dimen name="content_margin">16dp</dimen>
+    <dimen name="list_item_vertical_padding">14dp</dimen>
 
     <dimen name="surface_corner_radius">10dp</dimen>
     <dimen name="dock_height">64dp</dimen>

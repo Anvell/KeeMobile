@@ -4,7 +4,12 @@ import kotlinx.serialization.Serializable
 
 enum class ViewMode {
     TREE,
-    LIST
+    LIST;
+
+    operator fun not() = when (this) {
+        TREE -> LIST
+        LIST -> TREE
+    }
 }
 
 @Serializable

@@ -54,8 +54,14 @@ internal fun createTypography(colors: Colors) = Typography(
     ),
     button = TextStyle(
         color = colors.onSurface,
-        fontWeight = FontWeight.Light,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        letterSpacing = 1.15.sp
+    ),
+    caption = TextStyle(
+        color = colors.onSurface,
+        fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         letterSpacing = 0.sp
-    ),
+    )
 )

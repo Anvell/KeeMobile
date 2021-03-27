@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -31,11 +30,9 @@ import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.KeyOnly
 import io.github.anvell.keemobile.domain.entity.Secret
 import io.github.anvell.keemobile.presentation.R
-import io.github.anvell.keemobile.presentation.explore.ExploreArgs
 import io.github.anvell.keemobile.presentation.open.components.Dock
 import io.github.anvell.keemobile.presentation.open.components.LandingBlock
 import io.github.anvell.keemobile.presentation.open.components.VaultsBlock
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -155,7 +152,7 @@ fun Open(
             state.openFile is Success && !state.openFile.isConsumed -> {
                 navigator.navigate(
                     id = R.id.action_explore_database,
-                    data = ExploreArgs(state.openFile.unwrap())
+                    data = state.openFile.unwrap()
                 )
             }
         }

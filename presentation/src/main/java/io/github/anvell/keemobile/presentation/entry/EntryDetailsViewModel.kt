@@ -6,7 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviRxViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.datatypes.Right
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
+import io.github.anvell.keemobile.domain.datatypes.or
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
@@ -42,12 +44,8 @@ class EntryDetailsViewModel @Inject constructor(
         loadAppSettings()
     }
 
-    private fun loadAppSettings() = executeCatching({
-        runCatching {
-            getAppSettings()
-        }.getOrElse {
-            AppSettings()
-        }
+    private fun loadAppSettings() = execute({
+        getAppSettings().or { Right(AppSettings()) }
     }) {
         copy(appSettings = it)
     }

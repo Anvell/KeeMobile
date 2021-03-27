@@ -26,17 +26,13 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    fun <P> selectSubscribe(property: KProperty1<S, P>): LiveData<P> {
-        return selectSubscribeInternal(property).asLiveData()
-    }
-
     protected fun <P> selectSubscribe(property: KProperty1<S, P>, block: (P) -> Unit) {
         viewModelScope.launch {
-            selectSubscribeInternal(property).collect { block(it) }
+            selectSubscribe(property).collect { block(it) }
         }
     }
 
-    private fun <P> selectSubscribeInternal(property: KProperty1<S, P>): Flow<P> {
+    protected fun <P> selectSubscribe(property: KProperty1<S, P>): Flow<P> {
         return state.map { property.get(it) }.distinctUntilChanged()
     }
 
