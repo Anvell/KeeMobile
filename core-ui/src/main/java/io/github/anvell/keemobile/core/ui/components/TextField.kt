@@ -33,7 +33,7 @@ import io.github.anvell.keemobile.core.ui.theme.AppTheme
 
 private val TextFieldTrailingItemPadding = 4.dp
 private val TextFieldHorizontalPadding = 16.dp
-private val TextFieldVerticalPadding = 2.dp
+private val TextFieldVerticalPadding = 14.dp
 private val IconHorizontalPadding = 24.dp
 
 private val textSelectionColors
@@ -175,11 +175,11 @@ fun AppTheme.TextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(backgroundColor, shape)
-                .padding(vertical = TextFieldVerticalPadding)
         ) {
             CompositionLocalProvider(LocalTextSelectionColors provides textSelectionColors) {
                 Box(
                     Modifier
+                        .padding(vertical = TextFieldVerticalPadding)
                         .padding(
                             start = horizontalPadding,
                             end = trailing?.let { TextFieldTrailingItemPadding }
