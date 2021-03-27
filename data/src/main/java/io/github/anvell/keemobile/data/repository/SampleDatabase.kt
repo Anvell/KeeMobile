@@ -14,11 +14,11 @@ internal val SampleDatabase = KeyDatabase(
             KeyGroup(name = "Special", notes = "Lorem ipsum dolor")
         ), entries = mutableListOf(
             KeyEntry(
-                title = "My entry",
+                name = "My entry",
                 password = "GJKHEFJEH656"
             ),
             KeyEntry(
-                title = "Second entry",
+                name = "Second entry",
                 password = "R#JFJDERFLL"
             )
         )

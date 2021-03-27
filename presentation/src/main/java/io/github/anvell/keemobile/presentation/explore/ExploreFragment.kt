@@ -224,7 +224,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
             group.entries.forEach { item ->
                 entry {
                     id(item.uuid.toString())
-                    title(item.title)
+                    title(item.name)
                     subtitle(item.username)
                     iconId(iconMapper.map(item.iconId))
                     iconTint(filterColorMapper.map(item.backgroundColor))
@@ -252,11 +252,11 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
                         }
 
                         searchResult.entries
-                            .sortedBy { it.title }
+                            .sortedBy { it.name }
                             .forEach { item ->
                                 entry {
                                     id(item.uuid.toString())
-                                    title(item.title)
+                                    title(item.name)
                                     subtitle(item.username)
                                     iconId(iconMapper.map(item.iconId))
                                     iconTint(filterColorMapper.map(item.backgroundColor))

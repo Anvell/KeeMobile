@@ -133,7 +133,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
     override fun render(state: EntryDetailsViewState) {
         if (state.entry is Success) {
             state.entry()?.also {
-                requireBinding().entryTitle.text = it.title
+                requireBinding().entryTitle.text = it.name
                 requireBinding().entryIcon.setImageResource(iconMapper.map(it.iconId))
 
                 ImageViewCompat.setImageTintList(

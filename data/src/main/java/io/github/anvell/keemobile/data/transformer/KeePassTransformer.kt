@@ -120,7 +120,7 @@ object KeePassTransformer {
     private fun KeyEntry.convert(database: KeyDatabase): Entry {
         val entryBuilder = EntryBuilder()
             .uuid(uuid)
-            .title(title)
+            .title(name)
             .username(username)
             .password(password)
             .url(url)
@@ -199,10 +199,10 @@ object KeePassTransformer {
         KeyGroup(
             uuid,
             name ?: "",
-            notes ?: "",
             iconId,
             iconData,
             customIconUuid,
+            notes ?: "",
             times?.convert(),
             isExpanded,
             defaultAutoTypeSequence,
@@ -217,13 +217,13 @@ object KeePassTransformer {
         KeyEntry(
             uuid,
             getPropertyByName(TITLE)?.value ?: "",
+            iconId,
+            iconData,
+            customIconUuid,
             getPropertyByName(USER_NAME)?.value ?: "",
             getPropertyByName(PASSWORD)?.value ?: "",
             getPropertyByName(URL)?.value ?: "",
             getPropertyByName(NOTES)?.value ?: "",
-            iconId,
-            iconData,
-            customIconUuid,
             times?.convert(),
             foregroundColor,
             backgroundColor,

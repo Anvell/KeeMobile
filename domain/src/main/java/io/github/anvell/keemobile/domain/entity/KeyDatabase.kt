@@ -41,7 +41,7 @@ open class KeyDatabase(
     fun filterEntries(filter: String): List<SearchResult> {
         return findEntries { entry ->
             listOf(
-                entry.title,
+                entry.name,
                 entry.username,
                 entry.url,
                 entry.notes,
