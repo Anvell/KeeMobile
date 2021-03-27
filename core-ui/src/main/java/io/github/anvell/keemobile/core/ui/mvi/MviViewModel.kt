@@ -1,6 +1,10 @@
+@file:Suppress("unused")
+
 package io.github.anvell.keemobile.core.ui.mvi
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.anvell.keemobile.domain.datatypes.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -12,7 +16,7 @@ import kotlin.reflect.KProperty1
 abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     private val state = MutableStateFlow(initialState)
 
-    fun observableState() = state.asLiveData()
+    fun observableState(): StateFlow<S> = state
 
     fun <T> withState(block: (S) -> T) = block(state.value)
 

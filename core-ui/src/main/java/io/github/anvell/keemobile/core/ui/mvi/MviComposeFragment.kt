@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -37,7 +37,7 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
     ): View? = ComposeView(requireContext()).apply {
         setContent {
             viewModel.observableState()
-                .observeAsState()
+                .collectAsState()
                 .value
                 ?.let { state ->
                     CompositionLocalProvider(
