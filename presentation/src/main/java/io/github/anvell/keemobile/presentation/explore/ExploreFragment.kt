@@ -44,9 +44,6 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
     override val viewModel: ExploreViewModel by viewModels()
     private lateinit var filterColorMapper: FilterColorMapper
 
-    @Inject
-    lateinit var iconMapper: IconMapper
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getDrawer()?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -214,7 +211,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
                     id(item.uuid.toString())
                     title(item.name)
                     subtitle(item.notes)
-                    iconId(iconMapper.map(item.iconId))
+                    iconId(IconMapper.map(item.iconId))
                     iconTint(filterColorMapper.defaultColor)
                     isSelected(false)
                     clickListener(View.OnClickListener { onGroupClicked(item.uuid) })
@@ -226,7 +223,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
                     id(item.uuid.toString())
                     title(item.name)
                     subtitle(item.username)
-                    iconId(iconMapper.map(item.iconId))
+                    iconId(IconMapper.map(item.iconId))
                     iconTint(filterColorMapper.map(item.backgroundColor))
                     isSelected(false)
                     clickListener(View.OnClickListener { onEntryClicked(item.uuid) })
@@ -258,7 +255,7 @@ class ExploreFragment : ViewBindingFragment<FragmentExploreBinding>(
                                     id(item.uuid.toString())
                                     title(item.name)
                                     subtitle(item.username)
-                                    iconId(iconMapper.map(item.iconId))
+                                    iconId(IconMapper.map(item.iconId))
                                     iconTint(filterColorMapper.map(item.backgroundColor))
                                     isSelected(false)
                                     clickListener(View.OnClickListener { onEntryClicked(item.uuid) })

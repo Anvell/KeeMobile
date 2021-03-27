@@ -59,9 +59,6 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
     private var currentPage: Int by stateProperty(PAGES_FIRST)
 
     @Inject
-    lateinit var iconMapper: IconMapper
-
-    @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -134,7 +131,7 @@ class EntryDetailsFragment : ViewBindingFragment<FragmentEntryDetailsBinding>(
         if (state.entry is Success) {
             state.entry()?.also {
                 requireBinding().entryTitle.text = it.name
-                requireBinding().entryIcon.setImageResource(iconMapper.map(it.iconId))
+                requireBinding().entryIcon.setImageResource(IconMapper.map(it.iconId))
 
                 ImageViewCompat.setImageTintList(
                     requireBinding().entryIcon,
