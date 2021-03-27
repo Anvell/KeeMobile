@@ -9,8 +9,7 @@ import io.github.anvell.keemobile.domain.entity.SearchResult
 import kotlinx.coroutines.flow.StateFlow
 
 interface DatabaseRepository {
-
-    fun getOpenDatabases(): StateFlow<List<OpenDatabase>>
+    val openDatabasesAsFlow: StateFlow<List<OpenDatabase>>
 
     fun getOpenDatabaseById(id: VaultId): Either<Exception, OpenDatabase>
 

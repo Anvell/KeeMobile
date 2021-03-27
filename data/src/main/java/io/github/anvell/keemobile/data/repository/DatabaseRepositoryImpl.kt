@@ -20,7 +20,7 @@ class DatabaseRepositoryImpl @Inject constructor(
 ) : DatabaseRepository {
     private val openDatabases = MutableStateFlow(listOf<OpenDatabase>())
 
-    override fun getOpenDatabases(): StateFlow<List<OpenDatabase>> = openDatabases
+    override val openDatabasesAsFlow: StateFlow<List<OpenDatabase>> = openDatabases
 
     override fun getOpenDatabaseById(
         id: VaultId
