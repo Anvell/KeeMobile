@@ -65,7 +65,9 @@ open class KeyDatabase(
 
             if (group.groups.isNotEmpty()) {
                 group.groups.forEach {
-                    if(it.uuid.compareTo(meta.recycleBinUuid) != 0) {
+                    if (meta.recycleBinUuid == null ||
+                        it.uuid.compareTo(meta.recycleBinUuid) != 0
+                    ) {
                         stack.push(it)
                     }
                 }
