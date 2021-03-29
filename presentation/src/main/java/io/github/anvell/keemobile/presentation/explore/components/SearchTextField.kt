@@ -11,17 +11,16 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Source
-import androidx.compose.material.icons.filled.ViewAgenda
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Source
+import androidx.compose.material.icons.outlined.ViewDay
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.animatedVectorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -44,8 +43,11 @@ internal fun SearchTextField(
     onMoreClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val (viewModeLabel, viewModeIcon) = when (viewMode) {
+        ViewMode.TREE -> stringResource(R.string.explore_button_show_list) to Icons.Outlined.ViewDay
+        ViewMode.LIST -> stringResource(R.string.explore_button_show_folders) to Icons.Outlined.Source
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -66,19 +68,11 @@ internal fun SearchTextField(
                         IconButton(
                             onClick = { onViewModeChange(!viewMode) },
                             modifier = Modifier.semantics {
-                                context.getString(
-                                    when (viewMode) {
-                                        ViewMode.TREE -> R.string.explore_menu_show_list
-                                        ViewMode.LIST -> R.string.explore_menu_show_folders
-                                    }
-                                )
+                                contentDescription = viewModeLabel
                             }
                         ) {
                             Icon(
-                                imageVector = when (viewMode) {
-                                    ViewMode.TREE -> Icons.Outlined.ViewDay
-                                    ViewMode.LIST -> Icons.Outlined.Source
-                                },
+                                imageVector = viewModeIcon,
                                 contentDescription = null,
                                 tint = MaterialTheme.colors.onSurface
                             )

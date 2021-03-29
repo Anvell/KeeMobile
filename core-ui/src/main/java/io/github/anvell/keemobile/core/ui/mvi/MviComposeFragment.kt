@@ -11,7 +11,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.core.ui.navigation.AppNavigatorImpl
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -41,7 +43,8 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
                 .value
                 ?.let { state ->
                     CompositionLocalProvider(
-                        LocalAppNavigator provides AppNavigatorImpl(findNavController())
+                        LocalAppNavigator provides AppNavigatorImpl(findNavController()),
+                        LocalBiometricHelper provides BiometricHelper(requireActivity())
                     ) {
                         Content(
                             state = state,

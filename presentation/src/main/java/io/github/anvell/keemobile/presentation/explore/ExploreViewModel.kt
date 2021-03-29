@@ -10,8 +10,8 @@ import io.github.anvell.keemobile.domain.datatypes.Right
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.datatypes.or
-import io.github.anvell.keemobile.domain.entity.AppSettings
-import io.github.anvell.keemobile.domain.entity.ViewMode
+import io.github.anvell.keemobile.domain.entity.*
+import io.github.anvell.keemobile.domain.observers.OpenDatabasesObserver
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -26,16 +26,22 @@ private const val FilterTriggerTimeoutMs = 300L
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val openDatabasesObserver: OpenDatabasesObserver,
     private val getOpenDatabase: GetOpenDatabase,
     private val closeAllDatabases: CloseAllDatabases,
     private val getFilteredEntries: GetFilteredEntries,
     private val getAppSettings: GetAppSettings,
-    private val saveAppSettings: SaveAppSettings
+    private val saveAppSettings: SaveAppSettings,
+    private val updateListFileEntry: UpdateListFileEntry
 ) : MviComposeViewModel<ExploreViewState, ExploreCommand>(
     ExploreViewState(activeDatabaseId = savedStateHandle.getArguments())
 ) {
 
     init {
+        viewModelScope.launch {
+            openDatabasesObserver().executeCatching { copy(databases = it) }
+        }
+
         execute({
             getAppSettings().or { Right(AppSettings()) }
         }) {
@@ -58,12 +64,16 @@ class ExploreViewModel @Inject constructor(
 
     override fun onCommand(command: ExploreCommand) {
         when (command) {
+            is ExploreCommand.SetActiveDatabase -> activateDatabase(command.value)
             is ExploreCommand.ChangeViewMode -> changeViewMode(command.value)
             is ExploreCommand.NavigateToRoot -> navigateToRoot()
             is ExploreCommand.NavigateUp -> navigateUp()
             is ExploreCommand.NavigateToGroup -> navigateToGroup(command.id)
             is ExploreCommand.UpdateFilter -> updateFilter(command.value)
             is ExploreCommand.CloseAllFiles -> closeAllFiles()
+            is ExploreCommand.SetEncryptedSecrets -> setEncryptedSecrets(
+                command.source, command.secrets
+            )
         }
     }
 
@@ -85,20 +95,32 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-    private fun updateFilter(value: String) = setState {
-        copy(searchFilter = value)
+    private fun setEncryptedSecrets(fileSource: FileSource, fileSecrets: FileSecrets) {
+        viewModelScope.launch {
+            updateListFileEntry(
+                FileListEntry(
+                    fileSource = fileSource,
+                    encryptedSecrets = FileListEntrySecrets.Some(fileSecrets)
+                )
+            )
+        }
     }
 
-    private fun updateAppSettings(settings: AppSettings) = execute({
-        saveAppSettings(settings)
-    }) {
-        copy(appSettings = it)
+    private fun updateAppSettings(settings: AppSettings) {
+        execute({ saveAppSettings(settings) }) {
+            copy(appSettings = it)
+        }
     }
 
-    private fun activateDatabase(id: VaultId) = execute({
-        getOpenDatabase(id)
-    }) {
-        copy(activeDatabase = it)
+    private fun activateDatabase(id: VaultId) {
+        execute({ getOpenDatabase(id) }) {
+            copy(
+                activeDatabaseId = id,
+                activeDatabase = it,
+                navigationStack = listOf(),
+                searchResults = Uninitialized
+            )
+        }
     }
 
     private fun filterEntries(filter: String) = withState { state ->
@@ -110,6 +132,8 @@ class ExploreViewModel @Inject constructor(
             }
         }
     }
+
+    private fun updateFilter(value: String) = setState { copy(searchFilter = value) }
 
     private fun clearFilter() = setState { copy(searchResults = Uninitialized) }
 

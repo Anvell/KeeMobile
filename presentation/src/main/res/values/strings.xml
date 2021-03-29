@@ -18,8 +18,10 @@
 
     <string name="explore_text_hint_search">Search</string>
     <string name="explore_search_no_results">No results</string>
-    <string name="explore_menu_show_list">Show as list</string>
-    <string name="explore_menu_show_folders">Show as folders</string>
+    <string name="explore_button_show_list">Show as list</string>
+    <string name="explore_button_show_folders">Show as folders</string>
+    <string name="explore_menu_row_use_biometrics">Unlock with biometrics…</string>
+    <string name="explore_menu_row_open_another">Open another…</string>
     <string name="explore_all_files_closed">All files closed</string>
 
     <array name="details_tabs">

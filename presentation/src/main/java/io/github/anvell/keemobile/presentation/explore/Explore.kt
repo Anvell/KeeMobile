@@ -13,15 +13,17 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import io.github.anvell.keemobile.core.security.BiometricHelper
+import io.github.anvell.keemobile.core.ui.components.Dialog
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.extensions.toast
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.theme.AppTheme
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.ViewMode
@@ -30,16 +32,17 @@ import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
 import io.github.anvell.keemobile.presentation.explore.components.GroupAsList
 import io.github.anvell.keemobile.presentation.explore.components.SearchResultsAsList
 import io.github.anvell.keemobile.presentation.explore.components.SearchTextField
+import io.github.anvell.keemobile.presentation.explore.components.menu.ExploreMenu
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Explore(
     state: ExploreViewState,
-    commands: (ExploreCommand) -> Unit,
-    biometricHelper: BiometricHelper
+    commands: (ExploreCommand) -> Unit
 ) {
     val context = LocalContext.current
     val navigator = LocalAppNavigator.current
+    var showExploreMenu by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -74,7 +77,7 @@ fun Explore(
             },
             onValueChange = { commands(ExploreCommand.UpdateFilter(it)) },
             onViewModeChange = { commands(ExploreCommand.ChangeViewMode(it)) },
-            onMoreClicked = {},
+            onMoreClicked = { showExploreMenu = true },
             modifier = Modifier.padding(
                 horizontal = dimensionResource(R.dimen.layout_horizontal_margin)
             )
@@ -127,6 +130,33 @@ fun Explore(
 
             }
         }
+    }
+
+    if (showExploreMenu && state.databases is Success) {
+        AppTheme.Dialog(
+            onDismissRequest = { showExploreMenu = false },
+            backgroundColor = Color.Transparent,
+            buttons = {
+                ExploreMenu(
+                    selected = state.databases.unwrap().first {
+                        it.id == state.activeDatabaseId
+                    },
+                    items = state.databases.unwrap(),
+                    onItemSelected = {
+                        commands(ExploreCommand.SetActiveDatabase(it))
+                        showExploreMenu = false
+                    },
+                    onOpen = {
+                        navigator.navigate(id = R.id.action_open_database)
+                        showExploreMenu = false
+                    },
+                    onUseBiometrics = { source, secrets ->
+                        commands(ExploreCommand.SetEncryptedSecrets(source, secrets))
+                        showExploreMenu = false
+                    }
+                )
+            }
+        )
     }
 
     BackHandler {

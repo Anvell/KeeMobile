@@ -9,7 +9,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.core.ui.navigation.AppNavigatorImpl
 
 abstract class ComposeFragment : Fragment() {
@@ -22,6 +24,7 @@ abstract class ComposeFragment : Fragment() {
         setContent {
             CompositionLocalProvider(
                 LocalAppNavigator provides AppNavigatorImpl(findNavController()),
+                LocalBiometricHelper provides BiometricHelper(requireActivity())
             ) {
                 Content()
             }

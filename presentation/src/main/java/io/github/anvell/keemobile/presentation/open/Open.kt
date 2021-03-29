@@ -1,6 +1,5 @@
 package io.github.anvell.keemobile.presentation.open
 
-import android.content.ContextWrapper
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
@@ -16,12 +15,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.fragment.app.FragmentActivity
 import io.github.anvell.keemobile.core.extensions.getName
 import io.github.anvell.keemobile.core.extensions.toSha256
-import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.datatypes.Fail
 import io.github.anvell.keemobile.domain.datatypes.Loading
 import io.github.anvell.keemobile.domain.datatypes.Success
@@ -39,11 +37,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun Open(
     state: OpenViewState,
-    commands: (OpenCommand) -> Unit,
-    biometricHelper: BiometricHelper
+    commands: (OpenCommand) -> Unit
 ) {
     val context = LocalContext.current
     val navigator = LocalAppNavigator.current
+    val biometricHelper = LocalBiometricHelper.current
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -118,7 +116,6 @@ fun Open(
 
                         coroutineScope.launch {
                             val unencryptedSecret = biometricHelper.authenticateAndDecrypt(
-                                activity = (context as ContextWrapper).baseContext as FragmentActivity,
                                 secret = (secrets.fileSecrets as KeyOnly).masterKey as Secret.Encrypted,
                                 title = context.getString(R.string.open_dialogs_biometrics_title_unlock),
                                 cancelLabel = context.getString(R.string.open_dialogs_biometrics_label_cancel)

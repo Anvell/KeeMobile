@@ -60,7 +60,7 @@ internal object ThemeElements {
     val shapes = Shapes(
         small = RoundedCornerShape(10.dp),
         medium = RoundedCornerShape(10.dp),
-        large = RoundedCornerShape(0.dp)
+        large = RoundedCornerShape(12.dp)
     )
 
     fun typography(colors: Colors) = createTypography(colors)
