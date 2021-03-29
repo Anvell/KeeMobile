@@ -22,6 +22,7 @@
     <string name="explore_button_show_folders">Show as folders</string>
     <string name="explore_menu_row_use_biometrics">Unlock with biometrics…</string>
     <string name="explore_menu_row_open_another">Open another…</string>
+    <string name="explore_menu_row_button_close">Close</string>
     <string name="explore_all_files_closed">All files closed</string>
 
     <array name="details_tabs">

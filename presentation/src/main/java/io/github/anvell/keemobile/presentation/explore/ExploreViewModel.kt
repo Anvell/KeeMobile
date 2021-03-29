@@ -28,6 +28,7 @@ class ExploreViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val openDatabasesObserver: OpenDatabasesObserver,
     private val getOpenDatabase: GetOpenDatabase,
+    private val closeDatabase: CloseDatabase,
     private val closeAllDatabases: CloseAllDatabases,
     private val getFilteredEntries: GetFilteredEntries,
     private val getAppSettings: GetAppSettings,
@@ -70,6 +71,7 @@ class ExploreViewModel @Inject constructor(
             is ExploreCommand.NavigateUp -> navigateUp()
             is ExploreCommand.NavigateToGroup -> navigateToGroup(command.id)
             is ExploreCommand.UpdateFilter -> updateFilter(command.value)
+            is ExploreCommand.CloseDatabase -> closeDatabaseById(command.value)
             is ExploreCommand.CloseAllFiles -> closeAllFiles()
             is ExploreCommand.SetEncryptedSecrets -> setEncryptedSecrets(
                 command.source, command.secrets
@@ -146,6 +148,8 @@ class ExploreViewModel @Inject constructor(
             copy(navigationStack = state.navigationStack + id)
         }
     }
+
+    private fun closeDatabaseById(id: VaultId) = viewModelScope.launch { closeDatabase(id) }
 
     private fun closeAllFiles() = viewModelScope.launch { closeAllDatabases() }
 }

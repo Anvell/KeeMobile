@@ -25,7 +25,7 @@ internal fun UseBiometricsRow(
 
     ExploreMenuRow(
         title = stringResource(R.string.explore_menu_row_use_biometrics),
-        icon = {
+        leading = {
             Icon(
                 imageVector = Icons.Default.Fingerprint,
                 contentDescription = null,

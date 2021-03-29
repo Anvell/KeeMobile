@@ -24,5 +24,7 @@ sealed class ExploreCommand {
 
     class UpdateFilter(val value: String) : ExploreCommand()
 
+    class CloseDatabase(val value: VaultId) : ExploreCommand()
+
     object CloseAllFiles : ExploreCommand()
 }

@@ -146,6 +146,9 @@ fun Explore(
                         commands(ExploreCommand.SetActiveDatabase(it))
                         showExploreMenu = false
                     },
+                    onCloseItem = {
+                        commands(ExploreCommand.CloseDatabase(it))
+                    },
                     onOpen = {
                         navigator.navigate(id = R.id.action_open_database)
                         showExploreMenu = false
