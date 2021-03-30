@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.entity.FileSecrets
+import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.KeyFileOnly
 import io.github.anvell.keemobile.domain.entity.OpenDatabase
@@ -25,11 +25,12 @@ import io.github.anvell.keemobile.presentation.R
 @Composable
 internal fun ExploreMenu(
     selected: OpenDatabase,
+    selectedEncryptedSecrets: FileListEntrySecrets,
     items: List<OpenDatabase>,
     onItemSelected: (VaultId) -> Unit,
     onCloseItem: (VaultId) -> Unit,
     onOpen: () -> Unit,
-    onUseBiometrics: (source: FileSource, secrets: FileSecrets) -> Unit,
+    onUseBiometrics: (source: FileSource, encryptedSecrets: FileListEntrySecrets) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -98,6 +99,7 @@ internal fun ExploreMenu(
             if (selected.secrets !is KeyFileOnly) {
                 UseBiometricsRow(
                     database = selected,
+                    encryptedSecrets = selectedEncryptedSecrets,
                     onClick = { onUseBiometrics(selected.source, it) }
                 )
             }

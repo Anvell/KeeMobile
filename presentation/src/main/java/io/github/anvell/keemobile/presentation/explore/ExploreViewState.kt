@@ -12,6 +12,7 @@ data class ExploreViewState(
     val viewMode: ViewMode = ViewMode.TREE,
     val navigationStack: List<UUID> = listOf(),
     val databases: Async<List<OpenDatabase>> = Uninitialized,
+    val recentFiles: Async<List<FileListEntry>> = Uninitialized,
     val activeDatabase: Async<OpenDatabase> = Uninitialized,
     val searchResults: Async<SearchResults> = Uninitialized,
     val appSettings: Async<AppSettings> = Uninitialized

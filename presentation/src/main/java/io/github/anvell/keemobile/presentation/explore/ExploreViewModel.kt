@@ -12,6 +12,7 @@ import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.datatypes.or
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.observers.OpenDatabasesObserver
+import io.github.anvell.keemobile.domain.observers.RecentFilesObserver
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -27,6 +28,7 @@ private const val FilterTriggerTimeoutMs = 300L
 class ExploreViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val openDatabasesObserver: OpenDatabasesObserver,
+    private val recentFilesObserver: RecentFilesObserver,
     private val getOpenDatabase: GetOpenDatabase,
     private val closeDatabase: CloseDatabase,
     private val closeAllDatabases: CloseAllDatabases,
@@ -41,6 +43,9 @@ class ExploreViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             openDatabasesObserver().executeCatching { copy(databases = it) }
+        }
+        viewModelScope.launch {
+            recentFilesObserver().executeCatching { copy(recentFiles = it) }
         }
 
         execute({
@@ -74,7 +79,7 @@ class ExploreViewModel @Inject constructor(
             is ExploreCommand.CloseDatabase -> closeDatabaseById(command.value)
             is ExploreCommand.CloseAllFiles -> closeAllFiles()
             is ExploreCommand.SetEncryptedSecrets -> setEncryptedSecrets(
-                command.source, command.secrets
+                command.source, command.encryptedSecrets
             )
         }
     }
@@ -97,12 +102,12 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-    private fun setEncryptedSecrets(fileSource: FileSource, fileSecrets: FileSecrets) {
+    private fun setEncryptedSecrets(fileSource: FileSource, encryptedSecrets: FileListEntrySecrets) {
         viewModelScope.launch {
             updateListFileEntry(
                 FileListEntry(
                     fileSource = fileSource,
-                    encryptedSecrets = FileListEntrySecrets.Some(fileSecrets)
+                    encryptedSecrets = encryptedSecrets
                 )
             )
         }

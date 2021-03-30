@@ -1,6 +1,7 @@
 package io.github.anvell.keemobile.presentation.explore
 
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.ViewMode
@@ -11,7 +12,7 @@ sealed class ExploreCommand {
 
     class SetEncryptedSecrets(
         val source: FileSource,
-        val secrets: FileSecrets
+        val encryptedSecrets: FileListEntrySecrets
     ) : ExploreCommand()
 
     class ChangeViewMode(val value: ViewMode) : ExploreCommand()

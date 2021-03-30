@@ -26,6 +26,7 @@ import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
+import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.ViewMode
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
@@ -132,15 +133,19 @@ fun Explore(
         }
     }
 
-    if (showExploreMenu && state.databases is Success) {
+    if (showExploreMenu && state.databases is Success && state.recentFiles is Success) {
         AppTheme.Dialog(
             onDismissRequest = { showExploreMenu = false },
             backgroundColor = Color.Transparent,
             buttons = {
                 ExploreMenu(
-                    selected = state.databases.unwrap().first {
-                        it.id == state.activeDatabaseId
-                    },
+                    selected = state.databases
+                        .unwrap()
+                        .first { it.id == state.activeDatabaseId },
+                    selectedEncryptedSecrets = state.recentFiles
+                        .unwrap()
+                        .first { it.fileSource.id == state.activeDatabaseId }
+                        .encryptedSecrets,
                     items = state.databases.unwrap(),
                     onItemSelected = {
                         commands(ExploreCommand.SetActiveDatabase(it))
@@ -153,8 +158,8 @@ fun Explore(
                         navigator.navigate(id = R.id.action_open_database)
                         showExploreMenu = false
                     },
-                    onUseBiometrics = { source, secrets ->
-                        commands(ExploreCommand.SetEncryptedSecrets(source, secrets))
+                    onUseBiometrics = { source, encryptedSecrets ->
+                        commands(ExploreCommand.SetEncryptedSecrets(source, encryptedSecrets))
                         showExploreMenu = false
                     }
                 )
