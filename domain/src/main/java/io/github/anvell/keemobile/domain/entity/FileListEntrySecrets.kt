@@ -1,20 +1,22 @@
 package io.github.anvell.keemobile.domain.entity
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class FileListEntrySecrets : Parcelable {
-    @Parcelize
+sealed class FileListEntrySecrets {
     @Serializable
+    @SerialName("Unspecified")
     object Unspecified : FileListEntrySecrets()
 
-    @Parcelize
     @Serializable
+    @SerialName("Never")
     object Never : FileListEntrySecrets()
 
-    @Parcelize
     @Serializable
-    class Some(val fileSecrets: FileSecrets) : FileListEntrySecrets()
+    @SerialName("Some")
+    class Some(
+        @SerialName("fileSecrets")
+        val fileSecrets: FileSecrets
+    ) : FileListEntrySecrets()
 }

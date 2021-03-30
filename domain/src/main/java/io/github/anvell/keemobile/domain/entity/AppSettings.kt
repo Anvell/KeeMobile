@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.domain.entity
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 enum class ViewMode {
@@ -14,5 +15,6 @@ enum class ViewMode {
 
 @Serializable
 data class AppSettings(
+    @SerialName("exploreViewMode")
     val exploreViewMode: ViewMode = ViewMode.TREE
 )
