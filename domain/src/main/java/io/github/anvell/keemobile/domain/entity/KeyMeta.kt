@@ -24,6 +24,6 @@ data class KeyMeta(
     val lastTopVisibleGroup: UUID? = null,
     val historyMaxItems: Long = 10,
     val historyMaxSize: Long = 6291456,
-    val customIcons: List<IconData>? = null,
-    val binaries: List<BinaryData>? = null
+    val customIcons: List<IconData> = listOf(),
+    val binaries: List<BinaryData> = listOf()
 )
