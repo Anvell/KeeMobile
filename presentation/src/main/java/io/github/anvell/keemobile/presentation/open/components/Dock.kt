@@ -37,7 +37,7 @@ import io.github.anvell.keemobile.presentation.R
 private const val FileFilter = "*/*"
 
 private val DockButtonPadding = 16.dp
-private val DockIconSize = 32.dp
+private val DockIconSize = 24.dp
 private val DockElevation = 4.dp
 
 @OptIn(ExperimentalAnimationApi::class)
