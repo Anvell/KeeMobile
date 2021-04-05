@@ -1,8 +1,6 @@
 package io.github.anvell.keemobile.core.constants
 
 object AppConstants {
-    const val MAX_RECENT_FILES = 6
-
     const val KEYSTORE_ALIAS_RECENT_FILES = "io.github.anvell.keemobile.recentfiles"
     const val KEYSTORE_ALIAS_BIOMETRIC = "io.github.anvell.keemobile.biometric"
 

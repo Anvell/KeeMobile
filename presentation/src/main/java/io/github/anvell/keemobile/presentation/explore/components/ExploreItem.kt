@@ -8,11 +8,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.presentation.R
+
+private val ExploreItemHeight = 64.sp
 
 @Composable
 internal fun ExploreItem(
@@ -27,7 +31,7 @@ internal fun ExploreItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .height(dimensionResource(R.dimen.explore_list_item_height))
+            .height(with(LocalDensity.current) { ExploreItemHeight.toDp() })
             .padding(horizontal = dimensionResource(R.dimen.content_margin_medium))
     ) {
         icon()

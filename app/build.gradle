@@ -41,11 +41,5 @@ dependencies {
     implementation Dependencies.AndroidCore.Navigation.ui
     implementation Dependencies.AndroidCore.Navigation.fragment
 
-    implementation Dependencies.RxJava.rxJava
-    implementation Dependencies.RxJava.rxAndroid
-    implementation Dependencies.RxJava.rxBindings
-
-    implementation Dependencies.Epoxy.epoxy
-
     implementation Dependencies.Logging.timber
 }
