@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
@@ -35,8 +34,6 @@ import io.github.anvell.keemobile.presentation.open.components.Dock
 import io.github.anvell.keemobile.presentation.open.components.LandingBlock
 import io.github.anvell.keemobile.presentation.open.components.VaultsBlock
 import kotlinx.coroutines.launch
-
-private val DockTopPadding = 32.dp
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -58,10 +55,7 @@ fun Open(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .padding(
-                    horizontal = dimensionResource(R.dimen.layout_horizontal_margin),
-                    vertical = dimensionResource(R.dimen.layout_vertical_margin)
-                )
+                .padding(vertical = dimensionResource(R.dimen.layout_vertical_margin))
         ) {
             when (val recentFiles = state.recentFiles) {
                 is Success -> {
@@ -94,7 +88,8 @@ fun Open(
                 visible = state.recentFiles is Success && !windowInsets.ime.isVisible,
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .padding(top = DockTopPadding)
+                    .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
+                    .padding(top = dimensionResource(R.dimen.content_margin))
             ) {
                 Dock(
                     selected = state.selectedFile,

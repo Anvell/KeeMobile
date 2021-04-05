@@ -5,16 +5,15 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -47,12 +46,16 @@ internal fun VaultsBlock(
         overflow = TextOverflow.Ellipsis,
         style = MaterialTheme.typography.h4.copy(
             color = MaterialTheme.colors.onBackground
+        ),
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(R.dimen.layout_horizontal_margin)
         )
     )
     Spacers.Xl()
 
     Row(
         Modifier
+            .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
             .background(MaterialTheme.colors.surface, MaterialTheme.shapes.small)
             .height(IntrinsicSize.Min)
     ) {
@@ -97,40 +100,42 @@ internal fun VaultsBlock(
     }
     Spacers.L()
 
-    Column(modifier.verticalScroll(rememberScrollState())) {
-        Surface(
-            elevation = 4.dp,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.medium)
-                .fillMaxWidth()
-        ) {
-            Column {
-                reversedFiles.forEach {
-                    val color = animateColorAsState(
-                        if (it == selected) {
-                            MaterialTheme.colors.onBackground.copy(alpha = 0.10f)
-                        } else {
-                            Color.Transparent
-                        }
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clickable { onSelected(it) }
-                            .background(color.value)
-                            .fillMaxWidth()
-                            .padding(dimensionResource(R.dimen.list_item_vertical_padding))
-                    ) {
-                        Text(
-                            text = it.fileSource.nameWithoutExtension,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-                    Divider(color = MaterialTheme.colors.background)
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
+        items(
+            items = reversedFiles,
+            key = { it.fileSource.id }
+        ) { item ->
+            val color = animateColorAsState(
+                if (item == selected) {
+                    MaterialTheme.colors.onBackground.copy(alpha = 0.10f)
+                } else {
+                    Color.Transparent
                 }
+            )
+            Row(
+                modifier = Modifier
+                    .clickable { onSelected(item) }
+                    .background(color.value)
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
+                    .padding(all = dimensionResource(R.dimen.list_item_vertical_padding))
+            ) {
+                Text(
+                    text = item.fileSource.nameWithoutExtension,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacers.M()
+
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_simple_forward),
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.65f)
+                )
             }
         }
 
-        Spacer(Modifier.imePadding())
+        item { Spacer(Modifier.imePadding()) }
     }
 }
