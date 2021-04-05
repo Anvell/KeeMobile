@@ -12,8 +12,8 @@
         <item name="android:colorBackground">@android:color/white</item>
 
         <item name="android:textColor">@color/grey_800</item>
-        <item name="android:statusBarColor">@android:color/white</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:colorEdgeEffect">@color/grey_400</item>
         <item name="android:windowLightStatusBar">true</item>

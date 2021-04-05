@@ -8,6 +8,7 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import io.github.anvell.keemobile.domain.entity.BinaryData
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
 import io.github.anvell.keemobile.domain.entity.KeyEntry
@@ -25,6 +26,7 @@ internal fun EntryDetailsAttachments(
     Column(
         Modifier
             .verticalScroll(rememberScrollState())
+            .navigationBarsWithImePadding()
             .padding(vertical = dimensionResource(R.dimen.layout_vertical_margin))
     ) {
         for (item in entry.attachments) {

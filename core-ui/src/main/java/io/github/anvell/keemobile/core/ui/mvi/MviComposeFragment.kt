@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.google.accompanist.insets.ProvideWindowInsets
 import io.github.anvell.keemobile.core.security.BiometricHelper
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
@@ -46,12 +47,14 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
                         LocalAppNavigator provides AppNavigatorImpl(findNavController()),
                         LocalBiometricHelper provides BiometricHelper(requireActivity())
                     ) {
-                        Content(
-                            state = state,
-                            commands = {
-                                lifecycleScope.launch { pendingCommands.emit(it) }
-                            }
-                        )
+                        ProvideWindowInsets {
+                            Content(
+                                state = state,
+                                commands = {
+                                    lifecycleScope.launch { pendingCommands.emit(it) }
+                                }
+                            )
+                        }
                     }
                 }
         }

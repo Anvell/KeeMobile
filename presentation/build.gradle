@@ -67,6 +67,7 @@ dependencies {
     implementation Dependencies.Compose.icons
     implementation Dependencies.Compose.Extra.activity
     implementation Dependencies.Accompanist.flowlayout
+    implementation Dependencies.Accompanist.insets
 
     implementation Dependencies.Security.biometric
 

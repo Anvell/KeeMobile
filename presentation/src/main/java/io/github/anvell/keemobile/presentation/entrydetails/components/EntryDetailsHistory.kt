@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import io.github.anvell.keemobile.core.extensions.formatAsDateTime
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
@@ -43,6 +44,7 @@ internal fun EntryDetailsHistory(
     Column(
         Modifier
             .verticalScroll(rememberScrollState())
+            .navigationBarsWithImePadding()
             .padding(vertical = dimensionResource(R.dimen.layout_vertical_margin))
     ) {
         entry.times?.let { EntryTimeDetails(it) }

@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.google.accompanist.insets.statusBarsPadding
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.components.TopAppBar
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
@@ -104,7 +106,8 @@ fun EntryDetails(
                             )
                         }
                     }
-                }
+                },
+                modifier = Modifier.statusBarsPadding()
             )
 
             if (state.entry is Success) {
@@ -135,6 +138,8 @@ fun EntryDetails(
                             onClick = { coroutineScope.launch { history.show() } }
                         )
                     }
+
+                    Spacer(Modifier.navigationBarsWithImePadding())
                 }
             }
         }

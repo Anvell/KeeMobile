@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.presentation.explore.components
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
@@ -7,6 +8,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.google.accompanist.insets.imePadding
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import io.github.anvell.keemobile.core.ui.mappers.FilterColorMapper
 import io.github.anvell.keemobile.core.ui.mappers.IconMapper
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
@@ -52,5 +55,7 @@ internal fun GroupAsList(
                 onClick = { onEntryClicked(item) }
             )
         }
+
+        item { Spacer(Modifier.navigationBarsWithImePadding()) }
     }
 }

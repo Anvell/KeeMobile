@@ -15,9 +15,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 import io.github.anvell.keemobile.core.extensions.getName
 import io.github.anvell.keemobile.core.extensions.toSha256
-import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.datatypes.Fail
@@ -33,6 +36,8 @@ import io.github.anvell.keemobile.presentation.open.components.LandingBlock
 import io.github.anvell.keemobile.presentation.open.components.VaultsBlock
 import kotlinx.coroutines.launch
 
+private val DockTopPadding = 32.dp
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Open(
@@ -42,6 +47,7 @@ fun Open(
     val context = LocalContext.current
     val navigator = LocalAppNavigator.current
     val biometricHelper = LocalBiometricHelper.current
+    val windowInsets = LocalWindowInsets.current
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -51,6 +57,7 @@ fun Open(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .padding(
                     horizontal = dimensionResource(R.dimen.layout_horizontal_margin),
                     vertical = dimensionResource(R.dimen.layout_vertical_margin)
@@ -59,7 +66,6 @@ fun Open(
             when (val recentFiles = state.recentFiles) {
                 is Success -> {
                     if (recentFiles().isNotEmpty()) {
-                        Spacers.Xl()
                         VaultsBlock(
                             selected = state.selectedFile ?: recentFiles().first(),
                             files = recentFiles(),
@@ -83,9 +89,13 @@ fun Open(
                 }
                 else -> Unit
             }
-            Spacers.Xl()
 
-            AnimatedVisibility(state.recentFiles is Success) {
+            AnimatedVisibility(
+                visible = state.recentFiles is Success && !windowInsets.ime.isVisible,
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .padding(top = DockTopPadding)
+            ) {
                 Dock(
                     selected = state.selectedFile,
                     onDocumentCreated = {

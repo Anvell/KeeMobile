@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import com.google.accompanist.insets.statusBarsPadding
 import io.github.anvell.keemobile.core.ui.components.Dialog
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.extensions.toast
@@ -52,7 +53,8 @@ fun Explore(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = dimensionResource(R.dimen.layout_vertical_margin))
+            .statusBarsPadding()
+            .padding(top = dimensionResource(R.dimen.layout_vertical_margin))
     ) {
         SearchTextField(
             value = state.searchFilter,

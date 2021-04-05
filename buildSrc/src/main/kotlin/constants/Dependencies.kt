@@ -53,6 +53,7 @@ object Dependencies {
     object Accompanist {
         private const val version = "0.7.0"
         const val flowlayout = "com.google.accompanist:accompanist-flowlayout:$version"
+        const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
 
     object AndroidCore {

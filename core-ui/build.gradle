@@ -62,6 +62,7 @@ dependencies {
     implementation Dependencies.Compose.material
     implementation Dependencies.Compose.livedata
     implementation Dependencies.Compose.Extra.activity
+    implementation Dependencies.Accompanist.insets
 
     implementation Dependencies.Keepass.openkeepass
 }
