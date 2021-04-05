@@ -72,6 +72,7 @@ dependencies {
     implementation Dependencies.Compose.livedata
     implementation Dependencies.Compose.icons
     implementation Dependencies.Compose.Extra.activity
+    implementation Dependencies.Accompanist.flowlayout
 
     implementation Dependencies.RxJava.rxJava
     implementation Dependencies.RxJava.rxAndroid

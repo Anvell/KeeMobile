@@ -23,17 +23,21 @@ import io.github.anvell.keemobile.core.ui.components.Dialog
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.extensions.toast
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.core.ui.navigation.AppNavigator
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
+import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.Uninitialized
-import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.ViewMode
 import io.github.anvell.keemobile.presentation.R
-import io.github.anvell.keemobile.presentation.entry.EntryDetailsArgs
+import io.github.anvell.keemobile.presentation.data.EntryType
+import io.github.anvell.keemobile.presentation.entrydetails.data.EntryDetailsArgs
 import io.github.anvell.keemobile.presentation.explore.components.GroupAsList
 import io.github.anvell.keemobile.presentation.explore.components.SearchResultsAsList
 import io.github.anvell.keemobile.presentation.explore.components.SearchTextField
 import io.github.anvell.keemobile.presentation.explore.components.menu.ExploreMenu
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -90,9 +94,9 @@ fun Explore(
                 SearchResultsAsList(
                     results = state.searchResults.unwrap().filteredEntries,
                     onEntryClicked = {
-                        navigator.navigate(
-                            R.id.action_entry_details,
-                            EntryDetailsArgs(state.activeDatabaseId, it.uuid)
+                        navigator.navigateToDetails(
+                            databaseId = state.activeDatabaseId,
+                            entryId = it.uuid.toString()
                         )
                     }
                 )
@@ -109,9 +113,9 @@ fun Explore(
                             group = group!!,
                             onGroupClicked = { commands(ExploreCommand.NavigateToGroup(it.uuid)) },
                             onEntryClicked = {
-                                navigator.navigate(
-                                    R.id.action_entry_details,
-                                    EntryDetailsArgs(state.activeDatabaseId, it.uuid)
+                                navigator.navigateToDetails(
+                                    databaseId = state.activeDatabaseId,
+                                    entryId = it.uuid.toString()
                                 )
                             }
                         )
@@ -120,9 +124,9 @@ fun Explore(
                         SearchResultsAsList(
                             results = remember(database) { database.findEntries { true } },
                             onEntryClicked = {
-                                navigator.navigate(
-                                    R.id.action_entry_details,
-                                    EntryDetailsArgs(state.activeDatabaseId, it.uuid)
+                                navigator.navigateToDetails(
+                                    databaseId = state.activeDatabaseId,
+                                    entryId = it.uuid.toString()
                                 )
                             }
                         )
@@ -182,4 +186,19 @@ fun Explore(
             }
         }
     }
+}
+
+private fun AppNavigator.navigateToDetails(
+    databaseId: VaultId,
+    entryId: String
+) {
+    navigate(
+        R.id.action_entry_details,
+        Json.encodeToString(
+            EntryDetailsArgs(
+                databaseId = databaseId,
+                entryType = EntryType.Actual(entryId)
+            )
+        )
+    )
 }

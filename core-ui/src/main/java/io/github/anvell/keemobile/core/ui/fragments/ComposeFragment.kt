@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.anvell.keemobile.core.ui.fragments
 
 import android.os.Bundle

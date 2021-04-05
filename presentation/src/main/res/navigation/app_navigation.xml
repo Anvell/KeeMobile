@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/entryDetailsFragment"
-        android:name="io.github.anvell.keemobile.presentation.entry.EntryDetailsFragment"
+        android:name="io.github.anvell.keemobile.presentation.entrydetails.EntryDetailsFragment"
         android:label="EntryDetailsFragment">
         <action
             android:id="@+id/action_historic_entry_details"

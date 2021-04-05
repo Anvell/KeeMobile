@@ -1,7 +1,6 @@
 <resources>
     <string name="open_default_file_name">MyVault.bdbx</string>
-    <string name="open_landing_body_text">This application supports KeePass files up to version 3.x.
-    </string>
+    <string name="open_landing_body_text">This application supports KeePass files up to version 3.x.</string>
     <string name="open_landing_title">Welcome</string>
     <string name="open_button_unlock">Unlock</string>
     <string name="open_button_clear_all">Clear All</string>
@@ -26,12 +25,6 @@
     <string name="explore_menu_row_button_close">Close</string>
     <string name="explore_all_files_closed">All files closed</string>
 
-    <array name="details_tabs">
-        <item>General</item>
-        <item>Files</item>
-        <item>History</item>
-    </array>
-
     <string name="details_title">Title</string>
     <string name="details_username">Username</string>
     <string name="details_password">Password</string>
@@ -43,8 +36,8 @@
     <string name="details_date_historic_title">Changes</string>
     <string name="details_tags">Tags</string>
     <string name="details_otp">One Time Password</string>
-    <string name="details_copy_notice">%s copied to the clipboard</string>
     <string name="details_downloads_size">%,.2f KB</string>
-    <string name="details_downloads_empty">No files attached</string>
-
+    <string name="details_masked_content" translatable="false">••••••••</string>
+    <string name="details_button_files">Files</string>
+    <string name="details_button_history">History</string>
 </resources>

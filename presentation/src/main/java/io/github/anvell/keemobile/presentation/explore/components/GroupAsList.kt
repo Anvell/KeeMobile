@@ -7,7 +7,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import io.github.anvell.keemobile.core.ui.mappers.ComposeFilterColorMapper
+import io.github.anvell.keemobile.core.ui.mappers.FilterColorMapper
 import io.github.anvell.keemobile.core.ui.mappers.IconMapper
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
 import io.github.anvell.keemobile.domain.entity.KeyEntry
@@ -45,7 +45,7 @@ internal fun GroupAsList(
                         painter = painterResource(IconMapper.map(item.iconId)),
                         contentDescription = null,
                         tint = item.backgroundColor?.let {
-                            ComposeFilterColorMapper.map(it, AppTheme.colors.filterColors)
+                            FilterColorMapper.map(it, AppTheme.colors.filterColors)
                         } ?: MaterialTheme.colors.onSurface
                     )
                 },
