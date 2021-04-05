@@ -13,7 +13,7 @@ class DownloadsRepositoryImpl @Inject constructor(
 ) : DownloadsRepository {
 
     override fun writeToDownloads(name: String, data: ByteArray): String {
-        val (uri, stream) = mediaStoreFile.openOutputStream(name, Directories.DOWNLOADS)
+        val (uri, stream) = mediaStoreFile.openOutputStream(name, Directories.Downloads)
             ?: throw IOException("Cannot create file $name")
 
         stream.use { outputStream ->

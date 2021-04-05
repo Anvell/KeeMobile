@@ -31,16 +31,16 @@ class AndroidKeystoreEncryptionAes @Inject constructor() : KeystoreEncryption {
     private fun createAes256GcmSpec(
         keyAlias: String
     ) = KeyGenParameterSpec.Builder(
-        KEYSTORE_PATH_URI + keyAlias,
+        KeystorePathUri + keyAlias,
         KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
     )
         .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-        .setKeySize(KEY_SIZE)
+        .setKeySize(KeySize)
         .build()
 
     companion object {
-        private const val KEY_SIZE = 256
-        const val KEYSTORE_PATH_URI = "android-keystore://"
+        private const val KeySize = 256
+        const val KeystorePathUri = "android-keystore://"
     }
 }

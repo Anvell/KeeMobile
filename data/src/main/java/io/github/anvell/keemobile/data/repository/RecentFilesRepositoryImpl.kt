@@ -33,15 +33,15 @@ class RecentFilesRepositoryImpl @Inject constructor(
     override val recentFilesAsFlow: SharedFlow<List<FileListEntry>> = recentFiles
 
     override suspend fun readRecentFiles(): Either<Exception, List<FileListEntry>> = eitherCatch {
-        if (!internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
-            throw IOException("${AppConstants.FILE_RECENT_FILES} does not exist.")
+        if (!internalFile.exists(AppConstants.FileRecentFiles)) {
+            throw IOException("${AppConstants.FileRecentFiles} does not exist.")
         }
 
-        internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
+        internalFile.openInputStream(AppConstants.FileRecentFiles)?.use { stream ->
             val data = keystoreEncryption.decrypt(
-                AppConstants.KEYSTORE_ALIAS_RECENT_FILES,
+                AppConstants.KeystoreAliasRecentFiles,
                 stream.readBytes(),
-                AppConstants.FILE_RECENT_FILES.toByteArray()
+                AppConstants.FileRecentFiles.toByteArray()
             ).toString(Charsets.UTF_8)
 
             Json.decodeFromString<List<FileListEntry>>(data).filter {
@@ -54,29 +54,29 @@ class RecentFilesRepositoryImpl @Inject constructor(
             }.also {
                 recentFiles.emit(it)
             }
-        } ?: throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
+        } ?: throw IOException("Cannot open ${AppConstants.FileRecentFiles}")
     }
 
     override suspend fun writeRecentFiles(
         items: List<FileListEntry>
     ): Either<Exception, List<FileListEntry>> = eitherCatch {
-        internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
+        internalFile.openOutputStream(AppConstants.FileRecentFiles)?.use { stream ->
             val data = Json.encodeToString(items)
             val encrypted = keystoreEncryption.encrypt(
-                AppConstants.KEYSTORE_ALIAS_RECENT_FILES,
+                AppConstants.KeystoreAliasRecentFiles,
                 data.toByteArray(),
-                AppConstants.FILE_RECENT_FILES.toByteArray()
+                AppConstants.FileRecentFiles.toByteArray()
             )
             stream.write(encrypted)
             items.also {
                 recentFiles.emit(it)
             }
-        } ?: throw IOException("Cannot write ${AppConstants.FILE_RECENT_FILES}")
+        } ?: throw IOException("Cannot write ${AppConstants.FileRecentFiles}")
     }
 
     override suspend fun clearRecentFiles(): Either<Exception, Unit> = eitherCatch {
-        if (internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
-            internalFile.remove(AppConstants.FILE_RECENT_FILES)
+        if (internalFile.exists(AppConstants.FileRecentFiles)) {
+            internalFile.remove(AppConstants.FileRecentFiles)
         }
         recentFiles.emit(listOf())
     }

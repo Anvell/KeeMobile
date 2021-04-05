@@ -9,7 +9,7 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import io.github.anvell.keemobile.core.constants.AppConstants.KEYSTORE_ALIAS_BIOMETRIC
+import io.github.anvell.keemobile.core.constants.AppConstants.KeystoreAliasBiometric
 import io.github.anvell.keemobile.domain.datatypes.Either
 import io.github.anvell.keemobile.domain.datatypes.Left
 import io.github.anvell.keemobile.domain.datatypes.Right
@@ -101,18 +101,18 @@ class BiometricHelper(
     }
 
     private fun createAes256CbcSpec() = KeyGenParameterSpec.Builder(
-        KEYSTORE_PATH_URI + KEYSTORE_ALIAS_BIOMETRIC,
+        KeystorePathUri + KeystoreAliasBiometric,
         KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
     )
         .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
         .setRandomizedEncryptionRequired(true)
         .setUserAuthenticationRequired(true)
-        .setKeySize(KEY_SIZE)
+        .setKeySize(KeySize)
         .build()
 
     companion object {
-        private const val KEY_SIZE = 256
-        const val KEYSTORE_PATH_URI = "android-keystore://"
+        private const val KeySize = 256
+        const val KeystorePathUri = "android-keystore://"
     }
 }

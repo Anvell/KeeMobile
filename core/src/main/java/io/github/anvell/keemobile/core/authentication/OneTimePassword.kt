@@ -81,22 +81,21 @@ class OneTimePassword(
     }
 
     companion object {
+        private const val OtpProtocol = "otpauth://"
 
-        private const val OTP_PROTOCOL = "otpauth://"
+        private const val QuerySecret = "secret"
+        private const val QueryIssuer = "issuer"
+        private const val QueryAlgorithm = "algorithm"
+        private const val QueryDigits = "digits"
+        private const val QueryPeriod = "period"
 
-        private const val QUERY_SECRET = "secret"
-        private const val QUERY_ISSUER = "issuer"
-        private const val QUERY_ALGORITHM = "algorithm"
-        private const val QUERY_DIGITS = "digits"
-        private const val QUERY_PERIOD = "period"
-
-        private const val PROPERTY_OTP_URI = "otp"
-        private const val PROPERTY_OTP_SEED = "TOTP Seed"
-        private const val PROPERTY_OTP_SETTINGS = "TOTP Settings"
+        private const val PropertyOtpUri = "otp"
+        private const val PropertyOtpSeed = "TOTP Seed"
+        private const val PropertyOtpSettings = "TOTP Settings"
 
         @Throws(URISyntaxException::class)
         fun from(sourceUri: String): OneTimePassword {
-            if (!sourceUri.startsWith(OTP_PROTOCOL, true)) {
+            if (!sourceUri.startsWith(OtpProtocol, true)) {
                 return OneTimePassword(sourceUri)
             }
 
@@ -119,26 +118,26 @@ class OneTimePassword(
             }
 
             return OneTimePassword(
-                secret = params[QUERY_SECRET] ?: throw URISyntaxException(
+                secret = params[QuerySecret] ?: throw URISyntaxException(
                     sourceUri,
                     "A 'secret' parameter is required."
                 ),
-                digits = params[QUERY_DIGITS]?.toInt() ?: 6,
-                period = params[QUERY_PERIOD]?.toInt() ?: 30,
-                algorithm = params[QUERY_ALGORITHM]?.toAlgorithm() ?: Algorithm.SHA1
+                digits = params[QueryDigits]?.toInt() ?: 6,
+                period = params[QueryPeriod]?.toInt() ?: 30,
+                algorithm = params[QueryAlgorithm]?.toAlgorithm() ?: Algorithm.SHA1
             )
         }
 
         fun from(entry: KeyEntry): OneTimePassword? {
-            entry.getCustomPropertyByName(PROPERTY_OTP_URI)?.apply {
+            entry.getCustomPropertyByName(PropertyOtpUri)?.apply {
                 return from(value)
             }
 
             var result: OneTimePassword? = null
 
-            entry.getCustomPropertyByName(PROPERTY_OTP_SEED)?.let {
+            entry.getCustomPropertyByName(PropertyOtpSeed)?.let {
                 result = OneTimePassword(it.value)
-                val settings = entry.getCustomPropertyByName(PROPERTY_OTP_SETTINGS)
+                val settings = entry.getCustomPropertyByName(PropertyOtpSettings)
 
                 if (settings != null) {
                     val values = settings.value.split(';')

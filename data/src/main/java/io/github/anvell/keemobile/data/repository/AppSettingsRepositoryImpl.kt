@@ -21,19 +21,19 @@ class AppSettingsRepositoryImpl @Inject constructor(
 
     override fun readAppSettings(): Either<Exception, AppSettings> {
         return eitherCatch {
-            internalFile.openInputStream(AppConstants.FILE_PREFERENCES)?.use { stream ->
+            internalFile.openInputStream(AppConstants.FilePreferences)?.use { stream ->
                 Json.decodeFromString<AppSettings>(stream.readAsString())
-            } ?: throw IOException("Cannot open ${AppConstants.FILE_PREFERENCES}")
+            } ?: throw IOException("Cannot open ${AppConstants.FilePreferences}")
         }
     }
 
     override fun writeAppSettings(settings: AppSettings): Either<Exception, AppSettings> {
         return eitherCatch {
-            internalFile.openOutputStream(AppConstants.FILE_PREFERENCES)?.use { stream ->
+            internalFile.openOutputStream(AppConstants.FilePreferences)?.use { stream ->
                 settings.also {
                     stream.write(Json.encodeToString(settings).toByteArray())
                 }
-            } ?: throw IOException("Cannot write ${AppConstants.FILE_PREFERENCES}")
+            } ?: throw IOException("Cannot write ${AppConstants.FilePreferences}")
         }
     }
 }

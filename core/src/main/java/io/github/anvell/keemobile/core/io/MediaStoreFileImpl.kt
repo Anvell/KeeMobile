@@ -53,7 +53,7 @@ class MediaStoreFileImpl @Inject constructor(@ApplicationContext private val con
 
             return FileProvider.getUriForFile(
                 context,
-                AppConstants.FILE_PROVIDER,
+                AppConstants.FileProvider,
                 file
             ).toString() to FileOutputStream(file)
         }

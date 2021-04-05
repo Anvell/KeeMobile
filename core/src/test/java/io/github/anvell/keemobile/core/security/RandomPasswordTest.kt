@@ -14,17 +14,17 @@ class RandomPasswordTest {
 
     @Test
     fun `Random password is generated with specific characters`() {
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.UPPERCASE_LETTERS))
+        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.UppercaseLetters))
             .matches(Regex("[A-Z]+"))
 
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.LOWERCASE_LETTERS))
+        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.LowercaseLetters))
             .matches(Regex("[a-z]+"))
 
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.DIGITS))
+        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.Digits))
             .matches(Regex("[0-9]+"))
 
-        RandomPassword.create(10, RandomPassword.Dictionaries.SYMBOLS).forEach {
-            expectThat(RandomPassword.Dictionaries.SYMBOLS.toList())
+        RandomPassword.create(10, RandomPassword.Dictionaries.Symbols).forEach {
+            expectThat(RandomPassword.Dictionaries.Symbols.toList())
                 .any { isEqualTo(it) }
         }
     }
