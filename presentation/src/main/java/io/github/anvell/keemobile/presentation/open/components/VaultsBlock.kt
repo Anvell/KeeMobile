@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.imePadding
 import io.github.anvell.keemobile.core.ui.components.PasswordTextField
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
@@ -182,7 +181,5 @@ internal fun VaultsBlock(
                 }
             )
         }
-
-        item { Spacer(Modifier.imePadding()) }
     }
 }
