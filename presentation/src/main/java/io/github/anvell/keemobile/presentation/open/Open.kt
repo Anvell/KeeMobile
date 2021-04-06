@@ -75,6 +75,9 @@ fun Open(
                                     )
                                 )
                             },
+                            onDismiss = {
+                                commands(OpenCommand.RemoveRecentFile(it))
+                            },
                             modifier = Modifier.weight(1f)
                         )
                     } else {

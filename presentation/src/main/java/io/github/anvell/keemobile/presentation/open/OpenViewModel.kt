@@ -41,6 +41,7 @@ class OpenViewModel @Inject constructor(
             is OpenCommand.SelectFile -> selectFileSource(command.source)
             is OpenCommand.AddFileSource -> addFileSource(command.source)
             is OpenCommand.OpenFile -> openFile(command.entry, command.secrets)
+            is OpenCommand.RemoveRecentFile -> removeFileEntry(command.entry)
             is OpenCommand.ClearRecentFiles -> clearFiles()
         }
     }
@@ -96,6 +97,18 @@ class OpenViewModel @Inject constructor(
             .unwrap()
             .filter { it.fileSource.id != item.fileSource.id }
             .plus(item)
+
+        viewModelScope.launch {
+            saveRecentFiles(items).map {
+                setState {
+                    copy(recentFiles = Success(it))
+                }
+            }
+        }
+    }
+
+    private fun removeFileEntry(item: FileListEntry) = withState { state ->
+        val items = state.recentFiles.unwrap() - item
 
         viewModelScope.launch {
             saveRecentFiles(items).map {

@@ -2,19 +2,21 @@ package io.github.anvell.keemobile.presentation.open.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +30,12 @@ import io.github.anvell.keemobile.core.ui.theme.AppTheme
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.presentation.R
 
+private const val ItemIconAlpha = 0.65f
+
+private val ItemElevation = 4.dp
+private val ItemCornerRadius = 6.dp
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun VaultsBlock(
     selected: FileListEntry,
@@ -35,6 +43,7 @@ internal fun VaultsBlock(
     isLoading: Boolean,
     onSelected: (FileListEntry) -> Unit,
     onUnlock: (FileListEntry, String) -> Unit,
+    onDismiss: (FileListEntry) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val reversedFiles = remember(files) { files.reversed() }
@@ -105,35 +114,73 @@ internal fun VaultsBlock(
             items = reversedFiles,
             key = { it.fileSource.id }
         ) { item ->
-            val color = animateColorAsState(
-                if (item == selected) {
-                    MaterialTheme.colors.onBackground.copy(alpha = 0.10f)
-                } else {
-                    Color.Transparent
+            val dismissState = rememberDismissState(
+                confirmStateChange = { value ->
+                    if (value == DismissValue.DismissedToStart) onDismiss(item)
+                    value == DismissValue.DismissedToStart
                 }
             )
-            Row(
-                modifier = Modifier
-                    .clickable { onSelected(item) }
-                    .background(color.value)
-                    .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
-                    .padding(all = dimensionResource(R.dimen.list_item_vertical_padding))
-            ) {
-                Text(
-                    text = item.fileSource.nameWithoutExtension,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacers.M()
+            val backgroundColor by animateColorAsState(
+                if (item == selected) {
+                    MaterialTheme.colors.surface
+                } else {
+                    MaterialTheme.colors.background
+                }
+            )
 
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_simple_forward),
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.65f)
-                )
-            }
+            SwipeToDismiss(
+                state = dismissState,
+                directions = setOf(DismissDirection.EndToStart),
+                background = {
+                    Box(
+                        contentAlignment = Alignment.CenterEnd,
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.error.copy(alpha = 0.8f))
+                            .fillMaxSize()
+                            .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
+                            .padding(all = dimensionResource(R.dimen.list_item_vertical_padding))
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_close),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onError.copy(alpha = ItemIconAlpha)
+                        )
+                    }
+                },
+                dismissContent = {
+                    val isDragged = dismissState.dismissDirection != null
+                    val elevation by animateDpAsState(if (isDragged) ItemElevation else 0.dp)
+                    val cornerRadius by animateDpAsState(if (isDragged) ItemCornerRadius else 0.dp)
+
+                    Surface(
+                        color = backgroundColor,
+                        shape = RoundedCornerShape(cornerRadius),
+                        elevation = elevation,
+                        modifier = Modifier.clickable { onSelected(item) }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
+                                .padding(all = dimensionResource(R.dimen.list_item_vertical_padding))
+                        ) {
+                            Text(
+                                text = item.fileSource.nameWithoutExtension,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Spacers.M()
+
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_simple_forward),
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.onSurface.copy(alpha = ItemIconAlpha)
+                            )
+                        }
+                    }
+                }
+            )
         }
 
         item { Spacer(Modifier.imePadding()) }
