@@ -1,42 +1,21 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.App" parent="Theme.Base">
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/teal_600</item>
         <item name="colorPrimaryDark">@color/teal_900</item>
         <item name="colorAccent">@color/pink_600</item>
         <item name="colorError">@color/pink_400</item>
         <item name="colorSurface">@color/grey_200</item>
-        <item name="colorSurfaceSelected">@color/grey_400</item>
         <item name="colorOnSurface">@color/grey_800</item>
         <item name="colorOnPrimary">@color/grey_200</item>
         <item name="colorOnBackground">@color/grey_800</item>
         <item name="android:colorBackground">@android:color/white</item>
 
         <item name="android:textColor">@color/grey_800</item>
-        <item name="android:statusBarColor">@android:color/white</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:colorEdgeEffect">@color/grey_400</item>
         <item name="android:windowLightStatusBar">true</item>
-    </style>
-
-    <style name="Theme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:fontFamily">@font/firasans_regular</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
-        <item name="popupMenuStyle">@style/PopupMenu</item>
-        <item name="dockImageButtonStyle">@style/DockImageButton</item>
-        <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
-
-        <!-- Typography -->
-        <item name="textDisplay1">@style/Typography.Display1</item>
-        <item name="textDisplay2">@style/Typography.Display2</item>
-        <item name="textTitle">@style/Typography.Title</item>
-        <item name="textBody">@style/Typography.Body</item>
-        <item name="textBodyUppercase">@style/Typography.Body.Uppercase</item>
-        <item name="textCaption">@style/Typography.Caption</item>
-    </style>
-
-    <style name="ThemeOverlay.App.ModalBottomSheet" parent="">
-        <item name="android:colorBackground">@android:color/white</item>
     </style>
 </resources>

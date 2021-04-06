@@ -32,7 +32,7 @@ object Dependencies {
     }
 
     object Compose {
-        private const val version = "1.0.0-beta02"
+        private const val version = "1.0.0-beta03"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -46,22 +46,21 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
 
         object Extra {
-            const val activity = "androidx.activity:activity-compose:1.3.0-alpha03"
+            const val activity = "androidx.activity:activity-compose:1.3.0-alpha05"
         }
+    }
+
+    object Accompanist {
+        private const val version = "0.7.0"
+        const val flowlayout = "com.google.accompanist:accompanist-flowlayout:$version"
+        const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
 
     object AndroidCore {
         const val appcompat = "androidx.appcompat:appcompat:1.3.0-beta01"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
+        const val material = "com.google.android.material:material:1.3.0"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
-        const val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
-
-        object Widgets {
-            const val material = "com.google.android.material:material:1.3.0"
-            const val recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
-            const val viewpager = "androidx.viewpager2:viewpager2:1.0.0"
-            const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.4"
-        }
 
         object Navigation {
             private const val version = "2.3.4"
@@ -103,19 +102,6 @@ object Dependencies {
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val testing = "com.google.dagger:hilt-android-testing:$version"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
-    }
-
-    object RxJava {
-        const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.21"
-        const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
-        const val rxBindings = "com.jakewharton.rxbinding3:rxbinding:3.1.0"
-    }
-
-    object Epoxy {
-        private const val version = "3.11.0"
-        const val epoxy = "com.airbnb.android:epoxy:$version"
-        const val dataBinding = "com.airbnb.android:epoxy-databinding:$version"
-        const val processor = "com.airbnb.android:epoxy-processor:$version"
     }
 
     object Keepass {

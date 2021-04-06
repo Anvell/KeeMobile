@@ -1,5 +1,6 @@
 package io.github.anvell.keemobile.core.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -8,19 +9,15 @@ import androidx.compose.runtime.remember
 
 @Composable
 fun AppTheme(
-    isLight: Boolean = false,
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = remember {
-        if (isLight) ThemeElements.colorsLight else ThemeElements.colors
-    }
-    val appColors = remember {
-        AppColors(
-            when {
-                isLight -> ThemeElements.filterColorsLight
-                else -> ThemeElements.filterColors
-            }
-        )
+    val (colors, appColors) = remember(isDarkTheme) {
+        if (isDarkTheme) {
+            ThemeElements.colorsDark to AppColors(ThemeElements.filterColorsDark)
+        } else {
+            ThemeElements.colorsLight to AppColors(ThemeElements.filterColorsLight)
+        }
     }
 
     CompositionLocalProvider(LocalAppColors provides appColors) {

@@ -1,3 +1,3 @@
 package io.github.anvell.keemobile.domain.exceptions
 
-class DatabaseAlreadyOpenException : Throwable()
+class DatabaseAlreadyOpenException : Exception()

@@ -41,7 +41,7 @@ open class KeyDatabase(
     fun filterEntries(filter: String): List<SearchResult> {
         return findEntries { entry ->
             listOf(
-                entry.title,
+                entry.name,
                 entry.username,
                 entry.url,
                 entry.notes,
@@ -65,7 +65,9 @@ open class KeyDatabase(
 
             if (group.groups.isNotEmpty()) {
                 group.groups.forEach {
-                    if(it.uuid.compareTo(meta.recycleBinUuid) != 0) {
+                    if (meta.recycleBinUuid == null ||
+                        it.uuid.compareTo(meta.recycleBinUuid) != 0
+                    ) {
                         stack.push(it)
                     }
                 }

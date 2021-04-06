@@ -13,16 +13,16 @@ object RandomPassword {
     }
 
     object Dictionaries {
-        const val LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz"
-        const val UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        const val DIGITS = "0123456789"
-        const val SYMBOLS = """!"#$%&'()*+,-./:;<=>?@[]^_{|}~"""
+        const val LowercaseLetters = "abcdefghijklmnopqrstuvwxyz"
+        const val UppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        const val Digits = "0123456789"
+        const val Symbols = """!"#$%&'()*+,-./:;<=>?@[]^_{|}~"""
 
         fun all() = arrayOf(
-            LOWERCASE_LETTERS,
-            UPPERCASE_LETTERS,
-            DIGITS,
-            SYMBOLS
+            LowercaseLetters,
+            UppercaseLetters,
+            Digits,
+            Symbols
         )
     }
 }

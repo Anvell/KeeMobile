@@ -4,6 +4,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 sealed class Async<out T> {
     open operator fun invoke(): T? = null
+
+    fun unwrap(): T = requireNotNull(invoke())
 }
 
 object Uninitialized : Async<Nothing>()

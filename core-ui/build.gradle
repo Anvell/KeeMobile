@@ -3,7 +3,6 @@ import constants.Dependencies
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 }
@@ -37,8 +36,7 @@ dependencies {
 
     implementation Dependencies.AndroidCore.appcompat
     implementation Dependencies.AndroidCore.coreKtx
-    implementation Dependencies.AndroidCore.Widgets.material
-    implementation Dependencies.AndroidCore.dynamicAnimation
+    implementation Dependencies.AndroidCore.material
     implementation Dependencies.AndroidCore.Fragment.fragment
     implementation Dependencies.AndroidCore.Fragment.fragmentKtx
 
@@ -64,14 +62,7 @@ dependencies {
     implementation Dependencies.Compose.material
     implementation Dependencies.Compose.livedata
     implementation Dependencies.Compose.Extra.activity
-
-    implementation Dependencies.RxJava.rxJava
-    implementation Dependencies.RxJava.rxAndroid
-    implementation Dependencies.RxJava.rxBindings
-
-    implementation Dependencies.Epoxy.epoxy
-    implementation Dependencies.Epoxy.dataBinding
-    kapt Dependencies.Epoxy.processor
+    implementation Dependencies.Accompanist.insets
 
     implementation Dependencies.Keepass.openkeepass
 }

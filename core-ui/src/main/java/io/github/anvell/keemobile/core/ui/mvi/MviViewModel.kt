@@ -1,6 +1,10 @@
+@file:Suppress("unused")
+
 package io.github.anvell.keemobile.core.ui.mvi
 
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.anvell.keemobile.domain.datatypes.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -12,7 +16,7 @@ import kotlin.reflect.KProperty1
 abstract class MviViewModel<S>(initialState: S) : ViewModel() {
     private val state = MutableStateFlow(initialState)
 
-    fun observableState() = state.asLiveData()
+    fun observableState(): StateFlow<S> = state
 
     fun <T> withState(block: (S) -> T) = block(state.value)
 
@@ -26,17 +30,13 @@ abstract class MviViewModel<S>(initialState: S) : ViewModel() {
         }
     }
 
-    fun <P> selectSubscribe(property: KProperty1<S, P>): LiveData<P> {
-        return selectSubscribeInternal(property).asLiveData()
-    }
-
     protected fun <P> selectSubscribe(property: KProperty1<S, P>, block: (P) -> Unit) {
         viewModelScope.launch {
-            selectSubscribeInternal(property).collect { block(it) }
+            selectSubscribe(property).collect { block(it) }
         }
     }
 
-    private fun <P> selectSubscribeInternal(property: KProperty1<S, P>): Flow<P> {
+    protected fun <P> selectSubscribe(property: KProperty1<S, P>): Flow<P> {
         return state.map { property.get(it) }.distinctUntilChanged()
     }
 

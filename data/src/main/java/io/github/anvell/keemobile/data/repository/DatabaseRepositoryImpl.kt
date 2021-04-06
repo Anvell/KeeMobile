@@ -4,6 +4,7 @@ import de.slackspace.openkeepass.KeePassDatabase
 import io.github.anvell.keemobile.core.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
 import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.datatypes.*
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.exceptions.DatabaseAlreadyOpenException
 import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException
@@ -17,114 +18,112 @@ import javax.inject.Singleton
 class DatabaseRepositoryImpl @Inject constructor(
     private val storageFile: StorageFile
 ) : DatabaseRepository {
-    private val openDatabasesRelay = MutableStateFlow(listOf<OpenDatabase>())
-    private var openDatabases = listOf<OpenDatabase>()
-        private set(value) {
-            field = value
-            openDatabasesRelay.value = value
-        }
+    private val openDatabases = MutableStateFlow(listOf<OpenDatabase>())
 
-    override fun getOpenDatabases(): StateFlow<List<OpenDatabase>> {
-        return openDatabasesRelay
+    override val openDatabasesAsFlow: StateFlow<List<OpenDatabase>> = openDatabases
+
+    override fun getOpenDatabaseById(
+        id: VaultId
+    ): Either<Exception, OpenDatabase> {
+        return openDatabases.value
+            .find { it.id == id }
+            ?.let { Right(it) }
+            ?: Left(DatabaseNotOpenException())
     }
 
-    override fun getOpenDatabaseById(id: VaultId): OpenDatabase {
-        val database = openDatabases.find { it.id == id }
-
-        if (database != null) {
-            return database
-        } else {
-            throw DatabaseNotOpenException()
-        }
+    override fun getFilteredEntries(
+        id: VaultId,
+        filter: String
+    ): Either<Exception, List<SearchResult>> {
+        return openDatabases.value
+            .find { it.id == id }
+            ?.let { Right(it.database.filterEntries(filter)) }
+            ?: Left(DatabaseNotOpenException())
     }
 
-    override fun getFilteredEntries(id: VaultId, filter: String): List<SearchResult> {
-        val database = openDatabases.find { it.id == id }
+    override fun close(id: VaultId): Either<Exception, List<OpenDatabase>> {
+        val database = openDatabases.value.find { it.id == id }
 
-        if (database != null) {
-            return database.database.filterEntries(filter)
+        return if (database != null) {
+            openDatabases.value -= database
+            Right(openDatabases.value)
         } else {
-            throw DatabaseNotOpenException()
-        }
-    }
-
-    override fun close(id: VaultId): List<OpenDatabase> {
-        val database = openDatabases.find { it.id == id }
-
-        if (database != null) {
-            openDatabases = openDatabases.filter { it.id != id }
-            return openDatabases
-        } else {
-            throw DatabaseNotOpenException()
+            Left(DatabaseNotOpenException())
         }
     }
 
     override fun closeAll() {
-        openDatabases = listOf()
+        openDatabases.value = listOf()
     }
 
-    override fun readFromSource(source: FileSource, secrets: FileSecrets): VaultId {
-        val alreadyOpen = openDatabases.find { it.id == source.id }
+    override fun readFromSource(
+        source: FileSource,
+        secrets: FileSecrets
+    ): Either<Exception, OpenDatabase> {
+        val alreadyOpen = openDatabases.value.find { it.id == source.id }
 
-        if (alreadyOpen == null) {
-            val database = when (source) {
+        return if (alreadyOpen == null) {
+            when (source) {
                 is FileSource.Storage -> readFromStorage(source, secrets)
+            }.map { database ->
+                OpenDatabase(database, source, secrets).also {
+                    openDatabases.value += it
+                }
             }
-            return pushDatabase(database, source, secrets)
         } else {
-            throw DatabaseAlreadyOpenException()
+            Left(DatabaseAlreadyOpenException())
         }
     }
 
-    override fun createDatabase(source: FileSource, secrets: FileSecrets): VaultId {
-        val sample = KeyDatabase(
-            KeyMeta(),
-            KeyGroup(
-                name = "MyDB",
-                notes = "Some notes",
-                groups = mutableListOf(
-                    KeyGroup(name = "Special", notes = "Lorem ipsum dolor")
-                ), entries = mutableListOf(
-                    KeyEntry(
-                        title = "My entry",
-                        password = "GJKHEFJEH656"
-                    ),
-                    KeyEntry(
-                        title = "Second entry",
-                        password = "R#JFJDERFLL"
-                    )
-                )
-            )
-        )
-
-        when (source) {
-            is FileSource.Storage -> writeToStorage(sample, source, secrets)
+    override fun createDatabase(
+        source: FileSource,
+        secrets: FileSecrets
+    ): Either<Exception, VaultId> = when (source) {
+        is FileSource.Storage -> writeToStorage(SampleDatabase, source, secrets)
+    }.map { database ->
+        source.id.also {
+            openDatabases.value += OpenDatabase(database, source, secrets)
         }
-
-        return pushDatabase(sample, source, secrets)
     }
 
-    private fun readFromStorage(source: FileSource.Storage, secrets: FileSecrets): KeyDatabase {
-        require(secrets is KeyOnly) { "Only password protection is supported." }
-        require(secrets.masterKey is Secret.Unencrypted) { "Master key must be unencrypted at this point." }
+    private fun readFromStorage(
+        source: FileSource.Storage,
+        secrets: FileSecrets
+    ): Either<Exception, KeyDatabase> = eitherCatch {
+        require(secrets is KeyOnly) {
+            "Only password protection is supported."
+        }
+        require(secrets.masterKey is Secret.Unencrypted) {
+            "Master key must be unencrypted at this point."
+        }
 
         val database = KeePassDatabase
             .getInstance(storageFile.openInputStream(source.uri))
             .openDatabase((secrets.masterKey as Secret.Unencrypted).content)
 
-        return KeePassTransformer.from(database)
+        KeePassTransformer.from(database)
     }
 
-    private fun writeToStorage(database: KeyDatabase, source: FileSource.Storage, secrets: FileSecrets) {
-        require(secrets is KeyOnly) { "Only password protection is supported." }
-        require(secrets.masterKey is Secret.Unencrypted) { "Master key must be unencrypted at this point." }
+    private fun writeToStorage(
+        database: KeyDatabase,
+        source: FileSource.Storage,
+        secrets: FileSecrets
+    ) = eitherCatch {
+        require(secrets is KeyOnly) {
+            "Only password protection is supported."
+        }
+        require(secrets.masterKey is Secret.Unencrypted) {
+            "Master key must be unencrypted at this point."
+        }
 
-        val outputStream = storageFile.openOutputStream(source.uri)
-        KeePassDatabase.write(KeePassTransformer.to(database), (secrets.masterKey as Secret.Unencrypted).content, outputStream)
-    }
-
-    private fun pushDatabase(database: KeyDatabase, source: FileSource, secrets: FileSecrets): VaultId {
-        openDatabases = openDatabases + OpenDatabase(database, source, secrets)
-        return source.id
+        storageFile.openOutputStream(source.uri).use { outputStream ->
+            database.also {
+                KeePassDatabase.write(
+                    KeePassTransformer.to(it),
+                    (secrets.masterKey as Secret.Unencrypted).content,
+                    outputStream
+                )
+            }
+        }
     }
 }

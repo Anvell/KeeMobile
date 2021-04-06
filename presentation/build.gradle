@@ -3,7 +3,6 @@ import constants.Dependencies
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
@@ -47,11 +46,6 @@ dependencies {
     implementation Dependencies.AndroidCore.appcompat
     implementation Dependencies.AndroidCore.coreKtx
     implementation Dependencies.AndroidCore.documentfile
-    implementation Dependencies.AndroidCore.Widgets.material
-    implementation Dependencies.AndroidCore.Widgets.constraintlayout
-    implementation Dependencies.AndroidCore.Widgets.recyclerview
-    implementation Dependencies.AndroidCore.Widgets.viewpager
-    implementation Dependencies.AndroidCore.dynamicAnimation
 
     implementation Dependencies.AndroidCore.Fragment.fragment
     implementation Dependencies.AndroidCore.Fragment.fragmentKtx
@@ -70,15 +64,10 @@ dependencies {
     implementation Dependencies.Compose.animation
     implementation Dependencies.Compose.material
     implementation Dependencies.Compose.livedata
+    implementation Dependencies.Compose.icons
     implementation Dependencies.Compose.Extra.activity
-
-    implementation Dependencies.RxJava.rxJava
-    implementation Dependencies.RxJava.rxAndroid
-    implementation Dependencies.RxJava.rxBindings
-
-    implementation Dependencies.Epoxy.epoxy
-    implementation Dependencies.Epoxy.dataBinding
-    kapt Dependencies.Epoxy.processor
+    implementation Dependencies.Accompanist.flowlayout
+    implementation Dependencies.Accompanist.insets
 
     implementation Dependencies.Security.biometric
 

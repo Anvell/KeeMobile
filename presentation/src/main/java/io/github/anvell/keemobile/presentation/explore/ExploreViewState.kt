@@ -8,10 +8,12 @@ import java.util.*
 
 data class ExploreViewState(
     val activeDatabaseId: VaultId,
-    val rootStack: List<UUID> = listOf(),
+    val searchFilter: String = "",
+    val viewMode: ViewMode = ViewMode.TREE,
+    val navigationStack: List<UUID> = listOf(),
+    val databases: Async<List<OpenDatabase>> = Uninitialized,
+    val recentFiles: Async<List<FileListEntry>> = Uninitialized,
     val activeDatabase: Async<OpenDatabase> = Uninitialized,
     val searchResults: Async<SearchResults> = Uninitialized,
     val appSettings: Async<AppSettings> = Uninitialized
-) {
-    constructor(args: ExploreArgs) : this(args.databaseId)
-}
+)

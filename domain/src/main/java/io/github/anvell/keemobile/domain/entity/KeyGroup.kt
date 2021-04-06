@@ -3,12 +3,12 @@ package io.github.anvell.keemobile.domain.entity
 import java.util.*
 
 data class KeyGroup(
-    val uuid: UUID = UUID.randomUUID(),
-    val name: String,
-    val notes: String = "",
-    val iconId: Int = 49,
+    override val uuid: UUID = UUID.randomUUID(),
+    override val name: String,
+    override val iconId: Int = 49,
     val iconData: ByteArray? = null,
     val customIconUuid: UUID? = null,
+    val notes: String = "",
     val times: KeyDateTime? = null,
     val isExpanded: Boolean = false,
     val defaultAutoTypeSequence: String? = null,
@@ -17,11 +17,11 @@ data class KeyGroup(
     val lastTopVisibleEntry: UUID? = null,
     val groups: MutableList<KeyGroup> = mutableListOf(),
     val entries: MutableList<KeyEntry> = mutableListOf()
-) {
+): KeyDatabaseItem() {
 
     fun getEntryByTitle(title: String): KeyEntry? {
         for (entry in entries) {
-            if (entry.title.equals(title, ignoreCase = true)) {
+            if (entry.name.equals(title, ignoreCase = true)) {
                 return entry
             }
         }

@@ -38,9 +38,6 @@ dependencies {
     kapt Dependencies.Hilt.compiler
     kapt Dependencies.AndroidCore.Hilt.compiler
 
-    implementation Dependencies.RxJava.rxJava
-    implementation Dependencies.RxJava.rxAndroid
-
     implementation Dependencies.Security.tink
     implementation Dependencies.Security.jetpackSecurity
     implementation Dependencies.Security.biometric

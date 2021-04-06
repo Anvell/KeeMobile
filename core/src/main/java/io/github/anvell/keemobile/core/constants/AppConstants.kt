@@ -1,12 +1,10 @@
 package io.github.anvell.keemobile.core.constants
 
 object AppConstants {
-    const val MAX_RECENT_FILES = 6
+    const val KeystoreAliasRecentFiles = "io.github.anvell.keemobile.recentfiles"
+    const val KeystoreAliasBiometric = "io.github.anvell.keemobile.biometric"
 
-    const val KEYSTORE_ALIAS_RECENT_FILES = "io.github.anvell.keemobile.recentfiles"
-    const val KEYSTORE_ALIAS_BIOMETRIC = "io.github.anvell.keemobile.biometric"
-
-    const val FILE_RECENT_FILES = "recent_files.json"
-    const val FILE_PREFERENCES = "preferences.json"
-    const val FILE_PROVIDER = "io.github.anvell.keemobile.file.provider"
+    const val FileRecentFiles = "recent_files.json"
+    const val FilePreferences = "preferences.json"
+    const val FileProvider = "io.github.anvell.keemobile.file.provider"
 }

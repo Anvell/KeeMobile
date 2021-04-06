@@ -3,11 +3,11 @@ package io.github.anvell.keemobile.data.transformer
 import de.slackspace.openkeepass.domain.*
 import io.github.anvell.keemobile.domain.entity.*
 
-private const val USER_NAME = "UserName"
-private const val NOTES = "Notes"
-private const val URL = "URL"
-private const val PASSWORD = "Password"
-private const val TITLE = "Title"
+private const val UserName = "UserName"
+private const val Notes = "Notes"
+private const val Url = "URL"
+private const val Password = "Password"
+private const val Title = "Title"
 
 object KeePassTransformer {
 
@@ -120,7 +120,7 @@ object KeePassTransformer {
     private fun KeyEntry.convert(database: KeyDatabase): Entry {
         val entryBuilder = EntryBuilder()
             .uuid(uuid)
-            .title(title)
+            .title(name)
             .username(username)
             .password(password)
             .url(url)
@@ -199,10 +199,10 @@ object KeePassTransformer {
         KeyGroup(
             uuid,
             name ?: "",
-            notes ?: "",
             iconId,
             iconData,
             customIconUuid,
+            notes ?: "",
             times?.convert(),
             isExpanded,
             defaultAutoTypeSequence,
@@ -216,14 +216,14 @@ object KeePassTransformer {
     private fun Entry.convert(): KeyEntry =
         KeyEntry(
             uuid,
-            getPropertyByName(TITLE)?.value ?: "",
-            getPropertyByName(USER_NAME)?.value ?: "",
-            getPropertyByName(PASSWORD)?.value ?: "",
-            getPropertyByName(URL)?.value ?: "",
-            getPropertyByName(NOTES)?.value ?: "",
+            getPropertyByName(Title)?.value ?: "",
             iconId,
             iconData,
             customIconUuid,
+            getPropertyByName(UserName)?.value ?: "",
+            getPropertyByName(Password)?.value ?: "",
+            getPropertyByName(Url)?.value ?: "",
+            getPropertyByName(Notes)?.value ?: "",
             times?.convert(),
             foregroundColor,
             backgroundColor,

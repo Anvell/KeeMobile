@@ -9,7 +9,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 
 internal object CipherHelper {
-    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
+    private const val AndroidKeystore = "AndroidKeyStore"
 
     fun encrypt(
         keyGenParameterSpec: KeyGenParameterSpec
@@ -33,7 +33,7 @@ internal object CipherHelper {
             generateKey(keyGenParameterSpec)
         }
 
-        return KeyStore.getInstance(ANDROID_KEYSTORE).run {
+        return KeyStore.getInstance(AndroidKeystore).run {
             load(null)
             getKey(keyGenParameterSpec.keystoreAlias, null)
         }
@@ -42,14 +42,14 @@ internal object CipherHelper {
     private fun generateKey(keyGenParameterSpec: KeyGenParameterSpec) {
         val keyGenerator = KeyGenerator.getInstance(
             KeyProperties.KEY_ALGORITHM_AES,
-            ANDROID_KEYSTORE
+            AndroidKeystore
         )
         keyGenerator.init(keyGenParameterSpec)
         keyGenerator.generateKey()
     }
 
     private fun keyExists(keyAlias: String): Boolean {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
+        val keyStore = KeyStore.getInstance(AndroidKeystore)
         keyStore.load(null)
         return keyStore.containsAlias(keyAlias)
     }

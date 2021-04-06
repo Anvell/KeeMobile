@@ -5,9 +5,14 @@ import io.github.anvell.keemobile.core.constants.AppConstants
 import io.github.anvell.keemobile.core.io.InternalFile
 import io.github.anvell.keemobile.core.io.StorageFile
 import io.github.anvell.keemobile.core.security.KeystoreEncryption
+import io.github.anvell.keemobile.domain.datatypes.Either
+import io.github.anvell.keemobile.domain.datatypes.eitherCatch
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.repository.RecentFilesRepository
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -20,53 +25,59 @@ class RecentFilesRepositoryImpl @Inject constructor(
     private val storageFile: StorageFile,
     private val keystoreEncryption: KeystoreEncryption,
 ) : RecentFilesRepository {
+    private val recentFiles = MutableSharedFlow<List<FileListEntry>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    override fun readRecentFiles(): List<FileListEntry> {
-        if (!internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
-            throw RuntimeException("${AppConstants.FILE_RECENT_FILES} does not exist.")
+    override val recentFilesAsFlow: SharedFlow<List<FileListEntry>> = recentFiles
+
+    override suspend fun readRecentFiles(): Either<Exception, List<FileListEntry>> = eitherCatch {
+        if (!internalFile.exists(AppConstants.FileRecentFiles)) {
+            throw IOException("${AppConstants.FileRecentFiles} does not exist.")
         }
 
-        internalFile.openInputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
+        internalFile.openInputStream(AppConstants.FileRecentFiles)?.use { stream ->
             val data = keystoreEncryption.decrypt(
-                AppConstants.KEYSTORE_ALIAS_RECENT_FILES,
+                AppConstants.KeystoreAliasRecentFiles,
                 stream.readBytes(),
-                AppConstants.FILE_RECENT_FILES.toByteArray()
+                AppConstants.FileRecentFiles.toByteArray()
             ).toString(Charsets.UTF_8)
 
-            return Json.decodeFromString<List<FileListEntry>>(data).filter {
+            Json.decodeFromString<List<FileListEntry>>(data).filter {
                 when (val source = it.fileSource) {
                     is FileSource.Storage -> {
                         storageFile.checkUriPermission(source.uri) && storageFile.exists(source.uri)
                     }
                     else -> true
                 }
+            }.also {
+                recentFiles.emit(it)
             }
-        }
-
-        throw IOException("Cannot open ${AppConstants.FILE_RECENT_FILES}")
+        } ?: throw IOException("Cannot open ${AppConstants.FileRecentFiles}")
     }
 
-    override fun writeRecentFiles(recentFiles: List<FileListEntry>): List<FileListEntry> {
-        internalFile.openOutputStream(AppConstants.FILE_RECENT_FILES)?.use { stream ->
-            val data = Json.encodeToString(recentFiles)
-
+    override suspend fun writeRecentFiles(
+        items: List<FileListEntry>
+    ): Either<Exception, List<FileListEntry>> = eitherCatch {
+        internalFile.openOutputStream(AppConstants.FileRecentFiles)?.use { stream ->
+            val data = Json.encodeToString(items)
             val encrypted = keystoreEncryption.encrypt(
-                AppConstants.KEYSTORE_ALIAS_RECENT_FILES,
+                AppConstants.KeystoreAliasRecentFiles,
                 data.toByteArray(),
-                AppConstants.FILE_RECENT_FILES.toByteArray()
+                AppConstants.FileRecentFiles.toByteArray()
             )
             stream.write(encrypted)
-            return recentFiles
-        }
-
-        throw IOException("Cannot write ${AppConstants.FILE_RECENT_FILES}")
+            items.also {
+                recentFiles.emit(it)
+            }
+        } ?: throw IOException("Cannot write ${AppConstants.FileRecentFiles}")
     }
 
-    override fun clearRecentFiles(): Boolean {
-        return if (internalFile.exists(AppConstants.FILE_RECENT_FILES)) {
-            internalFile.remove(AppConstants.FILE_RECENT_FILES)
-        } else {
-            true
+    override suspend fun clearRecentFiles(): Either<Exception, Unit> = eitherCatch {
+        if (internalFile.exists(AppConstants.FileRecentFiles)) {
+            internalFile.remove(AppConstants.FileRecentFiles)
         }
+        recentFiles.emit(listOf())
     }
 }

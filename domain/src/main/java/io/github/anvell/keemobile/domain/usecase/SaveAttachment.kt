@@ -1,6 +1,8 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
+import io.github.anvell.keemobile.domain.datatypes.eitherCatch
+import io.github.anvell.keemobile.domain.datatypes.mapLeft
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.domain.entity.BinaryData
 import io.github.anvell.keemobile.domain.exceptions.DownloadsSaveException
@@ -17,10 +19,10 @@ class SaveAttachment @Inject constructor(
     // Raw data is already decompressed at this stage
     suspend operator fun invoke(name: String, binaryData: BinaryData) =
         withContext(dispatchers.io) {
-            try {
+            eitherCatch {
                 downloadsRepository.writeToDownloads(name, binaryData.data)
-            } catch (e: Throwable) {
-                throw DownloadsSaveException(cause = e)
+            }.mapLeft {
+                DownloadsSaveException(cause = it)
             }
         }
 }
