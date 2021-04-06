@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +44,7 @@ fun AppTheme.TopAppBar(
         ) {
             ProvideTextStyle(
                 value = MaterialTheme.typography.body1.copy(
-                    color = MaterialTheme.colors.onSecondary,
+                    color = contentColorFor(backgroundColor),
                     fontSize = TitleTextSize
                 ),
                 content = title
