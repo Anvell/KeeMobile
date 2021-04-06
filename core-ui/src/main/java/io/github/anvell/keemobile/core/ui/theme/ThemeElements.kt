@@ -24,14 +24,14 @@ internal object ThemeElements {
     )
 
     val colorsLight = Colors(
-        primary = ColorPalette.teal_600,
+        primary = ColorPalette.green_400,
         primaryVariant = ColorPalette.teal_900,
         secondary = ColorPalette.pink_600,
         secondaryVariant = ColorPalette.red,
         background = ColorPalette.white,
         surface = ColorPalette.grey_200,
         error = ColorPalette.pink_400,
-        onPrimary = ColorPalette.grey_200,
+        onPrimary = ColorPalette.white,
         onSecondary = ColorPalette.white,
         onBackground = ColorPalette.grey_800,
         onSurface = ColorPalette.grey_800,

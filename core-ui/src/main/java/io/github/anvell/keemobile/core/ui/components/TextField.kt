@@ -140,7 +140,7 @@ fun AppTheme.TextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onTextFieldFocused: (Boolean) -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    textColor: Color = MaterialTheme.colors.onSecondary,
+    textColor: Color = MaterialTheme.colors.onSurface,
     cursorColor: Color = MaterialTheme.colors.secondary,
     backgroundColor: Color = MaterialTheme.colors.surface,
     shape: Shape = MaterialTheme.shapes.medium,
