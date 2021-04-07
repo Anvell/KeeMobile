@@ -13,6 +13,8 @@ dependencies {
 
     implementation Dependencies.Kotlin.serializationJson
 
+    implementation Dependencies.Core.either
+
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
     implementation Dependencies.AndroidCore.Hilt.viewmodel

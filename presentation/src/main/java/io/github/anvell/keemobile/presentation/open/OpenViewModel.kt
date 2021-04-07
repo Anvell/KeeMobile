@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.anvell.async.Success
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
-import io.github.anvell.keemobile.domain.datatypes.Right
-import io.github.anvell.keemobile.domain.datatypes.map
-import io.github.anvell.keemobile.domain.datatypes.or
+import io.github.anvell.either.Right
+import io.github.anvell.either.map
+import io.github.anvell.either.or
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource

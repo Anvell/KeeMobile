@@ -7,6 +7,7 @@ object Dependencies {
         const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.1"
         const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-beta03"
         const val async = "com.github.anvell:async:0.1.0"
+        const val either = "com.github.anvell:either:0.1.0"
     }
 
     object Kotlin {

@@ -10,10 +10,10 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import io.github.anvell.keemobile.core.constants.AppConstants.KeystoreAliasBiometric
-import io.github.anvell.keemobile.domain.datatypes.Either
-import io.github.anvell.keemobile.domain.datatypes.Left
-import io.github.anvell.keemobile.domain.datatypes.Right
-import io.github.anvell.keemobile.domain.datatypes.map
+import io.github.anvell.either.Either
+import io.github.anvell.either.Left
+import io.github.anvell.either.Right
+import io.github.anvell.either.map
 import io.github.anvell.keemobile.domain.entity.Secret
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.crypto.Cipher

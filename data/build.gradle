@@ -21,6 +21,8 @@ dependencies {
 
     implementation Dependencies.Kotlin.serializationJson
 
+    implementation Dependencies.Core.either
+
     implementation Dependencies.Coroutines.core
     implementation Dependencies.Coroutines.android
 

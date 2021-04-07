@@ -5,8 +5,8 @@ import io.github.anvell.keemobile.core.constants.AppConstants
 import io.github.anvell.keemobile.core.io.InternalFile
 import io.github.anvell.keemobile.core.io.StorageFile
 import io.github.anvell.keemobile.core.security.KeystoreEncryption
-import io.github.anvell.keemobile.domain.datatypes.Either
-import io.github.anvell.keemobile.domain.datatypes.eitherCatch
+import io.github.anvell.either.Either
+import io.github.anvell.either.eitherCatch
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.repository.RecentFilesRepository

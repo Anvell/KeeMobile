@@ -9,7 +9,7 @@ import io.github.anvell.async.Async
 import io.github.anvell.async.Fail
 import io.github.anvell.async.Loading
 import io.github.anvell.async.Success
-import io.github.anvell.keemobile.domain.datatypes.*
+import io.github.anvell.either.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString

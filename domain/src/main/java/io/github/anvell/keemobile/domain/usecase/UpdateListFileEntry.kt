@@ -1,8 +1,8 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
-import io.github.anvell.keemobile.domain.datatypes.flatMap
-import io.github.anvell.keemobile.domain.datatypes.map
+import io.github.anvell.either.flatMap
+import io.github.anvell.either.map
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.repository.RecentFilesRepository

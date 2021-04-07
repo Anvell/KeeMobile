@@ -8,8 +8,8 @@ import io.github.anvell.async.Uninitialized
 import io.github.anvell.keemobile.core.extensions.getArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.datatypes.Right
-import io.github.anvell.keemobile.domain.datatypes.or
+import io.github.anvell.either.Right
+import io.github.anvell.either.or
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.observers.OpenDatabasesObserver
 import io.github.anvell.keemobile.domain.observers.RecentFilesObserver

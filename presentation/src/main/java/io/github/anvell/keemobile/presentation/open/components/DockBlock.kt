@@ -11,7 +11,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import io.github.anvell.keemobile.core.extensions.getName
 import io.github.anvell.keemobile.core.extensions.toSha256
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
-import io.github.anvell.keemobile.domain.datatypes.map
+import io.github.anvell.either.map
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.KeyOnly
 import io.github.anvell.keemobile.domain.entity.Secret

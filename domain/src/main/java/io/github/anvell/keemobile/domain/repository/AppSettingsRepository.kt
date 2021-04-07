@@ -1,6 +1,6 @@
 package io.github.anvell.keemobile.domain.repository
 
-import io.github.anvell.keemobile.domain.datatypes.Either
+import io.github.anvell.either.Either
 import io.github.anvell.keemobile.domain.entity.AppSettings
 
 interface AppSettingsRepository {

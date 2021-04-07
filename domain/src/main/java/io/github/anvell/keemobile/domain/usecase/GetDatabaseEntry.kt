@@ -2,10 +2,10 @@ package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.datatypes.Either
-import io.github.anvell.keemobile.domain.datatypes.Right
-import io.github.anvell.keemobile.domain.datatypes.Left
-import io.github.anvell.keemobile.domain.datatypes.flatMap
+import io.github.anvell.either.Either
+import io.github.anvell.either.Right
+import io.github.anvell.either.Left
+import io.github.anvell.either.flatMap
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
 import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.domain.exceptions.EntryNotFoundException
