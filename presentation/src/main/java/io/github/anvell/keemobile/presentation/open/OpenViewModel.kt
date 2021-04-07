@@ -2,9 +2,9 @@ package io.github.anvell.keemobile.presentation.open
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.anvell.async.Success
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
 import io.github.anvell.keemobile.domain.datatypes.Right
-import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.datatypes.map
 import io.github.anvell.keemobile.domain.datatypes.or
 import io.github.anvell.keemobile.domain.entity.FileListEntry

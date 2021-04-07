@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.insets.statusBarsPadding
+import io.github.anvell.async.Success
+import io.github.anvell.async.Uninitialized
 import io.github.anvell.keemobile.core.ui.components.Dialog
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.extensions.toast
@@ -27,8 +29,6 @@ import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
 import io.github.anvell.keemobile.core.ui.navigation.AppNavigator
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.keemobile.domain.datatypes.Success
-import io.github.anvell.keemobile.domain.datatypes.Uninitialized
 import io.github.anvell.keemobile.domain.entity.ViewMode
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.data.EntryType

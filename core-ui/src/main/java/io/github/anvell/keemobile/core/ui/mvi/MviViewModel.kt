@@ -5,6 +5,10 @@ package io.github.anvell.keemobile.core.ui.mvi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.anvell.async.Async
+import io.github.anvell.async.Fail
+import io.github.anvell.async.Loading
+import io.github.anvell.async.Success
 import io.github.anvell.keemobile.domain.datatypes.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

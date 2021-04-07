@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
+import io.github.anvell.async.Fail
+import io.github.anvell.async.Success
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.components.TopAppBar
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
@@ -28,8 +30,6 @@ import io.github.anvell.keemobile.core.ui.mappers.ErrorMapper
 import io.github.anvell.keemobile.core.ui.mappers.FilterColorMapper
 import io.github.anvell.keemobile.core.ui.mappers.IconMapper
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
-import io.github.anvell.keemobile.domain.datatypes.Fail
-import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.data.EntryType
 import io.github.anvell.keemobile.presentation.entrydetails.components.EntryDetailsButton

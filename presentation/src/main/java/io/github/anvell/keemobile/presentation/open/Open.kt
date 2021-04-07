@@ -15,10 +15,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
+import io.github.anvell.async.Fail
+import io.github.anvell.async.Loading
+import io.github.anvell.async.Success
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
-import io.github.anvell.keemobile.domain.datatypes.Fail
-import io.github.anvell.keemobile.domain.datatypes.Loading
-import io.github.anvell.keemobile.domain.datatypes.Success
 import io.github.anvell.keemobile.domain.entity.KeyOnly
 import io.github.anvell.keemobile.domain.entity.Secret
 import io.github.anvell.keemobile.presentation.R

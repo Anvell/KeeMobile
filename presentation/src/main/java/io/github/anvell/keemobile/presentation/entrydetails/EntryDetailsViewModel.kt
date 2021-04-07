@@ -3,6 +3,8 @@ package io.github.anvell.keemobile.presentation.entrydetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.anvell.async.Fail
+import io.github.anvell.async.Uninitialized
 import io.github.anvell.keemobile.core.extensions.getJsonArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
