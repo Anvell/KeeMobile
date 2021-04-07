@@ -1,9 +1,7 @@
 package io.github.anvell.keemobile.core.ui.mappers
 
 import androidx.annotation.DrawableRes
-import dagger.Reusable
 import io.github.anvell.keemobile.core.ui.R
-import javax.inject.Inject
 
 object IconMapper {
 

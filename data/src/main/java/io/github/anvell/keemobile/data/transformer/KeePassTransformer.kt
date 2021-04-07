@@ -23,11 +23,13 @@ object KeePassTransformer {
         .withRoot(
             DocumentRootBuilder()
                 .rootGroup(database.root.convert(database))
-                .addDeletedObjects(database.deletedEntries.map {
-                    DeletedObjectBuilder(it.uuid)
-                        .deletionTime(it.deletionTime)
-                        .build()
-                })
+                .addDeletedObjects(
+                    database.deletedEntries.map {
+                        DeletedObjectBuilder(it.uuid)
+                            .deletionTime(it.deletionTime)
+                            .build()
+                    }
+                )
                 .build()
         ).build()
 
@@ -55,22 +57,26 @@ object KeePassTransformer {
             .historyMaxSize(historyMaxSize)
             .binaries(
                 BinariesBuilder()
-                    .binaries(binaries?.map {
-                        BinaryBuilder()
-                            .id(it.id)
-                            .data(it.data)
-                            .isCompressed(it.isCompressed)
-                            .build()
-                    }).build()
+                    .binaries(
+                        binaries?.map {
+                            BinaryBuilder()
+                                .id(it.id)
+                                .data(it.data)
+                                .isCompressed(it.isCompressed)
+                                .build()
+                        }
+                    ).build()
             )
-            .customIcons(CustomIconsBuilder().customIcons(
-                customIcons?.map {
-                    CustomIconBuilder()
-                        .uuid(it.uuid)
-                        .data(it.data)
-                        .build()
-                }
-            ).build())
+            .customIcons(
+                CustomIconsBuilder().customIcons(
+                    customIcons?.map {
+                        CustomIconBuilder()
+                            .uuid(it.uuid)
+                            .data(it.data)
+                            .build()
+                    }
+                ).build()
+            )
             .build()
 
     private fun KeyGroup.convert(database: KeyDatabase): Group {
@@ -160,12 +166,14 @@ object KeePassTransformer {
             .enabled(isEnabled)
             .defaultSequence(defaultSequence)
             .dataTransferObfuscation(dataTransferObfuscation)
-            .addAssociation(*associations.map {
-                AutoTypeAssociationBuilder()
-                    .windowTitle(it.windowTitle)
-                    .keystrokeSequence(it.keystrokeSequence)
-                    .build()
-            }.toTypedArray())
+            .addAssociation(
+                *associations.map {
+                    AutoTypeAssociationBuilder()
+                        .windowTitle(it.windowTitle)
+                        .keystrokeSequence(it.keystrokeSequence)
+                        .build()
+                }.toTypedArray()
+            )
             .build()
 
     private fun Meta.convert(): KeyMeta =
@@ -244,5 +252,4 @@ object KeePassTransformer {
                 KeyAutoTypeAssociation(it.windowTitle, it.keystrokeSequence)
             }.toMutableList()
         )
-
 }

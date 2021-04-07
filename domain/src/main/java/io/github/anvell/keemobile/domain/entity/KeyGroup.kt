@@ -17,7 +17,7 @@ data class KeyGroup(
     val lastTopVisibleEntry: UUID? = null,
     val groups: MutableList<KeyGroup> = mutableListOf(),
     val entries: MutableList<KeyEntry> = mutableListOf()
-): KeyDatabaseItem() {
+) : KeyDatabaseItem() {
 
     fun getEntryByTitle(title: String): KeyEntry? {
         for (entry in entries) {
@@ -28,5 +28,4 @@ data class KeyGroup(
 
         return null
     }
-
 }

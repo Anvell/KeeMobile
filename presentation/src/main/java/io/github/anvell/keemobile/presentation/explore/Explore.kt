@@ -62,8 +62,8 @@ fun Explore(
             leading = {
                 AnimatedVisibility(
                     visible = state.searchFilter.isEmpty() &&
-                            state.navigationStack.isNotEmpty() &&
-                            state.viewMode == ViewMode.TREE,
+                        state.navigationStack.isNotEmpty() &&
+                        state.viewMode == ViewMode.TREE,
                     enter = expandHorizontally(),
                     exit = shrinkHorizontally(),
                 ) {
@@ -134,7 +134,6 @@ fun Explore(
                         )
                     }
                 }
-
             }
         }
     }

@@ -37,7 +37,6 @@ class MediaStoreFileImpl @Inject constructor(@ApplicationContext private val con
                     uri.toString() to stream
                 }
             }
-
         } else {
             val dir = Environment.getExternalStoragePublicDirectory(directory).toString()
             var file = File(dir, fileName)

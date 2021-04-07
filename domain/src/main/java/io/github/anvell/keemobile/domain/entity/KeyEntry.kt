@@ -21,7 +21,7 @@ data class KeyEntry(
     val history: MutableList<KeyEntry> = mutableListOf(),
     val attachments: MutableList<KeyAttachment> = mutableListOf(),
     val customProperties: MutableList<KeyProperty> = mutableListOf()
-): KeyDatabaseItem() {
+) : KeyDatabaseItem() {
 
     fun getCustomPropertyByName(name: String): KeyProperty? {
         for (property in customProperties) {
@@ -32,5 +32,4 @@ data class KeyEntry(
 
         return null
     }
-
 }

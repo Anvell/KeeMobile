@@ -1,7 +1,7 @@
 package io.github.anvell.keemobile.domain.repository
 
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.either.Either
+import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.OpenDatabase

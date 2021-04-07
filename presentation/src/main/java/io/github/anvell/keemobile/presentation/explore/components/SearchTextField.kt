@@ -95,7 +95,6 @@ internal fun SearchTextField(
                             tint = MaterialTheme.colors.onSurface
                         )
                     }
-
                 }
             },
             keyboardOptions = KeyboardOptions.Default.copy(

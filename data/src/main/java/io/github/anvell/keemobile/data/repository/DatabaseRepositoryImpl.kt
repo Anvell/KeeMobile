@@ -1,10 +1,10 @@
 package io.github.anvell.keemobile.data.repository
 
 import de.slackspace.openkeepass.KeePassDatabase
+import io.github.anvell.either.*
 import io.github.anvell.keemobile.core.io.StorageFile
 import io.github.anvell.keemobile.data.transformer.KeePassTransformer
 import io.github.anvell.keemobile.domain.alias.VaultId
-import io.github.anvell.either.*
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.domain.exceptions.DatabaseAlreadyOpenException
 import io.github.anvell.keemobile.domain.exceptions.DatabaseNotOpenException

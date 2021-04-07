@@ -1,7 +1,6 @@
 package io.github.anvell.keemobile.presentation.open
 
 import io.github.anvell.keemobile.domain.entity.FileListEntry
-import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 

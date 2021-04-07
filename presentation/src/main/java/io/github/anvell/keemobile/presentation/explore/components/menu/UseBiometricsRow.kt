@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.either.map
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.presentation.R
 import kotlinx.coroutines.launch

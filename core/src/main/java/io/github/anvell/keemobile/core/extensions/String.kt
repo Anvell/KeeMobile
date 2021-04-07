@@ -15,7 +15,7 @@ fun String.toSha512() = hash(Sha512)
 private fun String.hash(type: String): String {
 
     val bytes = MessageDigest.getInstance(type)
-            .digest(toByteArray())
+        .digest(toByteArray())
     val result = StringBuilder(bytes.size * 2)
 
     for (byte in bytes) {

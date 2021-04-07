@@ -48,15 +48,13 @@ class OneTimePassword(
 
             val offset = hash.last() and 0xf
             val code = ((hash[offset] and 0x7f) shl 24) or
-                    ((hash[offset + 1] and 0xff) shl 16) or
-                    ((hash[offset + 2] and 0xff) shl 8) or
-                    (hash[offset + 3] and 0xff)
+                ((hash[offset + 1] and 0xff) shl 16) or
+                ((hash[offset + 2] and 0xff) shl 8) or
+                (hash[offset + 3] and 0xff)
 
-            return (code % 10.0.pow(digits)
-                .toInt())
+            return (code % 10.0.pow(digits).toInt())
                 .toString()
                 .padStart(digits, '0')
-
         } catch (e: NoSuchAlgorithmException) {
             throw OneTimePasswordException(e.message, e.cause)
         } catch (e: InvalidKeyException) {
@@ -151,7 +149,6 @@ class OneTimePassword(
             return result
         }
     }
-
 }
 
 private fun String.toAlgorithm() = when (this) {

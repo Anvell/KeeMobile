@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.insets.LocalWindowInsets
+import io.github.anvell.either.map
 import io.github.anvell.keemobile.core.extensions.getName
 import io.github.anvell.keemobile.core.extensions.toSha256
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
-import io.github.anvell.either.map
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.KeyOnly
 import io.github.anvell.keemobile.domain.entity.Secret

@@ -66,7 +66,8 @@ fun AppTheme.ClearableTextField(
         trailing = {
             if (value.isNotEmpty()) {
                 IconButton(
-                    onClick = { onValueChange("") }) {
+                    onClick = { onValueChange("") }
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_close),
                         contentDescription = null,
@@ -188,9 +189,9 @@ fun AppTheme.TextField(
                 ) {
                     innerTextField()
 
-                    if (value.isEmpty()
-                        && !lastFocusState.isFocused
-                        && hint != null
+                    if (value.isEmpty() &&
+                        !lastFocusState.isFocused &&
+                        hint != null
                     ) {
                         ProvideTextStyle(
                             MaterialTheme.typography.body1.copy(
@@ -210,8 +211,7 @@ fun AppTheme.TextField(
                     Modifier
                         .padding(end = TextFieldTrailingItemPadding)
                         .wrapContentWidth()
-                )
-                {
+                ) {
                     content()
                 }
             }
