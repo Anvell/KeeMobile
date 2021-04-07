@@ -4,14 +4,14 @@ package constants
 object Dependencies {
 
     object Core {
-        const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.1"
+        const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
         const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-beta03"
         const val async = "com.github.anvell:async:0.1.0"
         const val either = "com.github.anvell:either:0.1.0"
     }
 
     object Kotlin {
-        private const val version = "1.4.31"
+        private const val version = "1.4.32"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
         const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
@@ -26,15 +26,15 @@ object Dependencies {
 
     object Testing {
         const val junit = "junit:junit:4.13.2"
-        const val mockk = "io.mockk:mockk:1.10.6"
+        const val mockk = "io.mockk:mockk:1.11.0"
         const val coreTesting = "androidx.arch.core:core-testing:2.1.0"
         const val rules = "androidx.test:rules:1.2.0"
-        const val strikt = "io.strikt:strikt-core:0.28.2"
+        const val strikt = "io.strikt:strikt-core:0.30.0"
         const val kotestAssertions = "io.kotest:kotest-assertions-core-jvm:4.0.7"
     }
 
     object Compose {
-        private const val version = "1.0.0-beta03"
+        private const val version = "1.0.0-beta04"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -53,7 +53,7 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.7.0"
+        private const val version = "0.7.1"
         const val flowlayout = "com.google.accompanist:accompanist-flowlayout:$version"
         const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
@@ -65,7 +65,7 @@ object Dependencies {
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
 
         object Navigation {
-            private const val version = "2.3.4"
+            private const val version = "2.3.5"
             const val fragment = "androidx.navigation:navigation-fragment-ktx:$version"
             const val ui = "androidx.navigation:navigation-ui-ktx:$version"
         }
