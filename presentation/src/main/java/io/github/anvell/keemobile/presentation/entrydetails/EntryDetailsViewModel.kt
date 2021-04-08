@@ -8,9 +8,9 @@ import io.github.anvell.async.Uninitialized
 import io.github.anvell.either.*
 import io.github.anvell.keemobile.core.extensions.getJsonArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyAttachment
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.usecase.GetAppSettings
 import io.github.anvell.keemobile.domain.usecase.GetDatabaseEntry
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase

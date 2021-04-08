@@ -1,8 +1,8 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.dispatchers.CoroutineDispatchers
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

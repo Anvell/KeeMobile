@@ -14,11 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.anvell.keemobile.core.ui.components.Spacers
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.KeyFileOnly
 import io.github.anvell.keemobile.domain.entity.OpenDatabase
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.presentation.R
 
 @OptIn(ExperimentalMaterialApi::class)

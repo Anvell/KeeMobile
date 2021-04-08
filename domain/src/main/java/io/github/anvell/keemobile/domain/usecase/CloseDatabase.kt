@@ -1,7 +1,7 @@
 package io.github.anvell.keemobile.domain.usecase
 
 import dagger.Reusable
-import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.repository.DatabaseRepository
 import javax.inject.Inject
 

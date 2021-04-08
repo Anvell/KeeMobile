@@ -2,10 +2,10 @@ package io.github.anvell.keemobile.presentation.entrydetails
 
 import io.github.anvell.async.Async
 import io.github.anvell.async.Uninitialized
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.AppSettings
 import io.github.anvell.keemobile.domain.entity.KeyEntry
 import io.github.anvell.keemobile.domain.entity.OpenDatabase
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.presentation.data.EntryType
 import io.github.anvell.keemobile.presentation.entrydetails.data.EntryDetailsArgs
 

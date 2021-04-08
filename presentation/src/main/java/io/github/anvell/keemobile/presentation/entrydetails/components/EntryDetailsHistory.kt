@@ -19,8 +19,8 @@ import com.google.accompanist.insets.navigationBarsWithImePadding
 import io.github.anvell.keemobile.core.extensions.formatAsDateTime
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.KeyEntry
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.data.EntryType
 import io.github.anvell.keemobile.presentation.entrydetails.data.EntryDetailsArgs

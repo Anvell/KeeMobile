@@ -1,8 +1,8 @@
 package io.github.anvell.keemobile.presentation.explore
 
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.entity.ViewMode
 import java.util.*
 

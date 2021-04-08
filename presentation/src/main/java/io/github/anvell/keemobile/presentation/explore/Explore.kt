@@ -28,7 +28,7 @@ import io.github.anvell.keemobile.core.ui.extensions.toast
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
 import io.github.anvell.keemobile.core.ui.navigation.AppNavigator
 import io.github.anvell.keemobile.core.ui.theme.AppTheme
-import io.github.anvell.keemobile.domain.alias.VaultId
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.entity.ViewMode
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.data.EntryType

@@ -1,4 +1,4 @@
-package io.github.anvell.keemobile.domain.alias
+package io.github.anvell.keemobile.domain.entity
 
 import kotlinx.serialization.Serializable
 

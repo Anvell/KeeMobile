@@ -7,10 +7,10 @@ import io.github.anvell.either.Right
 import io.github.anvell.either.map
 import io.github.anvell.either.or
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
-import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
+import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
