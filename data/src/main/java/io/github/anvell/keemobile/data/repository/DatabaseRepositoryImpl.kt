@@ -60,7 +60,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         source: FileSource,
         secrets: FileSecrets
     ): Either<Exception, OpenDatabase> {
-        val alreadyOpen = openDatabases.value.find { it.id == source.id }
+        val alreadyOpen = openDatabases.value.find { it.id == VaultId(source.id) }
 
         return if (alreadyOpen == null) {
             when (source) {
@@ -81,7 +81,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     ): Either<Exception, VaultId> = when (source) {
         is FileSource.Storage -> writeToStorage(SampleDatabase, source, secrets)
     }.map { database ->
-        source.id.also {
+        VaultId(source.id).also {
             openDatabases.value += OpenDatabase(database, source, secrets)
         }
     }

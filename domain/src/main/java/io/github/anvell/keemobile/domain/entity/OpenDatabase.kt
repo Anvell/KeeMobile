@@ -7,5 +7,5 @@ data class OpenDatabase(
     val source: FileSource,
     val secrets: FileSecrets
 ) {
-    val id: VaultId = source.id
+    val id = VaultId(source.id)
 }

@@ -8,6 +8,7 @@ import io.github.anvell.async.Uninitialized
 import io.github.anvell.either.Right
 import io.github.anvell.either.or
 import io.github.anvell.keemobile.core.extensions.getArguments
+import io.github.anvell.keemobile.core.extensions.getJsonArguments
 import io.github.anvell.keemobile.core.ui.mvi.MviComposeViewModel
 import io.github.anvell.keemobile.domain.alias.VaultId
 import io.github.anvell.keemobile.domain.entity.*
@@ -37,7 +38,7 @@ class ExploreViewModel @Inject constructor(
     private val saveAppSettings: SaveAppSettings,
     private val updateListFileEntry: UpdateListFileEntry
 ) : MviComposeViewModel<ExploreViewState, ExploreCommand>(
-    ExploreViewState(activeDatabaseId = savedStateHandle.getArguments())
+    ExploreViewState(activeDatabaseId = savedStateHandle.getJsonArguments())
 ) {
 
     init {

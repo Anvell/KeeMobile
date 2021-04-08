@@ -1,5 +1,6 @@
 package constants
 
+@Suppress("unused")
 object BuildVersions {
     const val buildTools = "30.0.3"
     const val compileSdk = 30

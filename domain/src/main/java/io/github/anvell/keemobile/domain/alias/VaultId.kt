@@ -1,3 +1,8 @@
 package io.github.anvell.keemobile.domain.alias
 
-typealias VaultId = String
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class VaultId(
+    val value: String
+)

@@ -25,6 +25,8 @@ import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.open.components.DockBlock
 import io.github.anvell.keemobile.presentation.open.components.LandingBlock
 import io.github.anvell.keemobile.presentation.open.components.VaultsBlock
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -90,7 +92,7 @@ fun Open(
             state.openFile is Success && !state.openFile.isConsumed -> {
                 navigator.navigate(
                     id = R.id.action_explore_database,
-                    data = state.openFile.unwrap()
+                    data = Json.encodeToString(state.openFile.unwrap())
                 )
             }
         }

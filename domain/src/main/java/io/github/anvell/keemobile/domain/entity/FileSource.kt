@@ -1,12 +1,11 @@
 package io.github.anvell.keemobile.domain.entity
 
-import io.github.anvell.keemobile.domain.alias.VaultId
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class FileSource {
-    abstract val id: VaultId
+    abstract val id: String
     abstract val name: String
 
     open val nameWithoutExtension: String
@@ -16,7 +15,7 @@ sealed class FileSource {
     @SerialName("Storage")
     class Storage(
         @SerialName("id")
-        override val id: VaultId,
+        override val id: String,
         @SerialName("name")
         override val name: String,
         @SerialName("uri")
