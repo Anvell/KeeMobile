@@ -2,6 +2,8 @@
 <resources>
     <dimen name="layout_horizontal_margin">16dp</dimen>
     <dimen name="layout_vertical_margin">16dp</dimen>
+    <dimen name="layout_maximum_width">500dp</dimen>
+    <dimen name="dialog_maximum_width">400dp</dimen>
     <dimen name="content_margin">16dp</dimen>
     <dimen name="content_margin_medium">32dp</dimen>
     <dimen name="list_item_vertical_padding">14dp</dimen>

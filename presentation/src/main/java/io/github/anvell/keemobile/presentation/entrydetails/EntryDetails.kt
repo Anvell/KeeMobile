@@ -55,7 +55,10 @@ fun EntryDetails(
         commands = commands,
         scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState)
     ) { attachments, history ->
-        Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
             AppTheme.TopAppBar(
                 navigationIcon = {
                     IconButton(
@@ -114,7 +117,7 @@ fun EntryDetails(
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
-                        .fillMaxSize()
+                        .width(dimensionResource(R.dimen.layout_maximum_width))
                         .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
                         .padding(
                             top = 4.dp,

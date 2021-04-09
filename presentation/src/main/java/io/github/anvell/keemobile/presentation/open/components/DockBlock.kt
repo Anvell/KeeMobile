@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun DockBlock(
     state: OpenViewState,
-    commands: (OpenCommand) -> Unit
+    commands: (OpenCommand) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val biometricHelper = LocalBiometricHelper.current
@@ -32,7 +33,7 @@ internal fun DockBlock(
 
     if (!windowInsets.ime.isVisible) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .padding(horizontal = dimensionResource(R.dimen.layout_horizontal_margin))
                 .padding(top = dimensionResource(R.dimen.content_margin))
         ) {

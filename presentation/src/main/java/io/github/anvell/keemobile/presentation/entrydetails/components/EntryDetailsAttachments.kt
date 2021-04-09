@@ -1,10 +1,14 @@
 package io.github.anvell.keemobile.presentation.entrydetails.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -25,6 +29,14 @@ internal fun EntryDetailsAttachments(
 ) {
     Column(
         Modifier
+            .background(
+                color = MaterialTheme.colors.background,
+                shape = MaterialTheme.shapes.large.copy(
+                    bottomStart = ZeroCornerSize,
+                    bottomEnd = ZeroCornerSize
+                )
+            )
+            .width(dimensionResource(R.dimen.layout_maximum_width))
             .verticalScroll(rememberScrollState())
             .navigationBarsWithImePadding()
             .padding(vertical = dimensionResource(R.dimen.layout_vertical_margin))

@@ -4,12 +4,14 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -43,6 +45,7 @@ fun Open(
         modifier = Modifier.navigationBarsWithImePadding()
     ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
@@ -70,13 +73,25 @@ fun Open(
                         onDismiss = {
                             commands(OpenCommand.RemoveRecentFile(it))
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .width(dimensionResource(R.dimen.layout_maximum_width))
+                            .weight(1f)
                     )
                 } else {
-                    LandingBlock(Modifier.weight(1f))
+                    LandingBlock(
+                        Modifier
+                            .width(dimensionResource(R.dimen.layout_maximum_width))
+                            .weight(1f)
+                    )
                 }
 
-                DockBlock(state, commands)
+                DockBlock(
+                    state = state,
+                    commands = commands,
+                    modifier = Modifier.width(
+                        dimensionResource(R.dimen.layout_maximum_width)
+                    )
+                )
             }
         }
     }
