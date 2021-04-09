@@ -29,7 +29,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import io.github.anvell.either.Right
 import io.github.anvell.keemobile.core.extensions.persistReadWritePermissions
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.FileListEntry
 import io.github.anvell.keemobile.domain.entity.FileListEntrySecrets
 import io.github.anvell.keemobile.presentation.R
@@ -50,6 +52,7 @@ internal fun Dock(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val biometricHelper = LocalBiometricHelper.current
 
     val defaultFileName = stringResource(R.string.open_default_file_name)
     val createDocumentContract = remember { ActivityResultContracts.CreateDocument() }
@@ -67,6 +70,8 @@ internal fun Dock(
             onDocumentOpened(uri)
         }
     }
+    val showBiometricUnlock = selected?.encryptedSecrets is FileListEntrySecrets.Some &&
+        biometricHelper.canAuthenticate() is Right
 
     Surface(
         elevation = DockElevation,
@@ -117,7 +122,7 @@ internal fun Dock(
             }
 
             AnimatedVisibility(
-                visible = selected?.encryptedSecrets is FileListEntrySecrets.Some,
+                visible = showBiometricUnlock,
                 modifier = Modifier.weight(1f)
             ) {
                 DockButton(

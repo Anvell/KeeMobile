@@ -13,7 +13,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.github.anvell.either.Right
 import io.github.anvell.keemobile.core.ui.components.Spacers
+import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.*
 import io.github.anvell.keemobile.presentation.R
 
@@ -29,6 +31,8 @@ internal fun ExploreMenu(
     onUseBiometrics: (source: FileSource, encryptedSecrets: FileListEntrySecrets) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val biometricHelper = LocalBiometricHelper.current
+
     Column(
         modifier.width(dimensionResource(R.dimen.dialog_maximum_width))
     ) {
@@ -94,7 +98,7 @@ internal fun ExploreMenu(
             )
             Divider()
 
-            if (selected.secrets !is KeyFileOnly) {
+            if (selected.secrets !is KeyFileOnly && biometricHelper.canAuthenticate() is Right) {
                 UseBiometricsRow(
                     database = selected,
                     encryptedSecrets = selectedEncryptedSecrets,
