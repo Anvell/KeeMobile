@@ -29,8 +29,10 @@ object Dependencies {
         const val mockk = "io.mockk:mockk:1.11.0"
         const val coreTesting = "androidx.arch.core:core-testing:2.1.0"
         const val rules = "androidx.test:rules:1.2.0"
-        const val strikt = "io.strikt:strikt-core:0.30.0"
-        const val kotestAssertions = "io.kotest:kotest-assertions-core-jvm:4.4.3"
+
+        object Kotest {
+            const val assertions = "io.kotest:kotest-assertions-core-jvm:4.4.3"
+        }
     }
 
     object Compose {

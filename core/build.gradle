@@ -27,7 +27,7 @@ dependencies {
 
     testImplementation Dependencies.Testing.junit
     testImplementation Dependencies.Testing.mockk
-    testImplementation Dependencies.Testing.strikt
+    testImplementation Dependencies.Testing.Kotest.assertions
 
     implementation Dependencies.AndroidCore.appcompat
     implementation Dependencies.AndroidCore.coreKtx

@@ -1,31 +1,38 @@
 package io.github.anvell.keemobile.core.security
 
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldHaveLength
+import io.kotest.matchers.string.shouldNotContain
 import org.junit.Test
-import strikt.api.expectThat
-import strikt.assertions.*
+
+private val UppercaseChars = Regex("[A-Z]+")
+private val LowercaseChars = Regex("[a-z]+")
+private val Numbers = Regex("[0-9]+")
 
 class RandomPasswordTest {
 
     @Test
     fun `Random password is generated with specific length`() {
-        expectThat(RandomPassword.create(8))
-            .hasLength(8)
+        RandomPassword.create(8) shouldHaveLength 8
     }
 
     @Test
     fun `Random password is generated with specific characters`() {
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.UppercaseLetters))
-            .matches(Regex("[A-Z]+"))
+        RandomPassword.create(
+            10,
+            RandomPassword.Dictionaries.UppercaseLetters
+        ) shouldContain UppercaseChars
 
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.LowercaseLetters))
-            .matches(Regex("[a-z]+"))
+        with(RandomPassword.create(10, RandomPassword.Dictionaries.LowercaseLetters)) {
+            this shouldContain LowercaseChars
+            this shouldNotContain UppercaseChars
+        }
 
-        expectThat(RandomPassword.create(10, RandomPassword.Dictionaries.Digits))
-            .matches(Regex("[0-9]+"))
+        RandomPassword.create(10, RandomPassword.Dictionaries.Digits) shouldContain Numbers
 
         RandomPassword.create(10, RandomPassword.Dictionaries.Symbols).forEach {
-            expectThat(RandomPassword.Dictionaries.Symbols.toList())
-                .any { isEqualTo(it) }
+            RandomPassword.Dictionaries.Symbols.toList() shouldContain it
         }
     }
 }
