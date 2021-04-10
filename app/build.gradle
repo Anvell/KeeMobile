@@ -31,7 +31,6 @@ dependencies {
 
     implementation Dependencies.Dagger.dagger
     implementation Dependencies.Hilt.library
-    implementation Dependencies.AndroidCore.Hilt.viewmodel
     kapt Dependencies.Dagger.compiler
     kapt Dependencies.Hilt.compiler
     kapt Dependencies.AndroidCore.Hilt.compiler
