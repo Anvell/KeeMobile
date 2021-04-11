@@ -30,6 +30,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.anvell.either.Right
+import io.github.anvell.keemobile.core.constants.AppFeatures
+import io.github.anvell.keemobile.core.constants.Feature
 import io.github.anvell.keemobile.core.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.FileListEntry
@@ -121,25 +123,26 @@ internal fun Dock(
                 )
             }
 
-            AnimatedVisibility(
-                visible = showBiometricUnlock,
-                modifier = Modifier.weight(1f)
-            ) {
-                DockButton(
-                    iconPainter = rememberVectorPainter(Icons.Default.Fingerprint),
-                    enabled = false,
-                    onClick = {
-                        (selected?.encryptedSecrets as? FileListEntrySecrets.Some)?.let {
-                            onUnlockWithBiometrics(it)
-                        }
-                    },
-                    modifier = Modifier
-                        .semantics {
-                            contentDescription = context.getString(
-                                R.string.open_button_label_use_biometrics
-                            )
-                        }
-                )
+            if (AppFeatures.contains(Feature.BiometricUnlock)) {
+                AnimatedVisibility(
+                    visible = showBiometricUnlock,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    DockButton(
+                        iconPainter = rememberVectorPainter(Icons.Default.Fingerprint),
+                        onClick = {
+                            (selected?.encryptedSecrets as? FileListEntrySecrets.Some)?.let {
+                                onUnlockWithBiometrics(it)
+                            }
+                        },
+                        modifier = Modifier
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.open_button_label_use_biometrics
+                                )
+                            }
+                    )
+                }
             }
         }
     }

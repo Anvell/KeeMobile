@@ -14,6 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.anvell.either.Right
+import io.github.anvell.keemobile.core.constants.AppFeatures
+import io.github.anvell.keemobile.core.constants.Feature
 import io.github.anvell.keemobile.core.ui.components.Spacers
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.*
@@ -96,14 +98,16 @@ internal fun ExploreMenu(
                 },
                 onClick = onOpen
             )
-            Divider()
 
-            if (selected.secrets !is KeyFileOnly && biometricHelper.canAuthenticate() is Right) {
-                UseBiometricsRow(
-                    database = selected,
-                    encryptedSecrets = selectedEncryptedSecrets,
-                    onClick = { onUseBiometrics(selected.source, it) }
-                )
+            if (AppFeatures.contains(Feature.BiometricUnlock)) {
+                if (selected.secrets !is KeyFileOnly && biometricHelper.canAuthenticate() is Right) {
+                    Divider()
+                    UseBiometricsRow(
+                        database = selected,
+                        encryptedSecrets = selectedEncryptedSecrets,
+                        onClick = { onUseBiometrics(selected.source, it) }
+                    )
+                }
             }
         }
     }
