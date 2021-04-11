@@ -15,6 +15,7 @@ import io.github.anvell.keemobile.domain.observers.OpenDatabasesObserver
 import io.github.anvell.keemobile.domain.observers.RecentFilesObserver
 import io.github.anvell.keemobile.domain.usecase.*
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
@@ -42,15 +43,15 @@ class ExploreViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            openDatabasesObserver().executeCatching { copy(databases = it) }
+            openDatabasesObserver().collectAsState { copy(databases = it) }
         }
         viewModelScope.launch {
-            recentFilesObserver().executeCatching { copy(recentFiles = it) }
+            recentFilesObserver().collectAsState { copy(recentFiles = it) }
         }
 
-        execute({
+        viewModelScope.async {
             getAppSettings().or { Right(AppSettings()) }
-        }) {
+        }.reduceAsState {
             copy(appSettings = it)
         }
 
@@ -85,7 +86,7 @@ class ExploreViewModel @Inject constructor(
     }
 
     private fun subscribeToSearchFilter() = viewModelScope.launch {
-        selectSubscribe(ExploreViewState::searchFilter)
+        selectAsFlow(ExploreViewState::searchFilter)
             .debounce(FilterTriggerTimeoutMs)
             .collect {
                 if (it.isNotBlank()) {
@@ -102,7 +103,10 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
-    private fun setEncryptedSecrets(fileSource: FileSource, encryptedSecrets: FileListEntrySecrets) {
+    private fun setEncryptedSecrets(
+        fileSource: FileSource,
+        encryptedSecrets: FileListEntrySecrets
+    ) {
         viewModelScope.launch {
             updateListFileEntry(
                 FileListEntry(
@@ -114,13 +118,17 @@ class ExploreViewModel @Inject constructor(
     }
 
     private fun updateAppSettings(settings: AppSettings) {
-        execute({ saveAppSettings(settings) }) {
+        viewModelScope.async {
+            saveAppSettings(settings)
+        }.reduceAsState {
             copy(appSettings = it)
         }
     }
 
     private fun activateDatabase(id: VaultId) {
-        execute({ getOpenDatabase(id) }) {
+        viewModelScope.async {
+            getOpenDatabase(id)
+        }.reduceAsState {
             copy(
                 activeDatabaseId = id,
                 activeDatabase = it,
@@ -132,9 +140,9 @@ class ExploreViewModel @Inject constructor(
 
     private fun filterEntries(filter: String) = withState { state ->
         if (state.searchResults is Uninitialized || state.searchResults()?.filter != filter) {
-            execute({
+            viewModelScope.async {
                 getFilteredEntries(state.activeDatabaseId, filter)
-            }) {
+            }.reduceAsState {
                 copy(searchResults = it)
             }
         }

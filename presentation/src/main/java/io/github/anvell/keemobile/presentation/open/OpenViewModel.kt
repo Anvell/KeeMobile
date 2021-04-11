@@ -12,6 +12,7 @@ import io.github.anvell.keemobile.domain.entity.FileSecrets
 import io.github.anvell.keemobile.domain.entity.FileSource
 import io.github.anvell.keemobile.domain.entity.VaultId
 import io.github.anvell.keemobile.domain.usecase.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,9 +27,9 @@ class OpenViewModel @Inject constructor(
 ) : MviComposeViewModel<OpenViewState, OpenCommand>(OpenViewState()) {
 
     init {
-        execute({
+        viewModelScope.async {
             getRecentFiles().or { Right(listOf()) }
-        }) { files ->
+        }.reduceAsState { files ->
             copy(
                 recentFiles = files,
                 selectedFile = files()?.lastOrNull()
@@ -48,7 +49,9 @@ class OpenViewModel @Inject constructor(
     }
 
     private fun createFile(source: FileSource, secrets: FileSecrets) {
-        execute({ createNewFile(source, secrets) }) {
+        viewModelScope.async {
+            createNewFile(source, secrets)
+        }.reduceAsState {
             copy(openFile = it)
         }
     }
@@ -67,8 +70,13 @@ class OpenViewModel @Inject constructor(
             else -> listOf(FileListEntry(source)) to FileListEntry(source)
         }
 
-        execute({ saveRecentFiles(recent) }) {
-            copy(recentFiles = Success(recent), selectedFile = selected)
+        viewModelScope.async {
+            saveRecentFiles(recent)
+        }.reduceAsState {
+            copy(
+                recentFiles = Success(recent),
+                selectedFile = selected
+            )
         }
     }
 
@@ -84,11 +92,11 @@ class OpenViewModel @Inject constructor(
     ) {
         updateFileEntry(entry)
 
-        execute({
+        viewModelScope.async {
             getOpenDatabase(VaultId(entry.fileSource.id))
                 .or { openFileSource(entry.fileSource, secrets) }
                 .map { it.id }
-        }) {
+        }.reduceAsState {
             copy(openFile = it)
         }
     }
@@ -120,10 +128,14 @@ class OpenViewModel @Inject constructor(
         }
     }
 
-    private fun clearFiles() = execute({ clearRecentFiles() }) {
-        copy(
-            recentFiles = Success(listOf()),
-            selectedFile = null
-        )
+    private fun clearFiles() {
+        viewModelScope.async {
+            clearRecentFiles()
+        }.reduceAsState {
+            copy(
+                recentFiles = Success(listOf()),
+                selectedFile = null
+            )
+        }
     }
 }

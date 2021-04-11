@@ -39,7 +39,7 @@ abstract class MviComposeFragment<V, S, C> : Fragment() where V : MviComposeView
         savedInstanceState: Bundle?
     ): View? = ComposeView(requireContext()).apply {
         setContent {
-            viewModel.observableState()
+            viewModel.stateAsFlow()
                 .collectAsState()
                 .value
                 ?.let { state ->

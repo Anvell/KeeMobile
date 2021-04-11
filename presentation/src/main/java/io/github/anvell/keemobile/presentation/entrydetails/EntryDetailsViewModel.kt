@@ -16,6 +16,7 @@ import io.github.anvell.keemobile.domain.usecase.GetDatabaseEntry
 import io.github.anvell.keemobile.domain.usecase.GetOpenDatabase
 import io.github.anvell.keemobile.domain.usecase.SaveAttachment
 import io.github.anvell.keemobile.presentation.data.EntryType
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -51,20 +52,24 @@ class EntryDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun loadAppSettings() = execute({
-        getAppSettings().or { Right(AppSettings()) }
-    }) {
-        copy(appSettings = it)
+    private fun loadAppSettings() {
+        viewModelScope.async {
+            getAppSettings().or { Right(AppSettings()) }
+        }.reduceAsState {
+            copy(appSettings = it)
+        }
     }
 
     private fun fetchDatabase(id: VaultId) {
-        execute({ getOpenDatabase(id) }) {
+        viewModelScope.async {
+            getOpenDatabase(id)
+        }.reduceAsState {
             copy(activeDatabase = it)
         }
     }
 
     private fun fetchEntry() = withState { state ->
-        execute({
+        viewModelScope.async {
             getDatabaseEntry(
                 databaseId = state.activeDatabaseId,
                 entryId = UUID.fromString(
@@ -74,7 +79,7 @@ class EntryDetailsViewModel @Inject constructor(
                     }
                 )
             )
-        }) {
+        }.reduceAsState {
             copy(entry = it)
         }
     }
