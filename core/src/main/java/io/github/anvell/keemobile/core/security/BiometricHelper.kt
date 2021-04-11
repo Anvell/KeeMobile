@@ -9,10 +9,7 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import io.github.anvell.either.Either
-import io.github.anvell.either.Left
-import io.github.anvell.either.Right
-import io.github.anvell.either.map
+import io.github.anvell.either.*
 import io.github.anvell.keemobile.core.constants.AppConstants.KeystoreAliasBiometric
 import io.github.anvell.keemobile.domain.entity.Secret
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -36,10 +33,10 @@ class BiometricHelper(
         secret: Secret.Unencrypted,
         title: String,
         cancelLabel: String
-    ): Either<BiometricAuthError, Secret.Encrypted?> {
-        val cipher = CipherHelper.encrypt(createAes256CbcSpec())
-
-        return authenticate(cipher, title, cancelLabel).map { cryptoObject ->
+    ): Either<Exception, Secret.Encrypted?> = eitherCatch {
+        CipherHelper.encrypt(createAes256CbcSpec())
+    }.flatMap { cipher ->
+        authenticate(cipher, title, cancelLabel).map { cryptoObject ->
             cryptoObject?.cipher?.doFinal(secret.content.toByteArray(Charsets.UTF_8))?.let {
                 Secret.Encrypted(cipher.iv, it)
             }
@@ -50,10 +47,10 @@ class BiometricHelper(
         secret: Secret.Encrypted,
         title: String,
         cancelLabel: String
-    ): Either<BiometricAuthError, Secret.Unencrypted?> {
-        val cipher = CipherHelper.decrypt(createAes256CbcSpec(), secret.iv)
-
-        return authenticate(cipher, title, cancelLabel).map { cryptoObject ->
+    ): Either<Exception, Secret.Unencrypted?> = eitherCatch {
+        CipherHelper.decrypt(createAes256CbcSpec(), secret.iv)
+    }.flatMap { cipher ->
+        authenticate(cipher, title, cancelLabel).map { cryptoObject ->
             cryptoObject?.cipher?.doFinal(secret.content)?.toString(Charsets.UTF_8)?.let {
                 Secret.Unencrypted(it)
             }
@@ -64,7 +61,7 @@ class BiometricHelper(
         cipher: Cipher,
         title: String,
         cancelLabel: String
-    ): Either<BiometricAuthError, BiometricPrompt.CryptoObject?> {
+    ): Either<Exception, BiometricPrompt.CryptoObject?> {
         return suspendCancellableCoroutine { coroutine ->
             val biometricPrompt = BiometricPrompt(
                 activity, ContextCompat.getMainExecutor(activity),
