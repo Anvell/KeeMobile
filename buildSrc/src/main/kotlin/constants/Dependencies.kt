@@ -5,9 +5,10 @@ object Dependencies {
 
     object Core {
         const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
-        const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0-beta04"
+        const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0"
         const val async = "com.github.anvell:async:0.1.0"
-        const val either = "com.github.anvell:either:0.1.0"
+        const val either = "com.github.anvell.either:either:0.2.2"
+        const val eitherAsync = "com.github.anvell.either:either-async:0.2.2"
     }
 
     object Kotlin {
@@ -31,12 +32,12 @@ object Dependencies {
         const val rules = "androidx.test:rules:1.2.0"
 
         object Kotest {
-            const val assertions = "io.kotest:kotest-assertions-core-jvm:4.4.3"
+            const val assertions = "io.kotest:kotest-assertions-core-jvm:4.5.0"
         }
     }
 
     object Compose {
-        private const val version = "1.0.0-beta04"
+        private const val version = "1.0.0-beta06"
         const val runtime = "androidx.compose.runtime:runtime:$version"
         const val foundation = "androidx.compose.foundation:foundation:$version"
         const val layout = "androidx.compose.foundation:foundation-layout:$version"
@@ -50,7 +51,7 @@ object Dependencies {
         const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
 
         object Extra {
-            const val activity = "androidx.activity:activity-compose:1.3.0-alpha06"
+            const val activity = "androidx.activity:activity-compose:1.3.0-alpha07"
         }
     }
 
@@ -73,13 +74,13 @@ object Dependencies {
         }
 
         object Fragment {
-            private const val version = "1.3.2"
+            private const val version = "1.3.3"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }
 
         object Lifecycle {
-            private const val version = "2.3.0"
+            private const val version = "2.3.1"
             const val runtime = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
             const val extensions = "androidx.lifecycle:lifecycle-extensions:$version"
             const val livedata = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
@@ -87,7 +88,7 @@ object Dependencies {
         }
 
         object Hilt {
-            private const val version = "1.0.0-beta01"
+            private const val version = "1.0.0"
             const val work = "androidx.hilt:hilt-work:$version"
             const val compiler = "androidx.hilt:hilt-compiler:$version"
         }
@@ -100,7 +101,7 @@ object Dependencies {
     }
 
     object Hilt {
-        private const val version = "2.34-beta"
+        private const val version = "2.35.1"
         const val library = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val testing = "com.google.dagger:hilt-android-testing:$version"
@@ -114,7 +115,7 @@ object Dependencies {
     object Security {
         const val biometric = "androidx.biometric:biometric:1.1.0"
         const val tink = "com.google.crypto.tink:tink-android:1.5.0"
-        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0-rc04"
+        const val jetpackSecurity = "androidx.security:security-crypto:1.0.0"
     }
 
     object Codecs {

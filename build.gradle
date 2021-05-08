@@ -4,7 +4,6 @@ import constants.Dependencies
 buildscript {
     repositories {
         google()
-        jcenter()
     }
     dependencies {
         classpath Dependencies.Core.androidGradlePlugin
@@ -16,13 +15,13 @@ buildscript {
 
 plugins {
     id "com.github.ben-manes.versions" version "0.38.0"
-    id "com.diffplug.spotless" version "5.12.0"
+    id "com.diffplug.spotless" version "5.12.4"
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
@@ -65,5 +64,11 @@ subprojects {
 
             ktlint("0.41.0") userData 'disabled_rules': 'no-wildcard-imports'
         }
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        it.candidate.version.toLowerCase().contains('-alpha')
     }
 }
