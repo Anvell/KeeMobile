@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "NOTHING_TO_INLINE")
 
 package io.github.anvell.keemobile.core.ui.components
 
@@ -43,15 +43,15 @@ private val textSelectionColors
     )
 
 @Composable
-fun AppTheme.ClearableTextField(
+inline fun AppTheme.ClearableTextField(
     value: String,
-    onValueChange: (String) -> Unit,
+    noinline onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    hint: @Composable (() -> Unit)? = null,
+    noinline hint: @Composable (() -> Unit)? = null,
     textStyle: TextStyle = LocalTextStyle.current,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onTextFieldFocused: (Boolean) -> Unit = {},
+    noinline onTextFieldFocused: (Boolean) -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     AppTheme.TextField(
@@ -82,15 +82,15 @@ fun AppTheme.ClearableTextField(
 }
 
 @Composable
-fun AppTheme.PasswordTextField(
+inline fun AppTheme.PasswordTextField(
     value: String,
-    onValueChange: (String) -> Unit,
+    noinline onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    hint: @Composable (() -> Unit)? = null,
+    noinline hint: @Composable (() -> Unit)? = null,
     textStyle: TextStyle = LocalTextStyle.current,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onTextFieldFocused: (Boolean) -> Unit = {}
+    noinline onTextFieldFocused: (Boolean) -> Unit = {}
 ) {
     var hidePassword by rememberSaveable { mutableStateOf(true) }
 
