@@ -6,7 +6,7 @@ object Dependencies {
     object Core {
         const val desugarJdkLibs = "com.android.tools:desugar_jdk_libs:1.1.5"
         const val androidGradlePlugin = "com.android.tools.build:gradle:4.2.0"
-        const val async = "com.github.anvell:async:0.1.0"
+        const val async = "com.github.anvell:async:0.2.0"
         const val either = "com.github.anvell.either:either:0.2.2"
         const val eitherAsync = "com.github.anvell.either:either-async:0.2.2"
     }
@@ -15,7 +15,7 @@ object Dependencies {
         private const val version = "1.4.32"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
         const val serialization = "org.jetbrains.kotlin:kotlin-serialization:$version"
-        const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+        const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
     }
 
     object Coroutines {
@@ -32,7 +32,7 @@ object Dependencies {
         const val rules = "androidx.test:rules:1.2.0"
 
         object Kotest {
-            const val assertions = "io.kotest:kotest-assertions-core-jvm:4.5.0"
+            const val assertions = "io.kotest:kotest-assertions-core-jvm:4.6.0"
         }
     }
 
@@ -56,13 +56,13 @@ object Dependencies {
     }
 
     object Accompanist {
-        private const val version = "0.7.1"
+        private const val version = "0.9.1"
         const val flowlayout = "com.google.accompanist:accompanist-flowlayout:$version"
         const val insets = "com.google.accompanist:accompanist-insets:$version"
     }
 
     object AndroidCore {
-        const val appcompat = "androidx.appcompat:appcompat:1.3.0-rc01"
+        const val appcompat = "androidx.appcompat:appcompat:1.3.0"
         const val coreKtx = "androidx.core:core-ktx:1.3.1"
         const val material = "com.google.android.material:material:1.3.0"
         const val documentfile = "androidx.documentfile:documentfile:1.0.1"
@@ -74,7 +74,7 @@ object Dependencies {
         }
 
         object Fragment {
-            private const val version = "1.3.3"
+            private const val version = "1.3.4"
             const val fragment = "androidx.fragment:fragment:$version"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
         }
@@ -95,7 +95,7 @@ object Dependencies {
     }
 
     object Dagger {
-        private const val version = "2.34"
+        private const val version = "2.35.1"
         const val dagger = "com.google.dagger:dagger:$version"
         const val compiler = "com.google.dagger:dagger-compiler:$version"
     }
@@ -114,12 +114,12 @@ object Dependencies {
 
     object Security {
         const val biometric = "androidx.biometric:biometric:1.1.0"
-        const val tink = "com.google.crypto.tink:tink-android:1.5.0"
+        const val tink = "com.google.crypto.tink:tink-android:1.6.0"
         const val jetpackSecurity = "androidx.security:security-crypto:1.0.0"
     }
 
     object Codecs {
-        const val commonsCodec = "commons-codec:commons-codec:1.13"
+        const val commonsCodec = "commons-codec:commons-codec:1.15"
     }
 
     object Logging {
