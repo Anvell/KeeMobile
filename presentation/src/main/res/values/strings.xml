@@ -8,6 +8,7 @@
     <string name="open_button_label_create">Create new file</string>
     <string name="open_button_label_open">Open</string>
     <string name="open_button_label_use_keyfile">Use key file</string>
+    <string name="open_button_label_remove_keyfile">Remove key file</string>
     <string name="open_button_label_use_biometrics">Unlock with biometrics</string>
     <string name="open_text_label_password">Password</string>
     <string name="open_dialogs_open_with">Open with</string>

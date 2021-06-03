@@ -21,7 +21,9 @@ import io.github.anvell.async.Fail
 import io.github.anvell.async.Loading
 import io.github.anvell.async.Success
 import io.github.anvell.keemobile.core.ui.locals.LocalAppNavigator
+import io.github.anvell.keemobile.domain.entity.KeyFileOnly
 import io.github.anvell.keemobile.domain.entity.KeyOnly
+import io.github.anvell.keemobile.domain.entity.KeyWithKeyFile
 import io.github.anvell.keemobile.domain.entity.Secret
 import io.github.anvell.keemobile.presentation.R
 import io.github.anvell.keemobile.presentation.open.components.DockBlock
@@ -66,7 +68,17 @@ fun Open(
                             commands(
                                 OpenCommand.OpenFile(
                                     entry = entry,
-                                    secrets = KeyOnly(Secret.Unencrypted(password))
+                                    secrets = when {
+                                        password.isNotBlank() && entry.keyFile != null -> {
+                                            KeyWithKeyFile(Secret.Unencrypted(password), entry.keyFile!!)
+                                        }
+                                        entry.keyFile != null -> {
+                                            KeyFileOnly(entry.keyFile!!)
+                                        }
+                                        else -> {
+                                            KeyOnly(Secret.Unencrypted(password))
+                                        }
+                                    }
                                 )
                             )
                         },

@@ -90,16 +90,40 @@ class DatabaseRepositoryImpl @Inject constructor(
         source: FileSource.Storage,
         secrets: FileSecrets
     ): Either<Exception, KeyDatabase> = eitherCatch {
-        require(secrets is KeyOnly) {
-            "Only password protection is supported."
-        }
-        require(secrets.masterKey is Secret.Unencrypted) {
-            "Master key must be unencrypted at this point."
-        }
-
         val database = KeePassDatabase
             .getInstance(storageFile.openInputStream(source.uri))
-            .openDatabase((secrets.masterKey as Secret.Unencrypted).content)
+            .run {
+                when (secrets) {
+                    is KeyOnly -> {
+                        require(secrets.masterKey is Secret.Unencrypted) {
+                            "Master key must be unencrypted at this point."
+                        }
+                        openDatabase(
+                            (secrets.masterKey as Secret.Unencrypted).content
+                        )
+                    }
+                    is KeyFileOnly -> {
+                        require(secrets.keyFile is FileSource.Storage) {
+                            "Only 'storage' is supported as file source."
+                        }
+                        openDatabase(
+                            storageFile.openInputStream((secrets.keyFile as FileSource.Storage).uri)
+                        )
+                    }
+                    is KeyWithKeyFile -> {
+                        require(secrets.masterKey is Secret.Unencrypted) {
+                            "Master key must be unencrypted at this point."
+                        }
+                        require(secrets.keyFile is FileSource.Storage) {
+                            "Only 'storage' is supported as file source."
+                        }
+                        openDatabase(
+                            (secrets.masterKey as Secret.Unencrypted).content,
+                            storageFile.openInputStream((secrets.keyFile as FileSource.Storage).uri)
+                        )
+                    }
+                }
+            }
 
         KeePassTransformer.from(database)
     }

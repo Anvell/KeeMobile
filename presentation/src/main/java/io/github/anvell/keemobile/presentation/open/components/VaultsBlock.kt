@@ -13,11 +13,14 @@ import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,7 +53,7 @@ internal fun VaultsBlock(
 
     Column(modifier) {
         Text(
-            text = selected.fileSource.nameWithoutExtension,
+            text = selected.vault.nameWithoutExtension,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.h4.copy(
@@ -84,7 +87,7 @@ internal fun VaultsBlock(
             Button(
                 onClick = { onUnlock(selected, password) },
                 elevation = null,
-                enabled = password.isNotBlank() && !isLoading,
+                enabled = (password.isNotBlank() || selected.keyFile != null) && !isLoading,
                 shape = MaterialTheme.shapes.small.copy(
                     topStart = ZeroCornerSize,
                     bottomStart = ZeroCornerSize
@@ -92,7 +95,7 @@ internal fun VaultsBlock(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Crossfade(isLoading) {
-                    if (isLoading) {
+                    if (it) {
                         CircularProgressIndicator(
                             strokeWidth = 2.5.dp,
                             modifier = Modifier.size(24.dp)
@@ -112,7 +115,7 @@ internal fun VaultsBlock(
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(
                 items = reversedFiles,
-                key = { it.fileSource.id }
+                key = { it.vault.id }
             ) { item ->
                 val dismissState = rememberDismissState(
                     confirmStateChange = { value ->
@@ -174,17 +177,30 @@ internal fun VaultsBlock(
                                     .padding(vertical = dimensionResource(R.dimen.list_item_vertical_padding))
                             ) {
                                 Text(
-                                    text = item.fileSource.nameWithoutExtension,
+                                    text = item.vault.nameWithoutExtension,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.weight(1f)
                                 )
                                 Spacers.M()
 
+                                if (item == selected && selected.keyFile != null) {
+                                    Icon(
+                                        painter = rememberVectorPainter(Icons.Default.VpnKey),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colors.onSurface.copy(
+                                            alpha = ItemIconAlpha
+                                        )
+                                    )
+                                    Spacers.M()
+                                }
+
                                 Icon(
                                     painter = painterResource(R.drawable.ic_arrow_simple_forward),
                                     contentDescription = null,
-                                    tint = MaterialTheme.colors.onSurface.copy(alpha = ItemIconAlpha)
+                                    tint = MaterialTheme.colors.onSurface.copy(
+                                        alpha = ItemIconAlpha
+                                    )
                                 )
                             }
                         }

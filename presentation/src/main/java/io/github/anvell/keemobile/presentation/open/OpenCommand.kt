@@ -7,6 +7,8 @@ import io.github.anvell.keemobile.domain.entity.FileSource
 sealed class OpenCommand {
     object ClearRecentFiles : OpenCommand()
 
+    object RemoveKeyFile : OpenCommand()
+
     class RemoveRecentFile(
         val entry: FileListEntry,
     ) : OpenCommand()
@@ -27,5 +29,9 @@ sealed class OpenCommand {
     class OpenFile(
         val entry: FileListEntry,
         val secrets: FileSecrets
+    ) : OpenCommand()
+
+    class AddKeyFile(
+        val keyFile: FileSource,
     ) : OpenCommand()
 }

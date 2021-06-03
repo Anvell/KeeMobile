@@ -5,8 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FileListEntry(
-    @SerialName("fileSource")
-    val fileSource: FileSource,
+    @SerialName("vault")
+    val vault: FileSource,
+    @SerialName("keyFile")
+    val keyFile: FileSource? = null,
     @SerialName("encryptedSecrets")
     val encryptedSecrets: FileListEntrySecrets = FileListEntrySecrets.Unspecified
 )

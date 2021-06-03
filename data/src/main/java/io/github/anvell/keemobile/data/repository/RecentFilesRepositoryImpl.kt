@@ -45,7 +45,7 @@ class RecentFilesRepositoryImpl @Inject constructor(
             ).toString(Charsets.UTF_8)
 
             Json.decodeFromString<List<FileListEntry>>(data).filter {
-                when (val source = it.fileSource) {
+                when (val source = it.vault) {
                     is FileSource.Storage -> {
                         storageFile.checkUriPermission(source.uri) && storageFile.exists(source.uri)
                     }

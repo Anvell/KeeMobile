@@ -110,7 +110,7 @@ class ExploreViewModel @Inject constructor(
         viewModelScope.launch {
             updateListFileEntry(
                 FileListEntry(
-                    fileSource = fileSource,
+                    vault = fileSource,
                     encryptedSecrets = encryptedSecrets
                 )
             )

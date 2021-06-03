@@ -154,7 +154,7 @@ fun Explore(
                         .first { it.id == state.activeDatabaseId },
                     selectedEncryptedSecrets = state.recentFiles
                         .unwrap()
-                        .first { VaultId(it.fileSource.id) == state.activeDatabaseId }
+                        .first { VaultId(it.vault.id) == state.activeDatabaseId }
                         .encryptedSecrets,
                     items = state.databases.unwrap(),
                     onItemSelected = {

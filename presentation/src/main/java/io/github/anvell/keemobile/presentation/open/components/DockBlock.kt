@@ -62,6 +62,21 @@ internal fun DockBlock(
                         )
                     }
                 },
+                onKeyFileOpened = {
+                    val uri = it.toString()
+                    val fileName = it.getName(context)
+
+                    if (fileName != null) {
+                        commands(
+                            OpenCommand.AddKeyFile(
+                                keyFile = FileSource.Storage(uri.toSha256(), fileName, uri)
+                            )
+                        )
+                    }
+                },
+                onRemoveKeyFile = {
+                    commands(OpenCommand.RemoveKeyFile)
+                },
                 onUnlockWithBiometrics = { secrets ->
                     require(secrets.fileSecrets is KeyOnly) { "Only password protection is supported." }
 

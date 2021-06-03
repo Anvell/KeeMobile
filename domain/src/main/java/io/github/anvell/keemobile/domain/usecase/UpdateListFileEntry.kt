@@ -18,7 +18,7 @@ class UpdateListFileEntry @Inject constructor(
     suspend operator fun invoke(entry: FileListEntry) = withContext(dispatchers.io) {
         recentFilesRepository.readRecentFiles().map { recentFiles ->
             recentFiles.filter {
-                it.fileSource.id != entry.fileSource.id
+                it.vault.id != entry.vault.id
             }.plus(entry)
         }.flatMap {
             recentFilesRepository.writeRecentFiles(it)

@@ -45,6 +45,16 @@ class OpenViewModel @Inject constructor(
             is OpenCommand.OpenFile -> openFile(command.entry, command.secrets)
             is OpenCommand.RemoveRecentFile -> removeFileEntry(command.entry)
             is OpenCommand.ClearRecentFiles -> clearFiles()
+            is OpenCommand.AddKeyFile -> withState { state ->
+                state.selectedFile?.also {
+                    updateFileEntry(it.copy(keyFile = command.keyFile))
+                }
+            }
+            is OpenCommand.RemoveKeyFile -> withState { state ->
+                state.selectedFile?.also {
+                    updateFileEntry(it.copy(keyFile = null))
+                }
+            }
         }
     }
 
@@ -59,7 +69,7 @@ class OpenViewModel @Inject constructor(
     private fun addFileSource(source: FileSource) = withState { state ->
         val (recent, selected) = when (state.recentFiles) {
             is Success -> {
-                val entry = state.recentFiles()?.find { it.fileSource.id == source.id }
+                val entry = state.recentFiles()?.find { it.vault.id == source.id }
                 if (entry == null) {
                     val newItem = FileListEntry(source)
                     state.recentFiles.unwrap() + newItem to newItem
@@ -93,8 +103,8 @@ class OpenViewModel @Inject constructor(
         updateFileEntry(entry)
 
         viewModelScope.async {
-            getOpenDatabase(VaultId(entry.fileSource.id))
-                .or { openFileSource(entry.fileSource, secrets) }
+            getOpenDatabase(VaultId(entry.vault.id))
+                .or { openFileSource(entry.vault, secrets) }
                 .map { it.id }
         }.reduceAsState {
             copy(openFile = it)
@@ -104,13 +114,16 @@ class OpenViewModel @Inject constructor(
     private fun updateFileEntry(item: FileListEntry) = withState { state ->
         val items = state.recentFiles
             .unwrap()
-            .filter { it.fileSource.id != item.fileSource.id }
+            .filter { it.vault.id != item.vault.id }
             .plus(item)
 
         viewModelScope.launch {
             saveRecentFiles(items).map {
                 setState {
-                    copy(recentFiles = Success(it))
+                    copy(
+                        recentFiles = Success(it),
+                        selectedFile = item
+                    )
                 }
             }
         }

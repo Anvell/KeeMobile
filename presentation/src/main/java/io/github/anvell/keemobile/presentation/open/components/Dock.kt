@@ -12,6 +12,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.github.anvell.either.Right
 import io.github.anvell.keemobile.core.constants.AppFeatures
 import io.github.anvell.keemobile.core.constants.Feature
+import io.github.anvell.keemobile.core.extensions.persistReadPermissions
 import io.github.anvell.keemobile.core.extensions.persistReadWritePermissions
 import io.github.anvell.keemobile.core.ui.locals.LocalBiometricHelper
 import io.github.anvell.keemobile.domain.entity.FileListEntry
@@ -50,6 +52,8 @@ internal fun Dock(
     selected: FileListEntry?,
     onDocumentCreated: (Uri) -> Unit,
     onDocumentOpened: (Uri) -> Unit,
+    onKeyFileOpened: (Uri) -> Unit,
+    onRemoveKeyFile: () -> Unit,
     onUnlockWithBiometrics: (FileListEntrySecrets.Some) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -70,6 +74,14 @@ internal fun Dock(
         if (uri != null) {
             uri.persistReadWritePermissions(context)
             onDocumentOpened(uri)
+        }
+    }
+
+    val openKeyFile = remember { ActivityResultContracts.OpenDocument() }
+    val openKeyFileLauncher = rememberLauncherForActivityResult(openKeyFile) { uri: Uri? ->
+        if (uri != null) {
+            uri.persistReadPermissions(context)
+            onKeyFileOpened(uri)
         }
     }
     val showBiometricUnlock = selected?.encryptedSecrets is FileListEntrySecrets.Some &&
@@ -110,17 +122,29 @@ internal fun Dock(
                 visible = selected != null,
                 modifier = Modifier.weight(1f)
             ) {
-                DockButton(
-                    iconPainter = rememberVectorPainter(Icons.Default.VpnKey),
-                    enabled = false,
-                    onClick = {},
-                    modifier = Modifier
-                        .semantics {
-                            contentDescription = context.getString(
-                                R.string.open_button_label_use_keyfile
-                            )
-                        }
-                )
+                if (selected?.keyFile != null) {
+                    DockButton(
+                        iconPainter = rememberVectorPainter(Icons.Default.Clear),
+                        onClick = onRemoveKeyFile,
+                        modifier = Modifier
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.open_button_label_remove_keyfile
+                                )
+                            }
+                    )
+                } else {
+                    DockButton(
+                        iconPainter = rememberVectorPainter(Icons.Default.VpnKey),
+                        onClick = { openKeyFileLauncher.launch(arrayOf(FileFilter)) },
+                        modifier = Modifier
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.open_button_label_use_keyfile
+                                )
+                            }
+                    )
+                }
             }
 
             if (AppFeatures.contains(Feature.BiometricUnlock)) {
