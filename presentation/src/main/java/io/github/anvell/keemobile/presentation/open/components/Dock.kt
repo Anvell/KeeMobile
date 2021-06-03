@@ -1,7 +1,7 @@
 package io.github.anvell.keemobile.presentation.open.components
 
 import android.net.Uri
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -58,7 +58,7 @@ internal fun Dock(
 
     val defaultFileName = stringResource(R.string.open_default_file_name)
     val createDocumentContract = remember { ActivityResultContracts.CreateDocument() }
-    val createDocumentLauncher = registerForActivityResult(createDocumentContract) { uri: Uri? ->
+    val createDocumentLauncher = rememberLauncherForActivityResult(createDocumentContract) { uri: Uri? ->
         if (uri != null) {
             uri.persistReadWritePermissions(context)
             onDocumentCreated(uri)
@@ -66,7 +66,7 @@ internal fun Dock(
     }
 
     val openDocumentContract = remember { ActivityResultContracts.OpenDocument() }
-    val openDocumentLauncher = registerForActivityResult(openDocumentContract) { uri: Uri? ->
+    val openDocumentLauncher = rememberLauncherForActivityResult(openDocumentContract) { uri: Uri? ->
         if (uri != null) {
             uri.persistReadWritePermissions(context)
             onDocumentOpened(uri)

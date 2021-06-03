@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.text.format.Formatter
-import androidx.activity.compose.registerForActivityResult
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -40,7 +40,7 @@ internal fun AttachmentRow(
     val context = LocalContext.current
     val mimeType = attachment.key.getMimeTypeFromFileName()
     val requestPermissionContract = remember { ActivityResultContracts.RequestPermission() }
-    val requestPermissionLauncher = registerForActivityResult(requestPermissionContract) {
+    val requestPermissionLauncher = rememberLauncherForActivityResult(requestPermissionContract) {
         if (it == true) onSaveAttachment(attachment)
     }
 
