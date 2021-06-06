@@ -49,7 +49,7 @@ internal fun VaultsBlock(
     modifier: Modifier = Modifier
 ) {
     val reversedFiles = remember(files) { files.reversed() }
-    var password by rememberSaveable { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Column(modifier) {
         Text(
